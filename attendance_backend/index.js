@@ -138,6 +138,6 @@ connectDb();
 app.use(errorMiddleware);
 
 app.listen(port, () => {
-  console.log(`app is listening at port ${port}`);
+  console.log(`app is listening at port number ${port}`);
   console.log(`http://localhost:${port}/`);
 });

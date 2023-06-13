@@ -1,0 +1,16 @@
+student 
+
+
+
+
+teacher 
+   
+   password
+   teacher name 
+   batch_name 
+
+   redirect to student where batch_id
+
+
+
+admin

@@ -1,0 +1,5 @@
+user.create(data)
+user.find() r
+user.findById(id) rd 
+user.findByIdAndDelete()  d 
+user.findByIdAndUpdate(id,data) uid

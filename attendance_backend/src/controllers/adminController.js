@@ -6,26 +6,23 @@ import { Types } from "mongoose";
 import { generateToken, verifyToken } from "../utils/token.js";
 
 export let addAdmin = expressAsyncHandler(async (req, res, next) => {
+  
   let result = await Admin.create(req.body);
-  console.log(result);
-
   let response = {
-    res: res,
-    message: "success",
-    result: result,
+    res,
+    message: "Success",
+    result,
     statusCode: HttpStatus.CREATED,
   };
-
   successResponse(response);
 });
 export let addBatch = expressAsyncHandler(async (req, res, next) => {
   let result = await Batch.create(req.body);
-  console.log(result);
 
   let response = {
-    res: res,
+    res,
     message: "success",
-    result: result,
+    result,
     statusCode: HttpStatus.CREATED,
   };
 
@@ -33,15 +30,21 @@ export let addBatch = expressAsyncHandler(async (req, res, next) => {
 });
 
 export let loginAdmin = expressAsyncHandler(async (req, res, next) => {
-  let result = await Admin.find(req.body);
+  let email=req.body.email
+  let password=req.body.password
+
+  let result = await Admin.find({email});
 
   let jwt_token;
+  
   if (result.length === 1) {
     jwt_token = await generateToken(req.body, {
       expiresIn: "365d",
     });
   } else {
-    throw new Error("password or email wrong");
+    let error= new Error("Credential didn't match")
+    error.statusCode=401
+    throw error
   }
 
   let response = {

@@ -105,33 +105,33 @@ app.use(express.static("./public"));
 
 //  console.log(_infoObj)
 
-let createUser = async () => {
-  let data = { name: "nitan", age: 29, isMarried: false };
-  try {
-    let result = await First.create(data);
-    console.log(result);
-  } catch (error) {
-    console.log(error.message);
-  }
-};
-let readUser = async () => {
-  try {
-    let result = await First.find();
-    console.log(result);
-  } catch (error) {
-    console.log(error.message);
-  }
-};
-let updateUser = async () => {
-  let data = { name: "nitan", age: 29, isMarried: false };
+// let createUser = async () => {
+//   let data = { name: "nitan", age: 29, isMarried: false };
+//   try {
+//     let result = await First.create(data);
+//     console.log(result);
+//   } catch (error) {
+//     console.log(error.message);
+//   }
+// };
+// let readUser = async () => {
+//   try {
+//     let result = await First.find();
+//     console.log(result);
+//   } catch (error) {
+//     console.log(error.message);
+//   }
+// };
+// let updateUser = async () => {
+//   let data = { name: "nitan", age: 29, isMarried: false };
 
-  try {
-    let result = await First.find();
-    console.log(result);
-  } catch (error) {
-    console.log(error.message);
-  }
-};
+//   try {
+//     let result = await First.find();
+//     console.log(result);
+//   } catch (error) {
+//     console.log(error.message);
+//   }
+// };
 
 connectDb();
 

@@ -1,9 +1,9 @@
 import { HttpStatus } from "../config/constant.js";
 
-import { successResponse } from "../helper/sucessResponse.js";
+import { successResponse } from "../helper/successResponse.js";
 
 import expressAsyncHandler from "express-async-handler";
-import { Attendance, Teacher } from "../schema/mode.js";
+import { Attendance, Teacher } from "../schema/model.js";
 import { Types } from "mongoose";
 
 // res.status(HttpStatus.CREATED).json({

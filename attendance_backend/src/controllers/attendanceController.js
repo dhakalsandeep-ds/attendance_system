@@ -1,6 +1,6 @@
 import expressAsyncHandler from "express-async-handler";
-import { Attendance } from "../schema/mode.js";
-import { successResponse } from "../helper/sucessResponse.js";
+import { Attendance } from "../schema/model.js";
+import { successResponse } from "../helper/successResponse.js";
 import { HttpStatus } from "../config/constant.js";
 
 export let getAttendance = expressAsyncHandler(async (req, res, next) => {

@@ -13,8 +13,9 @@ export let adminSchema = Schema({
     type: String,
     required: true,
     validate: (value) => {
-      if (!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,100}$/.test(value))
-        throw new Error("Password must be:- Minimum eight characters long at least one uppercase letter and one lowercase letter One number and one special character");
+      if (!/^(.{8,})$/.test(value)){
+        throw new Error("Password must be:- Minimum eight characters, at least one upper and one lower letter and one number:");
     }
+  }
   },
 });

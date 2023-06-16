@@ -1,6 +1,6 @@
 import expressAsyncHandler from "express-async-handler";
-import { Student } from "../schema/mode.js";
-import { successResponse } from "../helper/sucessResponse.js";
+import { Student } from "../schema/model.js";
+import { successResponse } from "../helper/successResponse.js";
 import { HttpStatus } from "../config/constant.js";
 
 export let getStudent = expressAsyncHandler(async (req, res, next) => {

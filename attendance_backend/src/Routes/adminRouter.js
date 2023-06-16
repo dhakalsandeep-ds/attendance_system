@@ -17,8 +17,7 @@ let adminRouter = Router();
 
 adminRouter.route("/login").post(loginAdmin);
 
-
-adminRouter.route("/add").post(addAdmin);
+adminRouter.route("/add").post(isAuthenticatedAdmin,isAuthorizedAdmin,addAdmin);
 
 adminRouter.route("/batch").get(isAuthenticatedAdmin,isAuthorizedAdmin,getBatch);
 

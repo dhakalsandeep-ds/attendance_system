@@ -1,6 +1,1 @@
-admin login
-
-{
-    email: String, 
-    password: String
-}
+localhost:8000/admin/logout

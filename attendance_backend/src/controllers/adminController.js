@@ -223,9 +223,14 @@ export let addTeacher = expressAsyncHandler(async (req, res, next) => {
    let name=req.body.name
    let email=req.body.email
    let password=req.body.password
-   //what to do for batchid
-
-  let result = await Teacher.create({name,email,password});
+   let batchId=req.params.batchId
+    if(!await Batch.findOne({_id:batchId}))
+    {
+      let error=new Error("Invalid batch id")
+      error.statusCode=404
+      throw error
+    }
+  let result = await Teacher.create({name,email,password,batchId});
 
   let response = {
     res: res,
@@ -238,7 +243,7 @@ export let addTeacher = expressAsyncHandler(async (req, res, next) => {
 });
 
 export let getStudent = expressAsyncHandler(async (req, res, next) => {
-  let result = await Student.find();
+  let result = await Student.find({});
 
   let response = {
     res: res,
@@ -251,8 +256,18 @@ export let getStudent = expressAsyncHandler(async (req, res, next) => {
 });
 
 export let addStudent = expressAsyncHandler(async (req, res, next) => {
-  let result = await Student.create(req.body);
-  console.log(result);
+
+  let name=req.body.name
+   let email=req.body.email
+   let password=req.body.password
+   let batchId=req.params.batchId
+    if(!await Batch.findOne({_id:batchId}))
+    {
+      let error=new Error("Invalid batch id")
+      error.statusCode=404
+      throw error
+    }
+  let result = await Student.create({name,email,password,batchId});
 
   let response = {
     res: res,
@@ -264,64 +279,15 @@ export let addStudent = expressAsyncHandler(async (req, res, next) => {
   successResponse(response);
 });
 
-export const authenticateLogin = expressAsyncHandler(async (req, res, next) => {
-  const authHeader = req.headers.authorization;
+export let logout = expressAsyncHandler(async(req,res,next)=>{
+  let id=req.body.info.id
+  await Token.findByIdAndDelete({_id:id})
+  let response = {
+    res: res,
+    message: "successfully logged out",
+    statusCode: HttpStatus.CREATED,
+  };
 
-  if (authHeader) {
-    const token = authHeader.split(" ")[1];
+  successResponse(response);
 
-    const info = await verifyToken(token);
-
-    // const exist = Admin.find()
-
-    console.log(info);
-    let response = {
-      res: res,
-      message: "valid token",
-
-      statusCode: HttpStatus.CREATED,
-    };
-
-    successResponse(response);
-  }
-  // jwt.verify(token, secretKey, (err, user) => {
-  //   if (err) {
-  //     return res.sendStatus(403);
-  //   }
-
-  //   req.user = user;
-  //   next();
-  // });
-  // } else {
-  //   res.sendStatus(401);
-  // }
-});
-
-// export let readDetailUser = expressAsyncHandler(async(req,res)=>{
-
-//   // try{
-
-//      let result = await User.findById(req.params.id)
-//      console.log(result)
-
-// let response = {"res":res,"message":"hello","result":result,"statusCode":HttpStatus.CREATED}
-
-//   successResponse(response)
-
-// // }catch(error){
-
-//   //   let response = {
-//   //    "res":res,
-//   //    "message":error.message,
-//   //    "statusCode":HttpStatus.BAD_REQUEST
-//   //   }
-
-//   //  errorResponse(response)
-
-// //   error.statusCode = HttpStatus.BAD_REQUEST
-
-// //   next(error)
-
-// // }
-
-// })
+})

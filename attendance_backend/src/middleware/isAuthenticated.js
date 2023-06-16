@@ -12,7 +12,7 @@ export let isAuthenticatedAdmin = expressAsyncHandler(async (req,res,next)=>{
     }
     let tokenArr=bearerTokenStr.split(" ")
     let token = tokenArr[1]
-    let tokenAtDatabase = await Token.findOne({token });
+    let tokenAtDatabase = await Token.findOne({token});
 
     if (!tokenAtDatabase) {
       let error = new Error("Token is not valid");
@@ -20,6 +20,7 @@ export let isAuthenticatedAdmin = expressAsyncHandler(async (req,res,next)=>{
       throw error;
     } else {
       let info = await verifyToken(token);
+      console.log(info)
       req.body.info = info;
       req.body.token={
          token,

@@ -7,6 +7,7 @@ export let studentSchema = Schema({
   },
   email: {
     type: String,
+    unique:true,
     required: true,
     validate: (value) => {
       if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(value))
@@ -16,10 +17,13 @@ export let studentSchema = Schema({
   password: {
     type: String,
     required: true,
-    validate: (value) => {
-        if (!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,100}$/.test(value))
-        throw new Error("Password must be:- Minimum eight characters long at least one uppercase letter and one lowercase letter One number and one special character");
-      }
+    validate: (value)=>{
+      if (!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,15}$/.test(value)) {
+      throw new Error(
+        "Minimum eight and maximum 15 characters, at least one uppercase letter, one lowercase letter, one number and one special character"
+      )
+    }
+  }
   },
   batchId: {
     type: [Schema.Types.ObjectId],

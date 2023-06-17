@@ -1,4 +1,9 @@
 import expressAsyncHandler from "express-async-handler"
+import { Batch, Teacher, Token } from "../schema/model.js";
+import { comparePassword } from "../utils/Hashing.js";
+import { generateToken } from "../utils/token.js";
+import { HttpStatus } from "../config/constant.js";
+import { successResponse } from "../helper/successResponse.js";
 
 export let loginTeacher=expressAsyncHandler(async(req,res,next)=>{
   let email=req.body.email
@@ -35,3 +40,23 @@ export let loginTeacher=expressAsyncHandler(async(req,res,next)=>{
   successResponse(response);
 })
 
+export let logoutTeacher = expressAsyncHandler(async(req,res,next)=>{
+  let id=req.body.token.tokenId
+  await Token.findByIdAndDelete({_id:id})
+  let response = {
+    res: res,
+    message: "successfully logged out",
+    statusCode: HttpStatus.CREATED,
+  };
+
+  successResponse(response);
+
+})
+
+export let showAllBatch=expressAsyncHandler(async(req,res,next)=>{
+  let teacherId=req.body.info.id
+  let teacher=await Teacher.findOne({_id:teacherId})
+  let batch=await Batch.find({_id:teacher.batchId})
+  console.log("teacherid"+teacher)
+  console.log("classes+++++++++++"+batch)
+})

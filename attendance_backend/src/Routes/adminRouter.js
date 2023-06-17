@@ -11,24 +11,24 @@ import {
   logout,
 } from "../controllers/adminController.js";
 import { isAuthorizedAdmin } from "../middleware/isAuthorized.js";
-import { isAuthenticatedAdmin } from "../middleware/isAuthenticated.js";
+import { isAuthenticated } from "../middleware/isAuthenticated.js";
 
 let adminRouter = Router();
 
 adminRouter.route("/login").post(loginAdmin);
 
-adminRouter.route("/add").post(isAuthenticatedAdmin,isAuthorizedAdmin,addAdmin);
+adminRouter.route("/add").post(isAuthenticated,isAuthorizedAdmin,addAdmin);
 
-adminRouter.route("/batch").get(isAuthenticatedAdmin,isAuthorizedAdmin,getBatch);
+adminRouter.route("/batch").get(isAuthenticated,isAuthorizedAdmin,getBatch);
 
-adminRouter.route("/batch").post(isAuthenticatedAdmin,isAuthorizedAdmin,addBatch);
+adminRouter.route("/batch").post(isAuthenticated,isAuthorizedAdmin,addBatch);
 
-adminRouter.route("/teacher").get(isAuthenticatedAdmin,isAuthorizedAdmin,getTeacher);
+adminRouter.route("/teacher").get(isAuthenticated,isAuthorizedAdmin,getTeacher);
 
-adminRouter.route("/teacher/:batchId").post(isAuthenticatedAdmin,isAuthorizedAdmin,addTeacher);
+adminRouter.route("/teacher/:batchId").post(isAuthenticated,isAuthorizedAdmin,addTeacher);
 
-adminRouter.route("/student").get(isAuthenticatedAdmin,isAuthorizedAdmin,getStudent);
+adminRouter.route("/student").get(isAuthenticated,isAuthorizedAdmin,getStudent);
 
-adminRouter.route("/student/:batchId").post(isAuthenticatedAdmin,isAuthorizedAdmin,addStudent);
-adminRouter.route("/logout").get(isAuthenticatedAdmin,isAuthorizedAdmin,logout)
+adminRouter.route("/student/:batchId").post(isAuthenticated,isAuthorizedAdmin,addStudent);
+adminRouter.route("/logout").get(isAuthenticated,isAuthorizedAdmin,logout)
 export default adminRouter;

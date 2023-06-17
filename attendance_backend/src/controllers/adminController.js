@@ -243,7 +243,9 @@ export let addTeacher = expressAsyncHandler(async (req, res, next) => {
 
   successResponse(response);
 });
-
+export let assignBatchToTeacher =expressAsyncHandler(async(req,res,next)=>{
+  let
+})
 export let getStudent = expressAsyncHandler(async (req, res, next) => {
   let result = await Student.find({});
 
@@ -293,4 +295,32 @@ export let logout = expressAsyncHandler(async(req,res,next)=>{
 
   successResponse(response);
 
+})
+
+export let getStudentDetail=expressAsyncHandler(async(req,res,next)=>{
+  let id=req.params.studentId
+  let result=await Student.findOne({_id:id})
+
+  let response = {
+    res: res,
+    message: "success",
+    result: result,
+    statusCode: HttpStatus.CREATED,
+  };
+
+  successResponse(response);
+})
+
+export let getTeacherDetail=expressAsyncHandler(async(req,res,next)=>{
+  let id=req.params.teacherId
+  let result=await Teacher.findOne({_id:id})
+
+  let response = {
+    res: res,
+    message: "success",
+    result: result,
+    statusCode: HttpStatus.CREATED,
+  };
+
+  successResponse(response);
 })

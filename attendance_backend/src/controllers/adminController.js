@@ -9,6 +9,7 @@ import { comparePassword, hashPassword } from "../utils/Hashing.js";
 export let addAdmin = expressAsyncHandler(async (req, res, next) => {
   
   let email = req.body.email
+  let password=req.body.password
   let adminData = await Admin.findOne({ email }); 
   
   if (adminData) {
@@ -16,7 +17,7 @@ export let addAdmin = expressAsyncHandler(async (req, res, next) => {
     error.statusCode = 409;
     throw error;
   }else{
-    let _hashPassword = await hashPassword(req.body.password);
+    let _hashPassword = await hashPassword(password);
   req.body.password = _hashPassword;
   let result = await Admin.create(req.body);
   delete result._doc.password;
@@ -230,6 +231,7 @@ export let addTeacher = expressAsyncHandler(async (req, res, next) => {
       error.statusCode=404
       throw error
     }
+    password=await hashPassword(password)
   let result = await Teacher.create({name,email,password,batchId});
 
   let response = {
@@ -241,7 +243,9 @@ export let addTeacher = expressAsyncHandler(async (req, res, next) => {
 
   successResponse(response);
 });
-
+export let assignBatchToTeacher =expressAsyncHandler(async(req,res,next)=>{
+  let
+})
 export let getStudent = expressAsyncHandler(async (req, res, next) => {
   let result = await Student.find({});
 
@@ -267,6 +271,7 @@ export let addStudent = expressAsyncHandler(async (req, res, next) => {
       error.statusCode=404
       throw error
     }
+    password=await hashPassword(password)
   let result = await Student.create({name,email,password,batchId});
 
   let response = {
@@ -280,7 +285,7 @@ export let addStudent = expressAsyncHandler(async (req, res, next) => {
 });
 
 export let logout = expressAsyncHandler(async(req,res,next)=>{
-  let id=req.body.info.id
+  let id=req.body.token.tokenId
   await Token.findByIdAndDelete({_id:id})
   let response = {
     res: res,
@@ -290,4 +295,32 @@ export let logout = expressAsyncHandler(async(req,res,next)=>{
 
   successResponse(response);
 
+})
+
+export let getStudentDetail=expressAsyncHandler(async(req,res,next)=>{
+  let id=req.params.studentId
+  let result=await Student.findOne({_id:id})
+
+  let response = {
+    res: res,
+    message: "success",
+    result: result,
+    statusCode: HttpStatus.CREATED,
+  };
+
+  successResponse(response);
+})
+
+export let getTeacherDetail=expressAsyncHandler(async(req,res,next)=>{
+  let id=req.params.teacherId
+  let result=await Teacher.findOne({_id:id})
+
+  let response = {
+    res: res,
+    message: "success",
+    result: result,
+    statusCode: HttpStatus.CREATED,
+  };
+
+  successResponse(response);
 })

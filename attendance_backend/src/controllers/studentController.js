@@ -37,7 +37,18 @@ export let loginStudent=expressAsyncHandler(async(req,res,next)=>{
 
   successResponse(response);
 })
+export let logoutStudent = expressAsyncHandler(async(req,res,next)=>{
+  let id=req.body.token.tokenId
+  await Token.findByIdAndDelete({_id:id})
+  let response = {
+    res: res,
+    message: "successfully logged out",
+    statusCode: HttpStatus.CREATED,
+  };
 
+  successResponse(response);
+
+})
 
 export let getStudent = expressAsyncHandler(async (req, res, next) => {
   let result = await Student.find({

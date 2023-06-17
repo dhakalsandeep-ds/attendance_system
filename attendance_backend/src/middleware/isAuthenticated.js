@@ -1,7 +1,7 @@
 import expressAsyncHandler from "express-async-handler";
 import { Token } from "../schema/model.js";
 import { verifyToken } from "../utils/token.js";
-export let isAuthenticatedAdmin = expressAsyncHandler(async (req,res,next)=>{
+export let isAuthenticated = expressAsyncHandler(async (req,res,next)=>{
     
     let bearerTokenStr=req.headers.authorization
     if(bearerTokenStr===undefined)
@@ -20,7 +20,6 @@ export let isAuthenticatedAdmin = expressAsyncHandler(async (req,res,next)=>{
       throw error;
     } else {
       let info = await verifyToken(token);
-      console.log(info)
       req.body.info = info;
       req.body.token={
          token,
@@ -30,4 +29,5 @@ export let isAuthenticatedAdmin = expressAsyncHandler(async (req,res,next)=>{
       next();
     }
   }); 
-    
+
+ 

@@ -17,18 +17,28 @@ let adminRouter = Router();
 
 adminRouter.route("/login").post(loginAdmin);
 
-adminRouter.route("/add").post(isAuthenticated,isAuthorizedAdmin,addAdmin);
+adminRouter.route("/add").post(isAuthenticated, isAuthorizedAdmin, addAdmin);
 
-adminRouter.route("/batch").get(isAuthenticated,isAuthorizedAdmin,getBatch);
+adminRouter.route("/batch").get(isAuthenticated, isAuthorizedAdmin, getBatch);
 
-adminRouter.route("/batch").post(isAuthenticated,isAuthorizedAdmin,addBatch);
+adminRouter.route("/batch").post(isAuthenticated, isAuthorizedAdmin, addBatch);
 
-adminRouter.route("/teacher").get(isAuthenticated,isAuthorizedAdmin,getTeacher);
+adminRouter
+  .route("/teacher")
+  .get(isAuthenticated, isAuthorizedAdmin, getTeacher);
 
-adminRouter.route("/teacher/:batchId").post(isAuthenticated,isAuthorizedAdmin,addTeacher);
+adminRouter
+  .route("/teacher/:batchId")
+  .post(isAuthenticated, isAuthorizedAdmin, addTeacher);
 
-adminRouter.route("/student").get(isAuthenticated,isAuthorizedAdmin,getStudent);
+adminRouter
+  .route("/student")
+  .get(isAuthenticated, isAuthorizedAdmin, getStudent);
 
-adminRouter.route("/student/:batchId").post(isAuthenticated,isAuthorizedAdmin,addStudent);
-adminRouter.route("/logout").get(isAuthenticated,isAuthorizedAdmin,logout)
+adminRouter
+  .route("/student/:batchId")
+  .post(isAuthenticated, isAuthorizedAdmin, addStudent);
+
+adminRouter.route("/logout").get(isAuthenticated, isAuthorizedAdmin, logout);
+
 export default adminRouter;

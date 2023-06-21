@@ -50,5 +50,23 @@ data={
 }
 
 //GET TEACHER DETAIL
-url: /admin/batch/:teacherId
+url: /admin/student/:studentId
+method: GET
+
+//GET ALL STUDENT
+url: /admin/student
+method: GET
+
+//ADD STUDENT
+url: /admin/student
+method: post
+data={
+    name:"Ram",
+    email:"ram123@gmail.com",
+    password:"********",
+    batchId:"5555516516546"
+}
+
+//GET STUDENT DETAIL
+url: /admin/student/:studentId
 method: GET

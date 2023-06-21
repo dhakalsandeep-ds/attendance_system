@@ -1,5 +1,5 @@
 //admin login
-url: /admin/login
+url: /teacher/login
 method: POST
 data={
     email:"manishkdka123@gmail.com"
@@ -7,5 +7,10 @@ data={
 }
 
 //admin logout
-url: /admin/logout
+url: /teacher/logout
 method: get
+
+//show all batches
+url: /teacher/batch
+method: get
+

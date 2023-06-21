@@ -3,7 +3,7 @@ import { model } from "mongoose";
 import { attendanceSchema } from "./attendanceSchema.js";
 import { studentSchema } from "./studentSchema.js";
 import { teacherSchema } from "./teacherSchema.js";
-import { batchSchema } from "./batchId.js";
+import { batchSchema } from "./batchSchema.js";
 import { adminSchema } from "./adminSchema.js";
 import { tokenSchema } from "./tokenSchema.js";
 

@@ -1,16 +1,10 @@
 import { Router } from "express";
-import { getAttendance } from "../controllers/attendanceController.js";
+import { getAttendance, postAttendance } from "../controllers/attendanceController.js";
 
 let attendanceRouter = Router();
 
-attendanceRouter.route("/").get(getAttendance);
-//   .post(createReview)
-//   .get(readReview);
+attendanceRouter.route("/attendance").get(getAttendance);
+attendanceRouter.route("/attendance").post(postAttendance);
 
-// reviewRouter
-//   .route("/:id")
-//   .get(readDetailReview)
-//   .patch(updateReview)
-//   .delete(deleteReview);
 
 export default attendanceRouter;

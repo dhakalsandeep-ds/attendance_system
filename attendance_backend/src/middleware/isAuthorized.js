@@ -2,6 +2,7 @@ import expressAsyncHandler from "express-async-handler";
 
 export let isAuthorizedAdmin =expressAsyncHandler((req,res,next)=>{
     let role=req.body.info.role
+    console.log("role is", role)
     
     if(role==="admin")
     {

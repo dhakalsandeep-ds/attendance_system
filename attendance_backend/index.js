@@ -16,8 +16,8 @@ let port = 8000;
 app.use(cors());
 
 app.use(json());
-connectDb();
 
+connectDb();
 
 app.use("/teacher", teacherRouter);
 app.use("/student", studentRouter);
@@ -28,8 +28,6 @@ app.get("/verifyToken",TokenVerification);
 
 
 app.use(express.static("./public"));
-
-
 
 app.use(errorMiddleware);
 

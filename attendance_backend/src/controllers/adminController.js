@@ -102,7 +102,7 @@ export let addBatch = expressAsyncHandler(async (req, res, next) => {
   };
 
   successResponse(response);
-});
+})
 
 
 
@@ -219,7 +219,7 @@ export let getBatch = expressAsyncHandler(async (req, res, next) => {
   };
 
   successResponse(response);
-});
+})
 
 export let getBatchDetails=expressAsyncHandler(async(req,res,next)=>{
   let id=req.params.batchId
@@ -244,21 +244,20 @@ export let getTeacher = expressAsyncHandler(async (req, res, next) => {
   };
 
   successResponse(response);
-});
+})
 
 export let addTeacher = expressAsyncHandler(async (req, res, next) => {
    let name=req.body.name
    let email=req.body.email
    let password=req.body.password
-   let batchId=req.params.batchId
-    if(!await Batch.findOne({_id:batchId}))
-    {
-      let error=new Error("Invalid batch id")
-      error.statusCode=404
-      throw error
-    }
+    // if(await Batch.findOne({email}))
+    // {
+    //   let error=new Error("Invalid batch id")
+    //   error.statusCode=404
+    //   throw error
+    // }
     password=await hashPassword(password)
-  let result = await Teacher.create({name,email,password,batchId});
+  let result = await Teacher.create({name,email,password});
 
   let response = {
     res: res,
@@ -268,7 +267,23 @@ export let addTeacher = expressAsyncHandler(async (req, res, next) => {
   };
 
   successResponse(response);
-});
+})
+
+export let assignTeacher=expressAsyncHandler(async (req, res, next) => {
+  let _batchId=req.params.batchId
+  let teacherId=req.params.teacherId
+  let theTeacher=await Teacher.findById(teacherId)
+  theTeacher.batchId.push(_batchId)
+  let result=await Teacher.findByIdAndUpdate(teacherId,theTeacher,{new:true})
+  let response = {
+    res,
+    message: "successfully assigned",
+    result,
+    statusCode: HttpStatus.OK,
+  };
+
+  successResponse(response);
+})
 // export let assignBatchToTeacher =expressAsyncHandler(async(req,res,next)=>{
 //   let
 // })
@@ -283,7 +298,7 @@ export let getStudent = expressAsyncHandler(async (req, res, next) => {
   };
 
   successResponse(response);
-});
+})
 
 export let addStudent = expressAsyncHandler(async (req, res, next) => {
 
@@ -308,7 +323,7 @@ export let addStudent = expressAsyncHandler(async (req, res, next) => {
   };
 
   successResponse(response);
-});
+})
 
 
 
@@ -334,6 +349,22 @@ export let getTeacherDetail=expressAsyncHandler(async(req,res,next)=>{
     res: res,
     message: "success",
     result: result,
+    statusCode: HttpStatus.OK,
+  };
+
+  successResponse(response);
+})
+
+export let insertStudent=expressAsyncHandler(async(req,res,next)=>{
+  let _batchId=req.params.batchId
+  let studentId=req.params.studentId
+  let theStudent=await Student.findById(studentId)
+  theStudent.batchId.push(_batchId)
+  let result=await Student.findByIdAndUpdate(studentId,theStudent,{new:true})
+  let response = {
+    res,
+    message: "Student enrolled in class successfully",
+    result,
     statusCode: HttpStatus.OK,
   };
 

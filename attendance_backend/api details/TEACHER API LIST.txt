@@ -1,0 +1,11 @@
+//admin login
+url: /admin/login
+method: POST
+data={
+    email:"manishkdka123@gmail.com"
+    password:"*******"
+}
+
+//admin logout
+url: /admin/logout
+method: get

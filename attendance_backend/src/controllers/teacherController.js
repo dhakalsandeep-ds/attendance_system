@@ -56,7 +56,9 @@ export let logoutTeacher = expressAsyncHandler(async(req,res,next)=>{
 export let showAllBatch=expressAsyncHandler(async(req,res,next)=>{
   let teacherId=req.body.info.id
   let teacher=await Teacher.findOne({_id:teacherId})
-  let batch=await Batch.find({_id:teacher.batchId})
-  console.log("teacherid"+teacher)
-  console.log("classes+++++++++++"+batch)
+  let numberOfBatch=teacher.batchId.length
+  console.log(numberOfBatch)
+  // let batch=await Batch.find({_id:})
+  // console.log("teacherid"+teacher)
+  // console.log("classes+++++++++++"+batch)
 })

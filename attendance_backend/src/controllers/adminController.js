@@ -1,15 +1,7 @@
 import { HttpStatus, secretKey } from "../config/constant.js";
 import { successResponse } from "../helper/successResponse.js";
 import expressAsyncHandler from "express-async-handler";
-import {
-  Admin,
-  Attendance,
-  Batch,
-  Student,
-  Teacher,
-  Token,
-} from "../schema/model.js";
-import { Types } from "mongoose";
+import { Admin, Attendance, Batch, Student, Teacher, Token } from "../schema/model.js";
 import { generateToken, verifyToken } from "../utils/token.js";
 import { comparePassword, hashPassword } from "../utils/Hashing.js";
 
@@ -306,22 +298,17 @@ export let getStudent = expressAsyncHandler(async (req, res, next) => {
 })
 
 export let addStudent = expressAsyncHandler(async (req, res, next) => {
-  let name = req.body.name;
-  let email = req.body.email;
-  let password = req.body.password;
-  let batchId = req.params.batchId;
-  if (!(await Batch.findOne({ _id: batchId }))) {
-    let error = new Error("Invalid batch id");
-    error.statusCode = 404;
-    throw error;
-  }
-  password = await hashPassword(password);
-  let result = await Student.create({ name, email, password, batchId });
+
+  let name=req.body.name
+   let email=req.body.email
+   let password=req.body.password
+    password=await hashPassword(password)
+  let result = await Student.create({name,email,password});
 
   let response = {
-    res: res,
-    message: "success",
-    result: result,
+    res,
+    message: "student added successfully",
+     result,
     statusCode: HttpStatus.CREATED,
   };
 
@@ -349,9 +336,9 @@ export let getTeacherDetail = expressAsyncHandler(async (req, res, next) => {
   let result = await Teacher.findOne({ _id: id });
 
   let response = {
-    res: res,
+    res,
     message: "success",
-    result: result,
+    result,
     statusCode: HttpStatus.OK,
   };
 

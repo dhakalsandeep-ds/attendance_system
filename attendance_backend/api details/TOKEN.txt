@@ -1,0 +1,3 @@
+//verify token
+url: /verifyToken
+method: get

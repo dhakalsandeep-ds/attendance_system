@@ -11,3 +11,5 @@ export let generateToken = async (infoObj, expireInfo) => {
 
   return token;
 };
+
+

@@ -50,7 +50,7 @@ data={
 }
 
 //GET TEACHER DETAIL
-url: /admin/student/:studentId
+url: /admin/student/:batchId
 method: GET
 
 //GET ALL STUDENT
@@ -68,5 +68,5 @@ data={
 }
 
 //GET STUDENT DETAIL
-url: /admin/student/:studentId
+url: /admin/student/:batchId
 method: GET

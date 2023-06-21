@@ -23,6 +23,7 @@ app.use("/teacher", teacherRouter);
 app.use("/student", studentRouter);
 app.use("/attendance", attendanceRouter);
 app.use("/admin", adminRouter);
+// app.use("/verifyToken",TokenVerification)
 
 app.use(express.static("./public"));
 

@@ -1,1 +1,54 @@
-localhost:8000/admin/logout
+//admin login
+url: /admin/login
+method: POST
+data={
+    email:"manishkdka123@gmail.com"
+    password:"*******"
+}
+
+//admin logout
+url: /admin/logout
+method: get
+
+
+//ADMIN ADD 
+url: /admin/add
+method: POST
+data={
+    email:"manishkdka123@gmail.com",
+    password: "********"
+}
+
+//GET ALL Batch
+url: /admin/batch
+method: GET
+
+//ADD BATCH 
+url: /admin/batch
+method: post
+data={
+    name:"Nepalaya class of 2023",
+    course:"database"
+}
+
+//GET BATCH DETAIL
+url: /admin/batch/:batchId
+method: GET
+
+//GET ALL TEACHER
+url: /admin/teacher
+method: GET
+
+//ADD TEACHER
+url: /admin/teacher
+method: post
+data={
+    name:"Ram",
+    email:"ram123@gmail.com",
+    password:"********",
+    batchId:"5555516516546"
+}
+
+//GET TEACHER DETAIL
+url: /admin/batch/:teacherId
+method: GET

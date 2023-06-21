@@ -6,6 +6,53 @@ import { Types } from "mongoose";
 import { generateToken, verifyToken } from "../utils/token.js";
 import { comparePassword, hashPassword } from "../utils/Hashing.js";
 
+export let loginAdmin = expressAsyncHandler(async (req, res, next) => {
+  let email=req.body.email
+  let password=req.body.password
+  let result = await Admin.findOne({email});
+  let jwt_token;
+  if (await comparePassword(password,result.password)){
+    let infoObj={
+      id:result._id,
+      role:"admin"
+    }
+    let expireInfo={
+      expiresIn:"365d"
+    }
+    jwt_token = await generateToken(infoObj, expireInfo);
+    await Token.create({token:jwt_token})
+  }
+    else{
+    let error= new Error("Credential didn't match")
+    error.statusCode=401
+    throw error
+    }
+
+  let response = {
+    res: res,
+    message: "success",
+    result: 
+      {
+        token:jwt_token,
+      },
+    statusCode: HttpStatus.OK,
+  };
+
+  successResponse(response);
+})
+export let logout = expressAsyncHandler(async(req,res,next)=>{
+  let id=req.body.token.tokenId
+  await Token.findByIdAndDelete({_id:id})
+  let response = {
+    res: res,
+    message: "successfully logged out",
+    statusCode: HttpStatus.OK,
+  };
+
+  successResponse(response);
+
+})
+
 export let addAdmin = expressAsyncHandler(async (req, res, next) => {
   
   let email = req.body.email
@@ -57,40 +104,7 @@ export let addBatch = expressAsyncHandler(async (req, res, next) => {
   successResponse(response);
 });
 
-export let loginAdmin = expressAsyncHandler(async (req, res, next) => {
-  let email=req.body.email
-  let password=req.body.password
-  let result = await Admin.findOne({email});
-  let jwt_token;
-  if (await comparePassword(password,result.password)){
-    let infoObj={
-      id:result._id,
-      role:"admin"
-    }
-    let expireInfo={
-      expiresIn:"365d"
-    }
-    jwt_token = await generateToken(infoObj, expireInfo);
-    await Token.create({token:jwt_token})
-  }
-    else{
-    let error= new Error("Credential didn't match")
-    error.statusCode=401
-    throw error
-    }
 
-  let response = {
-    res: res,
-    message: "success",
-    result: 
-      {
-        token:jwt_token,
-      },
-    statusCode: HttpStatus.CREATED,
-  };
-
-  successResponse(response);
-})
 
 // export let updateUser = expressAsyncHandler(async (req, res, next) => {
   
@@ -201,12 +215,24 @@ export let getBatch = expressAsyncHandler(async (req, res, next) => {
     res: res,
     message: "success",
     result: result,
-    statusCode: HttpStatus.CREATED,
+    statusCode: HttpStatus.OK,
   };
 
   successResponse(response);
 });
 
+export let getBatchDetails=expressAsyncHandler(async(req,res,next)=>{
+  let id=req.params.batchId
+  let result= await Batch.findOne({_id:id})
+  let response = {
+    res,
+    message: "success",
+    result,
+    statusCode: HttpStatus.OK,
+  };
+
+  successResponse(response);
+})
 export let getTeacher = expressAsyncHandler(async (req, res, next) => {
   let result = await Teacher.find({});
 
@@ -214,7 +240,7 @@ export let getTeacher = expressAsyncHandler(async (req, res, next) => {
     res: res,
     message: "success",
     result: result,
-    statusCode: HttpStatus.CREATED,
+    statusCode: HttpStatus.OK,
   };
 
   successResponse(response);
@@ -238,14 +264,14 @@ export let addTeacher = expressAsyncHandler(async (req, res, next) => {
     res: res,
     message: "success",
     result: result,
-    statusCode: HttpStatus.CREATED,
+    statusCode: HttpStatus.OK,
   };
 
   successResponse(response);
 });
-export let assignBatchToTeacher =expressAsyncHandler(async(req,res,next)=>{
-  let
-})
+// export let assignBatchToTeacher =expressAsyncHandler(async(req,res,next)=>{
+//   let
+// })
 export let getStudent = expressAsyncHandler(async (req, res, next) => {
   let result = await Student.find({});
 
@@ -253,7 +279,7 @@ export let getStudent = expressAsyncHandler(async (req, res, next) => {
     res: res,
     message: "success",
     result: result,
-    statusCode: HttpStatus.CREATED,
+    statusCode: HttpStatus.OK,
   };
 
   successResponse(response);
@@ -284,18 +310,7 @@ export let addStudent = expressAsyncHandler(async (req, res, next) => {
   successResponse(response);
 });
 
-export let logout = expressAsyncHandler(async(req,res,next)=>{
-  let id=req.body.token.tokenId
-  await Token.findByIdAndDelete({_id:id})
-  let response = {
-    res: res,
-    message: "successfully logged out",
-    statusCode: HttpStatus.CREATED,
-  };
 
-  successResponse(response);
-
-})
 
 export let getStudentDetail=expressAsyncHandler(async(req,res,next)=>{
   let id=req.params.studentId
@@ -305,7 +320,7 @@ export let getStudentDetail=expressAsyncHandler(async(req,res,next)=>{
     res: res,
     message: "success",
     result: result,
-    statusCode: HttpStatus.CREATED,
+    statusCode: HttpStatus.OK,
   };
 
   successResponse(response);
@@ -319,7 +334,7 @@ export let getTeacherDetail=expressAsyncHandler(async(req,res,next)=>{
     res: res,
     message: "success",
     result: result,
-    statusCode: HttpStatus.CREATED,
+    statusCode: HttpStatus.OK,
   };
 
   successResponse(response);

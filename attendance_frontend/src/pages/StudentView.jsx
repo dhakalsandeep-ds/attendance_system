@@ -1,17 +1,10 @@
 import React, { useEffect, useState } from "react";
-// import Table from "@mui/material/Table";
-// import TableBody from "@mui/material/TableBody";
-// import TableCell from "@mui/material/TableCell";
-// import TableContainer from "@mui/material/TableContainer";
-// import TableHead from "@mui/material/TableHead";
-// import TableRow from "@mui/material/TableRow";
-// import Paper from "@mui/material/Paper";
 import Table from "../components/Table";
-import { useAuth } from "../context/auth";
+import { useAuth } from "./../context/auth";
 
-const BatchView = () => {
+const StudentView = () => {
   let [loading, setLoading] = useState(true);
-  let [batches, setBatches] = useState([]);
+  let [student, setStudent] = useState([]);
   let user = useAuth();
 
   async function fetchBatch() {
@@ -20,7 +13,7 @@ const BatchView = () => {
       Authorization: `Bearer ${user.token()}`,
     };
 
-    let response = await fetch("http://localhost:8000/admin/batch", {
+    let response = await fetch("http://localhost:8000/admin/student", {
       method: "GET",
       headers: headersList,
     });
@@ -28,7 +21,7 @@ const BatchView = () => {
     let data = await response.json();
     console.log(data);
 
-    setBatches(data.result);
+    setStudent(data.result);
     setLoading(false);
   }
 
@@ -37,11 +30,11 @@ const BatchView = () => {
   }, []);
   return (
     <div>
-      BatchView
+      <button onClick={user.logout}>logout</button>
       {loading && <p>loading.......</p>}
       {loading === false && <Table> </Table>}
     </div>
   );
 };
 
-export default BatchView;
+export default StudentView;

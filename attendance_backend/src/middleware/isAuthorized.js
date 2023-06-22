@@ -39,3 +39,17 @@ export let isAuthorizedStudent =expressAsyncHandler((req,res,next)=>{
         throw error
     }
 })
+
+export let isAuthorized =expressAsyncHandler((req,res,next)=>{
+    let role=req.body.info.role
+    
+    if(role==="teacher" || role==="admin")
+    {
+        next()
+    }
+    else{
+        let error=new Error("Access Not granted")
+        error.statusCode=403
+        throw error
+    }
+})

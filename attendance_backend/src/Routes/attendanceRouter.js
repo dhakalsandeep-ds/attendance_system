@@ -1,10 +1,13 @@
 import { Router } from "express";
-import { getAttendance, postAttendance } from "../controllers/attendanceController.js";
+import {  getAllAttendance, studentList, submitAttendance } from "../controllers/attendanceController.js";
+import { isAuthenticated } from "../middleware/isAuthenticated.js";
+import { isAuthorized } from "../middleware/isAuthorized.js";
 
-let attendanceRouter = Router();
+let attendanceRouter = Router()
 
-attendanceRouter.route("/attendance").get(getAttendance);
-attendanceRouter.route("/attendance").post(postAttendance);
+attendanceRouter.route("/:batchId").get(isAuthenticated,isAuthorized,getAllAttendance)
+attendanceRouter.route("/studentList/:batchId").get(isAuthenticated,isAuthorized,studentList)
+attendanceRouter.route("/submit/:batchId").post(isAuthenticated,isAuthorized,submitAttendance)
 
 
 export default attendanceRouter;

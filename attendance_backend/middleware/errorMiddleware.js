@@ -1,12 +1,6 @@
 import { HttpStatus } from "./../src/config/constant.js";
 
 export let errorMiddleware = (error, req, res, next) => {
-
-
-
-
-
-    
   res
     .status(error.statusCode || HttpStatus.INTERNAL_SERVER_ERROR)
     .json({

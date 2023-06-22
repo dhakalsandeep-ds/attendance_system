@@ -223,7 +223,7 @@ export let getBatchDetails=expressAsyncHandler(async(req,res,next)=>{
   let result= await Batch.findOne({_id:id})
   let response = {
     res,
-    message: "success",
+    message: "Batch Detail",
     result,
     statusCode: HttpStatus.OK,
   };
@@ -235,7 +235,7 @@ export let getTeacher = expressAsyncHandler(async (req, res, next) => {
 
   let response = {
     res: res,
-    message: "success",
+    message: "Teacher Detail",
     result: result,
     statusCode: HttpStatus.OK,
   };

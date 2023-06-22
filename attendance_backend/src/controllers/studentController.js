@@ -1,7 +1,9 @@
 import expressAsyncHandler from "express-async-handler";
-import { Student } from "../schema/model.js";
+import { Attendance, Student, Token} from "../schema/model.js";
 import { successResponse } from "../helper/successResponse.js";
 import { HttpStatus } from "../config/constant.js";
+import { comparePassword } from "../utils/Hashing.js";
+import { generateToken } from "../utils/token.js";
 
 export let loginStudent=expressAsyncHandler(async(req,res,next)=>{
   let email=req.body.email
@@ -26,48 +28,97 @@ export let loginStudent=expressAsyncHandler(async(req,res,next)=>{
     }
 
   let response = {
-    res: res,
-    message: "success",
+    res,
+    message: "student login successful",
     result: 
       {
         token:jwt_token,
       },
-    statusCode: HttpStatus.CREATED,
+    statusCode: HttpStatus.OK,
   };
 
   successResponse(response);
 })
+
 export let logoutStudent = expressAsyncHandler(async(req,res,next)=>{
   let id=req.body.token.tokenId
   await Token.findByIdAndDelete({_id:id})
   let response = {
     res: res,
     message: "successfully logged out",
-    statusCode: HttpStatus.CREATED,
+    statusCode: HttpStatus.OK,
   };
 
   successResponse(response);
 
 })
 
-export let getStudent = expressAsyncHandler(async (req, res, next) => {
-  let result = await Student.find({
-    batchId: "6481986943933fbec54ae4b7",
-  }).populate({
-    path: "batchId",
-    match: {
-      name: "mern2",
-    },
-  });
+// export let getStudent = expressAsyncHandler(async (req, res, next) => {
+//   let result = await Student.find({
+//     batchId: "6481986943933fbec54ae4b7",
+//   }).populate({
+//     path: "batchId",
+//     match: {
+//       name: "mern2",
+//     },
+//   });
 
-  console.log(result, "resutl ..........................");
+//   console.log(result, "resutl ..........................");
 
+//   let response = {
+//     res: res,
+//     message: "sucess",
+//     result: result,
+//     statusCode: HttpStatus.CREATED,
+//   };
+
+//   successResponse(response);
+// })
+
+export let showEnrolledClasses=expressAsyncHandler(async(req,res,next)=>{
+  let _studentId=req.body.info.id
+  let theStudent=await Student.find({_id:_studentId}).populate({path:"batchId"})
   let response = {
-    res: res,
-    message: "sucess",
-    result: result,
-    statusCode: HttpStatus.CREATED,
+    res,
+    message: "Student's Enrolled class details",
+    result:theStudent[0].batchId,
+    statusCode: HttpStatus.OK,
   };
 
   successResponse(response);
-});
+
+})
+
+export let studentDetail = expressAsyncHandler(async (req, res, next) => {
+  let _studentId=req.body.info.id
+  let result=await Student.find({_id:_studentId})
+
+  let response = {
+    res,
+    message: "Student Detail",
+    result,
+    statusCode: HttpStatus.OK,
+  };
+
+  successResponse(response);
+})
+
+export let attendanceDetail = expressAsyncHandler(async (req, res, next) => {
+  let _studentId=req.body.info.id
+  let _batchId=req.params.batchId
+  let result = await Attendance.find({batchId:_batchId,studentId:_studentId})
+    .populate({
+      path: "studentId"
+    }) 
+    .populate({
+      path: "batchId"
+    })
+  let response = {
+    res,
+    message: "Attendance of a student of a particular batch",
+    result,
+    statusCode: HttpStatus.OK,
+  };
+
+  successResponse(response);
+})

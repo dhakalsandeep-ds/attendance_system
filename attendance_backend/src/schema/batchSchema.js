@@ -6,7 +6,7 @@ export let batchSchema = Schema({
     required: true,
   },
   course: {
-    type: "String",
+    type: String,
     required: true,
   },
 });

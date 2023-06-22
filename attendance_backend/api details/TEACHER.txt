@@ -1,4 +1,4 @@
-//admin login
+//teacher login
 url: /teacher/login
 method: POST
 data={
@@ -6,7 +6,7 @@ data={
     password:"*******"
 }
 
-//admin logout
+//teacher logout
 url: /teacher/logout
 method: get
 

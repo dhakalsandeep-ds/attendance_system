@@ -34,7 +34,7 @@ export let loginTeacher=expressAsyncHandler(async(req,res,next)=>{
       {
         token:jwt_token,
       },
-    statusCode: HttpStatus.CREATED,
+    statusCode: HttpStatus.OK,
   };
 
   successResponse(response);
@@ -46,7 +46,7 @@ export let logoutTeacher = expressAsyncHandler(async(req,res,next)=>{
   let response = {
     res: res,
     message: "successfully logged out",
-    statusCode: HttpStatus.CREATED,
+    statusCode: HttpStatus.OK,
   };
 
   successResponse(response);
@@ -64,30 +64,13 @@ export let showAllBatch=expressAsyncHandler(async(req,res,next)=>{
   let response = {
     res,
     result,
-    message: "successfully logged out",
+    message: "All Batches",
     statusCode: HttpStatus.OK,
   };
 
   successResponse(response)
 })
 
-export let showAllStudentWithAttendance=expressAsyncHandler(async(req,res,next)=>{
-  // let _batchId=req.params.batchId
-  // let studentDetails=await Student.find({batchId:_batchId})
-  // let studentKoIdHaru=studentDetails.map((value,index)=>{
-  //   return {
-  //     _studentId: value._id
-  //   }
-  // })
-  // let attendanceDetails=[]
-  // for(let i=0;i<studentKoIdHaru.length;i++) {
-  // attendanceDetails.push(await Attendance.find({batchId:_batchId,studentId:studentKoIdHaru[i]._studentId}))
-  // }
-  // let finalArr=[
-  //   {
-  //     "name":
-  //   }
-  // ]
-  
 
-})
+
+

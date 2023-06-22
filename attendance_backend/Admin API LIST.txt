@@ -50,7 +50,7 @@ data={
 }
 
 //GET TEACHER DETAIL
-url: /admin/student/:batchId
+url: /admin/teacher/:batchId
 method: GET
 
 //GET ALL STUDENT

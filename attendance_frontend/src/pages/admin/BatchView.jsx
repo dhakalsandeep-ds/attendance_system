@@ -6,12 +6,14 @@ import React, { useEffect, useState } from "react";
 // import TableHead from "@mui/material/TableHead";
 // import TableRow from "@mui/material/TableRow";
 // import Paper from "@mui/material/Paper";
-import Table from "../components/Table";
-import { useAuth } from "../context/auth";
+import Table from "../../components/Table";
+import { useAuth } from "../../context/auth";
+import { Navigate, useNavigate } from "react-router-dom";
 
 const BatchView = () => {
   let [loading, setLoading] = useState(true);
   let [batches, setBatches] = useState([]);
+  let navigate = useNavigate();
   let user = useAuth();
 
   async function fetchBatch() {
@@ -32,14 +34,25 @@ const BatchView = () => {
     setLoading(false);
   }
 
+  function handleClick(id) {
+    console.log("clicked");
+    navigate(`/admin/batch/${id}`);
+  }
+
   useEffect(() => {
     fetchBatch();
   }, []);
   return (
     <div>
       BatchView
-      {loading && <p>loading.......</p>}
-      {loading === false && <Table> </Table>}
+      {batches &&
+        batches.map((v, i) => {
+          return (
+            <button key={i} onClick={(e) => handleClick(v._id, e)}>
+              {v.name} {v.course}
+            </button>
+          );
+        })}
     </div>
   );
 };

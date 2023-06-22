@@ -7,15 +7,17 @@ import { useEffect, useState } from "react";
 import { useNavigate, Route, Navigate } from "react-router-dom";
 import Paper from "@mui/material/Paper";
 import MaterialTable from "material-table";
-import Table from "./../components/Table";
-import useLocalStorage from "../../../attendance_backend/src/hooks/useLocalStorage";
-import { useAuth } from "../context/auth";
+import Table from "../../components/Table";
+import useLocalStorage from "../../../../attendance_backend/src/hooks/useLocalStorage";
+import { useAuth } from "../../context/auth";
 
 const AdminLogin = () => {
   let [email, setEmail] = useState("");
   let [password, setPassword] = useState("");
   let [emailErrors, setEmailErrors] = useState([]);
   let [passwordErrors, setPasswordErrors] = useState([]);
+  let [isEmailError, setIsEmailError] = useState(false);
+  let [isPasswordError, setIsPasswordError] = useState(false);
 
   const user = useAuth();
 
@@ -38,12 +40,16 @@ const AdminLogin = () => {
 
     checks.password.forEach((v) => {
       if (v === "required") {
-        if (e.target.value.length === 0) {
-          errors.push(["email is required"]);
+        if (e.target.value === "") {
+          errors.push("password is required");
         }
       }
     });
-
+    if (errors.length === 0) {
+      setIsPasswordError(false);
+    } else {
+      setIsPasswordError(true);
+    }
     setPasswordErrors(errors);
   }
 
@@ -54,17 +60,32 @@ const AdminLogin = () => {
 
     checks.email.forEach((v) => {
       if (v === "required") {
-        if (e.target.value.length === 0) {
-          errors.push(["email is required"]);
+        if (e.target.value === "") {
+          errors.push("email is required");
         }
       }
     });
-
+    if (errors.length !== 0) {
+      setIsEmailError(true);
+    } else {
+      setIsEmailError(false);
+    }
     setEmailErrors(errors);
   }
 
   async function handleSubmit() {
-    console.log(emailErrors.length);
+    if (email === "" || password === "") {
+      console.log(emailErrors);
+      if (email === "" && !emailErrors.includes("email is required")) {
+        setIsEmailError(true);
+        setEmailErrors([...emailErrors, "email is required"]);
+      }
+      if (password === "" && !passwordErrors.includes("password is required")) {
+        setIsPasswordError(true);
+        setPasswordErrors([...passwordErrors, "password is required"]);
+      }
+      return;
+    }
     if (emailErrors.length !== 0 || passwordErrors.length !== 0) {
       console.log("cannot call error is there");
       return;
@@ -85,6 +106,7 @@ const AdminLogin = () => {
         <h1 align="center">Login In</h1>
 
         <TextField
+          error={isEmailError ? true : false}
           style={{ marginTop: "20px" }}
           onChange={handleChange}
           value={email}
@@ -105,6 +127,7 @@ const AdminLogin = () => {
           })}
 
         <TextField
+          error={isPasswordError ? true : false}
           onChange={handleChange}
           value={password}
           type="password"

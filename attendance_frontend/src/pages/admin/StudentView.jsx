@@ -1,19 +1,19 @@
 import React, { useEffect, useState } from "react";
-import { useAuth } from "../context/auth";
-import Table from "../components/Table";
+import Table from "../../components/Table";
+import { useAuth } from "../../context/auth";
 
-const TeacherView = () => {
+const StudentView = () => {
   let [loading, setLoading] = useState(true);
-  let [teacher, setTeacher] = useState([]);
+  let [student, setStudent] = useState([]);
   let user = useAuth();
 
-  async function fetchTeacher() {
+  async function fetchBatch() {
     let headersList = {
       "Content-type": "application/json",
       Authorization: `Bearer ${user.token()}`,
     };
 
-    let response = await fetch("http://localhost:8000/admin/teacher", {
+    let response = await fetch("http://localhost:8000/admin/student", {
       method: "GET",
       headers: headersList,
     });
@@ -21,19 +21,20 @@ const TeacherView = () => {
     let data = await response.json();
     console.log(data);
 
-    setTeacher(data.result);
+    setStudent(data.result);
     setLoading(false);
   }
 
   useEffect(() => {
-    fetchTeacher();
+    fetchBatch();
   }, []);
   return (
     <div>
+      <button onClick={user.logout}>logout</button>
       {loading && <p>loading.......</p>}
       {loading === false && <Table> </Table>}
     </div>
   );
 };
 
-export default TeacherView;
+export default StudentView;

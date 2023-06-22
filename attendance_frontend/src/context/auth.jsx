@@ -26,7 +26,7 @@ export const AuthProvider = ({ children }) => {
     localStorage.setItem("token", data.result.token);
 
     console.log("redirecting ....");
-    navigate("/batch");
+    navigate("/batch", { replace: true });
   };
 
   const logout = async () => {
@@ -41,6 +41,7 @@ export const AuthProvider = ({ children }) => {
       const data = await response.json();
 
       localStorage.removeItem("token");
+      navigate("/admin", { replace: true });
     }
   };
   const token = () => {

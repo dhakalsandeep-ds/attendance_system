@@ -1,81 +1,62 @@
-import { useState } from "react";
 // import reactLogo from "./assets/react.svg";
 // import viteLogo from "/vite.svg";
 // import "./App.css";
-import AdminLogin from "./pages/AdminLogin";
-import { Routes, Route } from "react-router-dom";
-import BatchView from "./pages/BatchView";
-import ProtectedRoute from "./components/ProtectedRoute";
+import { Route, Routes } from "react-router-dom";
 import HideRoute from "./components/HideRoute";
-import AttendanceView from "./pages/AttendanceView";
-import StudentView from "./pages/StudentView";
-import TeacherView from "./pages/TeacherView";
-import AdminView from "./pages/AdminView";
-import AdminLayout from "./pages/AdminLayout";
-import { AuthContext, AuthProvider } from "./context/auth";
+import ProtectedRoute from "./components/ProtectedRoute";
+import { AuthProvider } from "./context/auth";
+import AdminLogin from "./pages/admin/AdminLogin";
+import AdminLayout from "./pages/admin/AdminLayout";
+import BatchView from "./pages/admin/BatchView";
+import TeacherView from "./pages/admin/TeacherView";
+import StudentView from "./pages/admin/StudentView";
+import AttendanceView from "./pages/admin/AttendanceView";
+import AddTeacherAndAdmin from "./pages/admin/AddTeacherAndAdmin";
+import { ThemeProvider } from "@mui/material";
+import theme from "./pages/admin/AdminTheme";
 
 function App() {
   return (
     <AuthProvider>
       <Routes>
-        <Route
-          path="/"
-          element={
-            <HideRoute>
-              <AdminLogin></AdminLogin>
-            </HideRoute>
-          }
-        ></Route>
-        <Route
-          path="/batch"
-          element={
-            <ProtectedRoute>
-              <AdminLayout>
-                <BatchView></BatchView>
-              </AdminLayout>
-            </ProtectedRoute>
-          }
-        ></Route>
-        <Route
-          path="/admin"
-          element={
-            <ProtectedRoute>
-              <AdminLayout>
-                <AdminView></AdminView>
-              </AdminLayout>
-            </ProtectedRoute>
-          }
-        ></Route>
-        <Route
-          path="/teacher"
-          element={
-            <ProtectedRoute>
-              <AdminLayout>
-                <TeacherView></TeacherView>
-              </AdminLayout>
-            </ProtectedRoute>
-          }
-        ></Route>
-        <Route
-          path="/student"
-          element={
-            <ProtectedRoute>
-              <AdminLayout>
-                <StudentView></StudentView>
-              </AdminLayout>
-            </ProtectedRoute>
-          }
-        ></Route>
-        <Route
-          path="/attendance"
-          element={
-            <ProtectedRoute>
-              <AdminLayout>
-                <AttendanceView></AttendanceView>
-              </AdminLayout>
-            </ProtectedRoute>
-          }
-        ></Route>
+        <Route path="/admin">
+          <Route
+            index
+            element={
+              <HideRoute>
+                <AdminLogin></AdminLogin>
+              </HideRoute>
+            }
+          ></Route>
+
+          <Route element={<ProtectedRoute></ProtectedRoute>}>
+            <Route
+              element={
+                <ThemeProvider theme={theme}>
+                  <AdminLayout></AdminLayout>
+                </ThemeProvider>
+              }
+            >
+              <Route
+                path="batch/:batchId"
+                element={<AddTeacherAndAdmin></AddTeacherAndAdmin>}
+              ></Route>
+              <Route path="batch" element={<BatchView></BatchView>}></Route>
+              <Route
+                path="teacher"
+                element={<TeacherView></TeacherView>}
+              ></Route>
+              <Route
+                path="student"
+                element={<StudentView></StudentView>}
+              ></Route>
+              <Route
+                path="attendance"
+                element={<AttendanceView></AttendanceView>}
+              ></Route>
+            </Route>
+          </Route>
+        </Route>
       </Routes>
     </AuthProvider>
   );

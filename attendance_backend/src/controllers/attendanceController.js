@@ -5,12 +5,9 @@ import { HttpStatus } from "../config/constant.js";
 
 export let getAttendance = expressAsyncHandler(async (req, res, next) => {
   
-  let result = await Attendance.find()
+  let result = await Attendance.find({})
     .populate({
-      path: "batchId",
-      // match: {
-      //   course: "dot net",
-      // },
+      path: "batchId"
     })
     .populate({
       path: "studentId",
@@ -37,4 +34,8 @@ export let getAttendance = expressAsyncHandler(async (req, res, next) => {
   //   next(error)
 
   // }
-});
+})
+
+export let postAttendance=expressAsyncHandler(async(req,res,next)=>{
+
+})

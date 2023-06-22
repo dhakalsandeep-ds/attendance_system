@@ -1,0 +1,16 @@
+//admin login
+url: /teacher/login
+method: POST
+data={
+    email:"manishkdka123@gmail.com"
+    password:"*******"
+}
+
+//admin logout
+url: /teacher/logout
+method: get
+
+//show all batches
+url: /teacher/batch
+method: get
+

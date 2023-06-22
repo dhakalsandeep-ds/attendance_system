@@ -53,6 +53,10 @@ data={
 url: /admin/teacher/:batchId
 method: GET
 
+//Assign teacher to class
+url: /admin/:teacherId/:batchId
+method: PUT
+
 //GET ALL STUDENT
 url: /admin/student
 method: GET
@@ -70,3 +74,7 @@ data={
 //GET STUDENT DETAIL
 url: /admin/student/:batchId
 method: GET
+
+//Assign student to class
+url: /admin/:studentId/:batchId
+method: PUT

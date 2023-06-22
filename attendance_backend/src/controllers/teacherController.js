@@ -1,5 +1,5 @@
 import expressAsyncHandler from "express-async-handler"
-import { Batch, Teacher, Token } from "../schema/model.js";
+import { Attendance, Batch, Student, Teacher, Token } from "../schema/model.js";
 import { comparePassword } from "../utils/Hashing.js";
 import { generateToken } from "../utils/token.js";
 import { HttpStatus } from "../config/constant.js";
@@ -16,7 +16,7 @@ export let loginTeacher=expressAsyncHandler(async(req,res,next)=>{
       role:"teacher"
     }
     let expireInfo={
-      expiresIn:"365d"
+      expiresIn:"1d"
     }
     jwt_token = await generateToken(infoObj, expireInfo);
     await Token.create({token:jwt_token})
@@ -29,7 +29,7 @@ export let loginTeacher=expressAsyncHandler(async(req,res,next)=>{
 
   let response = {
     res: res,
-    message: "success",
+    message: "successfully logged in as Teacher",
     result: 
       {
         token:jwt_token,
@@ -56,7 +56,38 @@ export let logoutTeacher = expressAsyncHandler(async(req,res,next)=>{
 export let showAllBatch=expressAsyncHandler(async(req,res,next)=>{
   let teacherId=req.body.info.id
   let teacher=await Teacher.findOne({_id:teacherId})
-  let batch=await Batch.find({_id:teacher.batchId})
-  console.log("teacherid"+teacher)
-  console.log("classes+++++++++++"+batch)
+  let numberOfBatch=teacher.batchId.length
+  let result=[]
+  for(let i=0;i<numberOfBatch;i++) {
+    result.push(await Batch.findById({_id:teacher.batchId[i]}))
+  }
+  let response = {
+    res,
+    result,
+    message: "successfully logged out",
+    statusCode: HttpStatus.OK,
+  };
+
+  successResponse(response)
+})
+
+export let showAllStudentWithAttendance=expressAsyncHandler(async(req,res,next)=>{
+  // let _batchId=req.params.batchId
+  // let studentDetails=await Student.find({batchId:_batchId})
+  // let studentKoIdHaru=studentDetails.map((value,index)=>{
+  //   return {
+  //     _studentId: value._id
+  //   }
+  // })
+  // let attendanceDetails=[]
+  // for(let i=0;i<studentKoIdHaru.length;i++) {
+  // attendanceDetails.push(await Attendance.find({batchId:_batchId,studentId:studentKoIdHaru[i]._studentId}))
+  // }
+  // let finalArr=[
+  //   {
+  //     "name":
+  //   }
+  // ]
+  
+
 })

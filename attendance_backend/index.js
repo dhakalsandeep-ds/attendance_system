@@ -12,7 +12,6 @@ let app = express();
 let port = 8000;
 app.use(cors());
 app.use(json());
-connectDb();
 
 app.use("/teacher", teacherRouter);
 app.use("/student", studentRouter);

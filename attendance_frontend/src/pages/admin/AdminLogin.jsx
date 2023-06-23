@@ -6,9 +6,9 @@ import Grid from "@mui/material/Stack";
 import { useEffect, useState } from "react";
 import { useNavigate, Route, Navigate } from "react-router-dom";
 import Paper from "@mui/material/Paper";
-import MaterialTable from "material-table";
-import Table from "../../components/Table";
-import useLocalStorage from "../../../../attendance_backend/src/hooks/useLocalStorage";
+// import MaterialTable from "material-table";
+// import Table from "../../components/Table";
+// import useLocalStorage from "../../../../attendance_backend/src/hooks/useLocalStorage";
 import { useAuth } from "../../context/auth";
 
 const AdminLogin = () => {

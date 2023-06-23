@@ -45,8 +45,7 @@ method: post
 data={
     name:"Ram",
     email:"ram123@gmail.com",
-    password:"********",
-    batchId:"5555516516546"
+    password:"********"
 }
 
 //GET TEACHER DETAIL
@@ -68,7 +67,6 @@ data={
     name:"Ram",
     email:"ram123@gmail.com",
     password:"********",
-    batchId:"5555516516546"
 }
 
 //GET STUDENT DETAIL

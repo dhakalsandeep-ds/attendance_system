@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import Table from "../../components/Table";
+// import Table from "../../components/Table";
 import { useAuth } from "../../context/auth";
 
 const StudentView = () => {
@@ -31,8 +31,9 @@ const StudentView = () => {
   return (
     <div>
       <button onClick={user.logout}>logout</button>
-      {loading && <p>loading.......</p>}
-      {loading === false && <Table> </Table>}
+      {/* {loading && <p>loading.......</p>}
+      {loading === false && <Table> </Table>} */}
+      student view
     </div>
   );
 };

@@ -12,8 +12,6 @@ import TeacherView from "./pages/admin/TeacherView";
 import StudentView from "./pages/admin/StudentView";
 import AttendanceView from "./pages/admin/AttendanceView";
 import AddTeacherAndAdmin from "./pages/admin/AddTeacherAndAdmin";
-import { ThemeProvider } from "@mui/material";
-import theme from "./pages/admin/AdminTheme";
 
 function App() {
   return (
@@ -30,13 +28,7 @@ function App() {
           ></Route>
 
           <Route element={<ProtectedRoute></ProtectedRoute>}>
-            <Route
-              element={
-                <ThemeProvider theme={theme}>
-                  <AdminLayout></AdminLayout>
-                </ThemeProvider>
-              }
-            >
+            <Route element={<AdminLayout></AdminLayout>}>
               <Route
                 path="batch/:batchId"
                 element={<AddTeacherAndAdmin></AddTeacherAndAdmin>}

@@ -1,5 +1,6 @@
-import React, { useState } from "react";
-import Table from "../../components/Table";
+import React, { useEffect, useState } from "react";
+import { useAuth } from "../../context/auth";
+// import Table from "../../components/Table";
 
 const AttendanceView = () => {
   let [loading, setLoading] = useState(true);
@@ -29,8 +30,10 @@ const AttendanceView = () => {
   }, []);
   return (
     <div>
-      {loading && <p>loading.......</p>}
-      {loading === false && <Table> </Table>}
+      {/* {loading && <p>loading.......</p>}
+
+      {loading === false && <Table> </Table>} */}
+      attendance View
     </div>
   );
 };

@@ -1,11 +1,24 @@
-//teacher login
-url: /admin/login
+//student login
+url: /student/login
 method: POST
 data={
     email:"manishkdka123@gmail.com"
     password:"*******"
 }
 
-//admin logout
-url: /admin/logout
+//student logout
+url: /student/logout
 method: get
+
+//show the detail of student
+url: /student-detail
+method: get
+
+//show students enrolled class details
+url: /student/class
+method:get
+
+//show attendance of a particular class
+url: /attendance-detail/:batchId
+method:get
+

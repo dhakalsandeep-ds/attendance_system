@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Grid from "@mui/material/Grid";
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
@@ -9,6 +9,9 @@ import Typography from "@mui/material/Typography";
 import Stack from "@mui/material/Stack";
 import { DataGrid } from "@mui/x-data-grid";
 import "../../css/linear-gradient.css";
+import { useAuth } from "../../context/auth";
+import Divider from "@mui/material/Divider";
+import { useNavigate } from "react-router-dom";
 
 const columns = [
   { field: "id", headerName: "ID", width: 70 },
@@ -44,6 +47,35 @@ const rows = [
 ];
 
 const BatchView = () => {
+  let [batch, setBatch] = useState();
+  let user = useAuth();
+  const navigate = useNavigate();
+
+  async function fetchBatch() {
+    let headersList = {
+      "Content-type": "application/json",
+      Authorization: `Bearer ${user.token()}`,
+    };
+
+    let response = await fetch("http://localhost:8000/admin/batch", {
+      method: "GET",
+      headers: headersList,
+    });
+
+    let data = await response.json();
+    console.log(data);
+
+    setBatch(data.result);
+  }
+
+  useEffect(() => {
+    fetchBatch();
+  }, []);
+
+  function handleBatchClick(e, id) {
+    navigate(`/admin/batch/${id}`);
+  }
+
   return (
     <div>
       <Stack spacing={2} direction={"row"}>
@@ -100,7 +132,23 @@ const BatchView = () => {
         </Card>
       </Stack>
 
-      <Stack sx={{ marginTop: "20px" }}>
+      {batch?.map((v, i) => {
+        return (
+          <Card key={i} onClick={(e) => handleBatchClick(e, v._id)}>
+            <CardContent>
+              <Typography gutterBottom variant="h5" component="div">
+                Course:{v.course}
+              </Typography>
+              <Typography variant="body2" color="text.secondary">
+                name of batch: {v.name}
+              </Typography>
+            </CardContent>
+            <Divider></Divider>
+          </Card>
+        );
+      })}
+
+      {/* <Stack sx={{ marginTop: "20px" }}>
         <DataGrid
           rows={rows}
           columns={columns}
@@ -112,7 +160,7 @@ const BatchView = () => {
           pageSizeOptions={[5, 10]}
           checkboxSelection
         />
-      </Stack>
+      </Stack> */}
     </div>
   );
 };

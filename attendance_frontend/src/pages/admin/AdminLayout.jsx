@@ -22,6 +22,7 @@ import { NavLink, Outlet } from "react-router-dom";
 import { FaChalkboardTeacher } from "react-icons/fa";
 import Stack from "@mui/material/Stack";
 import Button from "@mui/material/Button";
+import { useAuth } from "../../context/auth";
 
 const drawerWidth = 240;
 
@@ -72,6 +73,7 @@ const Drawer = styled(MuiDrawer, {
 export default function MiniDrawer() {
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
+  const user = useAuth();
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -79,6 +81,10 @@ export default function MiniDrawer() {
 
   const handleDrawerClose = () => {
     setOpen(false);
+  };
+
+  const logout = () => {
+    user.logout();
   };
 
   return (
@@ -99,7 +105,9 @@ export default function MiniDrawer() {
             Mini variant drawer
           </Typography>
 
-          <Button color="inherit">Logout</Button>
+          <Button color="inherit" onClick={logout}>
+            Logout
+          </Button>
         </Toolbar>
       </AppBar>
       <Drawer

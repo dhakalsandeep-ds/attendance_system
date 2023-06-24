@@ -1,47 +1,54 @@
 import { HttpStatus, secretKey } from "../config/constant.js";
 import { successResponse } from "../helper/successResponse.js";
 import expressAsyncHandler from "express-async-handler";
-import { Admin, Attendance, Batch, Student, Teacher, Token } from "../schema/model.js";
+import {
+  Admin,
+  Attendance,
+  Batch,
+  Student,
+  Teacher,
+  Token,
+} from "../schema/model.js";
 import { generateToken, verifyToken } from "../utils/token.js";
 import { comparePassword, hashPassword } from "../utils/Hashing.js";
 
 export let loginAdmin = expressAsyncHandler(async (req, res, next) => {
-  let email=req.body.email
-  let password=req.body.password
-  let result = await Admin.findOne({email});
+  let email = req.body.email;
+  let password = req.body.password;
+  console.log(email, password, "login");
+  let result = await Admin.findOne({ email });
+  console.log(result);
   let jwt_token;
-  if (await comparePassword(password,result.password)){
-    let infoObj={
-      id:result._id,
-      role:"admin"
-    }
-    let expireInfo={
-      expiresIn:"365d"
-    }
+  if (await comparePassword(password, result.password)) {
+    let infoObj = {
+      id: result._id,
+      role: "admin",
+    };
+    let expireInfo = {
+      expiresIn: "365d",
+    };
     jwt_token = await generateToken(infoObj, expireInfo);
-    await Token.create({token:jwt_token})
+    await Token.create({ token: jwt_token });
+  } else {
+    let error = new Error("Credential didn't match");
+    error.statusCode = 401;
+    throw error;
   }
-    else{
-    let error= new Error("Credential didn't match")
-    error.statusCode=401
-    throw error
-    }
 
   let response = {
     res: res,
     message: "success",
-    result: 
-      {
-        token:jwt_token,
-      },
+    result: {
+      token: jwt_token,
+    },
     statusCode: HttpStatus.OK,
   };
 
   successResponse(response);
-})
-export let logout = expressAsyncHandler(async(req,res,next)=>{
-  let id=req.body.token.tokenId
-  await Token.findByIdAndDelete({_id:id})
+});
+export let logout = expressAsyncHandler(async (req, res, next) => {
+  let id = req.body.token.tokenId;
+  await Token.findByIdAndDelete({ _id: id });
   let response = {
     res: res,
     message: "successfully logged out",
@@ -49,8 +56,7 @@ export let logout = expressAsyncHandler(async(req,res,next)=>{
   };
 
   successResponse(response);
-
-})
+});
 
 export let addAdmin = expressAsyncHandler(async (req, res, next) => {
   let email = req.body.email;
@@ -99,9 +105,7 @@ export let addBatch = expressAsyncHandler(async (req, res, next) => {
   };
 
   successResponse(response);
-})
-
-
+});
 
 // export let updateUser = expressAsyncHandler(async (req, res, next) => {
 
@@ -216,45 +220,45 @@ export let getBatch = expressAsyncHandler(async (req, res, next) => {
   };
 
   successResponse(response);
-})
+});
 
-export let getBatchDetails=expressAsyncHandler(async(req,res,next)=>{
-  let id=req.params.batchId
-  let result= await Batch.findOne({_id:id})
+export let getBatchDetails = expressAsyncHandler(async (req, res, next) => {
+  let id = req.params.batchId;
+  let result = await Batch.findOne({ _id: id });
   let response = {
     res,
-    message: "success",
+    message: "Batch Detail",
     result,
     statusCode: HttpStatus.OK,
   };
 
   successResponse(response);
-})
+});
 export let getTeacher = expressAsyncHandler(async (req, res, next) => {
   let result = await Teacher.find({});
 
   let response = {
     res: res,
-    message: "success",
+    message: "Teacher Detail",
     result: result,
     statusCode: HttpStatus.OK,
   };
 
   successResponse(response);
-})
+});
 
 export let addTeacher = expressAsyncHandler(async (req, res, next) => {
-   let name=req.body.name
-   let email=req.body.email
-   let password=req.body.password
-    // if(await Batch.findOne({email}))
-    // {
-    //   let error=new Error("Invalid batch id")
-    //   error.statusCode=404
-    //   throw error
-    // }
-    password=await hashPassword(password)
-  let result = await Teacher.create({name,email,password});
+  let name = req.body.name;
+  let email = req.body.email;
+  let password = req.body.password;
+  // if(await Batch.findOne({email}))
+  // {
+  //   let error=new Error("Invalid batch id")
+  //   error.statusCode=404
+  //   throw error
+  // }
+  password = await hashPassword(password);
+  let result = await Teacher.create({ name, email, password });
 
   let response = {
     res: res,
@@ -264,14 +268,16 @@ export let addTeacher = expressAsyncHandler(async (req, res, next) => {
   };
 
   successResponse(response);
-})
+});
 
-export let assignTeacher=expressAsyncHandler(async (req, res, next) => {
-  let _batchId=req.params.batchId
-  let teacherId=req.params.teacherId
-  let theTeacher=await Teacher.findById(teacherId)
-  theTeacher.batchId.push(_batchId)
-  let result=await Teacher.findByIdAndUpdate(teacherId,theTeacher,{new:true})
+export let assignTeacher = expressAsyncHandler(async (req, res, next) => {
+  let _batchId = req.params.batchId;
+  let teacherId = req.params.teacherId;
+  let theTeacher = await Teacher.findById(teacherId);
+  theTeacher.batchId.push(_batchId);
+  let result = await Teacher.findByIdAndUpdate(teacherId, theTeacher, {
+    new: true,
+  });
   let response = {
     res,
     message: "successfully assigned",
@@ -280,7 +286,7 @@ export let assignTeacher=expressAsyncHandler(async (req, res, next) => {
   };
 
   successResponse(response);
-})
+});
 // export let assignBatchToTeacher =expressAsyncHandler(async(req,res,next)=>{
 //   let
 // })
@@ -295,31 +301,28 @@ export let getStudent = expressAsyncHandler(async (req, res, next) => {
   };
 
   successResponse(response);
-})
+});
 
 export let addStudent = expressAsyncHandler(async (req, res, next) => {
-
-  let name=req.body.name
-   let email=req.body.email
-   let password=req.body.password
-    password=await hashPassword(password)
-  let result = await Student.create({name,email,password});
+  let name = req.body.name;
+  let email = req.body.email;
+  let password = req.body.password;
+  password = await hashPassword(password);
+  let result = await Student.create({ name, email, password });
 
   let response = {
     res,
     message: "student added successfully",
-     result,
+    result,
     statusCode: HttpStatus.CREATED,
   };
 
   successResponse(response);
-})
+});
 
-
-
-export let getStudentDetail=expressAsyncHandler(async(req,res,next)=>{
-  let id=req.params.studentId
-  let result=await Student.findOne({_id:id})
+export let getStudentDetail = expressAsyncHandler(async (req, res, next) => {
+  let id = req.params.studentId;
+  let result = await Student.findOne({ _id: id });
 
   let response = {
     res: res,
@@ -343,14 +346,16 @@ export let getTeacherDetail = expressAsyncHandler(async (req, res, next) => {
   };
 
   successResponse(response);
-})
+});
 
-export let insertStudent=expressAsyncHandler(async(req,res,next)=>{
-  let _batchId=req.params.batchId
-  let studentId=req.params.studentId
-  let theStudent=await Student.findById(studentId)
-  theStudent.batchId.push(_batchId)
-  let result=await Student.findByIdAndUpdate(studentId,theStudent,{new:true})
+export let insertStudent = expressAsyncHandler(async (req, res, next) => {
+  let _batchId = req.params.batchId;
+  let studentId = req.params.studentId;
+  let theStudent = await Student.findById(studentId);
+  theStudent.batchId.push(_batchId);
+  let result = await Student.findByIdAndUpdate(studentId, theStudent, {
+    new: true,
+  });
   let response = {
     res,
     message: "Student enrolled in class successfully",
@@ -359,4 +364,4 @@ export let insertStudent=expressAsyncHandler(async(req,res,next)=>{
   };
 
   successResponse(response);
-})
+});

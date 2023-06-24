@@ -287,6 +287,20 @@ export let assignTeacher = expressAsyncHandler(async (req, res, next) => {
 
   successResponse(response);
 });
+export let getBatchTeacher = expressAsyncHandler(async (req, res, next) => {
+  let _batchId = req.params.batchId;
+
+  let theTeacher = await Teacher.find({ batchId: [_batchId] });
+
+  let response = {
+    res,
+    message: "successfully assigned",
+    result,
+    statusCode: HttpStatus.OK,
+  };
+
+  successResponse(response);
+});
 // export let assignBatchToTeacher =expressAsyncHandler(async(req,res,next)=>{
 //   let
 // })

@@ -12,7 +12,7 @@ import { useAuth } from "../../context/auth";
 import Box from "@mui/material/Box";
 import Fab from "@mui/material/Fab";
 import AddIcon from "@mui/icons-material/Add";
-import { assignTeacher } from "../../../../attendance_backend/src/controllers/adminController";
+import useAdd from "./../../context/add";
 
 const AddTeacherAndAdmin = () => {
   const navigate = useNavigate();
@@ -20,11 +20,33 @@ const AddTeacherAndAdmin = () => {
   let [teachers, setTeachers] = useState([]);
   let [teacher, setTeacher] = useState("");
 
+  const user = useAuth();
+
+  async function add(body) {
+    let headersList = {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${user.token()}`,
+    };
+
+    let bodyContent = JSON.stringify({ ok: "ok" });
+
+    let response = await fetch(
+      "http://localhost:8000/admin/teacher/" + batchId,
+      {
+        method: "get",
+        body: bodyContent,
+        headers: headersList,
+      }
+    );
+
+    let data = await response.json();
+    console.log(data);
+  }
+
   const handleChange = (event) => {
     setTeacher(event.target.value);
   };
 
-  const user = useAuth();
   console.log(batchId);
 
   function goBack(e) {
@@ -54,6 +76,8 @@ const AddTeacherAndAdmin = () => {
 
   function assignTeacher(e) {
     console.log(e);
+    console.log(teacher);
+    add();
   }
 
   return (

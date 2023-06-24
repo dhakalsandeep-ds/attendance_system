@@ -7,7 +7,7 @@ import CardMedia from "@mui/material/CardMedia";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Stack from "@mui/material/Stack";
-import { DataGrid } from "@mui/x-data-grid";
+
 import "../../css/linear-gradient.css";
 import { useAuth } from "../../context/auth";
 import Divider from "@mui/material/Divider";

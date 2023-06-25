@@ -1,4 +1,4 @@
-import { HttpStatus } from "./../src/config/constant.js";
+import { HttpStatus } from "../config/constant.js";
 
 export let errorMiddleware = (error, req, res, next) => {
   res

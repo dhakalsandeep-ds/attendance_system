@@ -20,6 +20,6 @@ export let teacherSchema = Schema({
   },
   batchId: {
     type: [Types.ObjectId],
-    ref: "Batch",
-  },
+    ref: "Batch"
+  }
 });

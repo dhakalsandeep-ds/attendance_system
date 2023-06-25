@@ -16,7 +16,6 @@ import { Types } from "mongoose";
 export let loginAdmin = expressAsyncHandler(async (req, res, next) => {
   let email = req.body.email;
   let password = req.body.password;
-  console.log(email, password, "login");
   let result = await Admin.findOne({ email });
   console.log(result);
   let jwt_token;
@@ -211,7 +210,7 @@ export let addBatch = expressAsyncHandler(async (req, res, next) => {
 //   // }
 // });
 export let getBatch = expressAsyncHandler(async (req, res, next) => {
-  let result = await Batch.find({});
+  let result = await Batch.find({})
 
   let response = {
     res: res,
@@ -338,7 +337,7 @@ export let getStudent = expressAsyncHandler(async (req, res, next) => {
   };
 
   successResponse(response);
-});
+})
 
 export let addStudent = expressAsyncHandler(async (req, res, next) => {
   let name = req.body.name;
@@ -355,7 +354,7 @@ export let addStudent = expressAsyncHandler(async (req, res, next) => {
   };
 
   successResponse(response);
-});
+})
 
 export let getStudentDetail = expressAsyncHandler(async (req, res, next) => {
   let id = req.params.studentId;
@@ -369,7 +368,7 @@ export let getStudentDetail = expressAsyncHandler(async (req, res, next) => {
   };
 
   successResponse(response);
-});
+})
 
 export let getTeacherDetail = expressAsyncHandler(async (req, res, next) => {
   let id = req.params.teacherId;
@@ -383,7 +382,7 @@ export let getTeacherDetail = expressAsyncHandler(async (req, res, next) => {
   };
 
   successResponse(response);
-});
+})
 
 export let insertStudent = expressAsyncHandler(async (req, res, next) => {
   let _batchId = req.params.batchId;
@@ -401,4 +400,65 @@ export let insertStudent = expressAsyncHandler(async (req, res, next) => {
   };
 
   successResponse(response);
-});
+})
+
+export let updateStudent = expressAsyncHandler(async (req, res, next) => {
+  let studentId = req.params.studentId
+  let _data=req.body.data
+  delete _data.password
+  let result = await Student.findByIdAndUpdate(studentId,_data, {
+    new: true,
+  });
+  let response = {
+    res,
+    message: "Student Updated successfully",
+    result,
+    statusCode: HttpStatus.OK,
+  };
+
+  successResponse(response);
+})
+export let updateTeacher = expressAsyncHandler(async (req, res, next) => {
+  let teacherId = req.params.teacherId
+  let _data=req.body.data
+  delete _data.password
+  let result = await Teacher.findByIdAndUpdate(teacherId,_data, {
+    new: true,
+  });
+  let response = {
+    res,
+    message: "Teacher Updated successfully",
+    result,
+    statusCode: HttpStatus.OK,
+  };
+
+  successResponse(response);
+})
+
+export let deleteTeacher = expressAsyncHandler(async (req, res, next) => {
+  let teacherId = req.params.teacherId
+  
+  let result = await Teacher.findByIdAndDelete(teacherId)
+  let response = {
+    res,
+    message: "Teacher Account Deleted successfully",
+    result,
+    statusCode: HttpStatus.OK,
+  };
+
+  successResponse(response);
+})
+
+export let deleteStudent = expressAsyncHandler(async (req, res, next) => {
+  let studentId = req.params.studentId
+  let result = await Student.findByIdAndDelete(studentId);
+  let response = {
+    res,
+    message: "Student Account Deleted successfully",
+    result,
+    statusCode: HttpStatus.OK,
+  };
+
+  successResponse(response);
+})
+

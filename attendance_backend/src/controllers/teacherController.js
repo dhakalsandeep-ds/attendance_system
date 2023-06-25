@@ -1,6 +1,6 @@
 import expressAsyncHandler from "express-async-handler";
 import { Attendance, Batch, Student, Teacher, Token } from "../schema/model.js";
-import { comparePassword } from "../utils/Hashing.js";
+import { comparePassword, hashPassword } from "../utils/Hashing.js";
 import { generateToken } from "../utils/token.js";
 import { HttpStatus } from "../config/constant.js";
 import { successResponse } from "../helper/successResponse.js";
@@ -62,6 +62,29 @@ export let showAllBatch = expressAsyncHandler(async (req, res, next) => {
     res,
     result,
     message: "All Batches",
+    statusCode: HttpStatus.OK,
+  };
+
+  successResponse(response);
+});
+
+export let updatePasswordTeacher = expressAsyncHandler(async (req, res, next) => {
+  let teacherId = req.body.info.id
+  let theTeacher = await Teacher.findOne({ _id:teacherId})
+  let currentPassword=req.body.currentPassword
+  if(!await comparePassword(currentPassword,theTeacher.password))
+  {
+    let error = new Error("Password didn't match")
+    error.statusCode=401
+    throw error    
+  }
+  let _hashPassword= await hashPassword(req.body.newPassword)
+  let result=await Teacher.findByIdAndUpdate({_id:teacherId},{password:_hashPassword})
+  console.log(result)
+  let response = {
+    res,
+    result:{id:teacherId},
+    message: "Password Changed Successfully",
     statusCode: HttpStatus.OK,
   };
 

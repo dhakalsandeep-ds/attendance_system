@@ -10,6 +10,10 @@ data={
 url: /student/logout
 method: get
 
+//update password
+url: /student/update-password
+method: post
+
 //show the detail of student
 url: /student-detail
 method: get

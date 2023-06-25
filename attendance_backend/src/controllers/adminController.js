@@ -11,6 +11,7 @@ import {
 } from "../schema/model.js";
 import { generateToken, verifyToken } from "../utils/token.js";
 import { comparePassword, hashPassword } from "../utils/Hashing.js";
+import { Types } from "mongoose";
 
 export let loginAdmin = expressAsyncHandler(async (req, res, next) => {
   let email = req.body.email;
@@ -290,7 +291,29 @@ export let assignTeacher = expressAsyncHandler(async (req, res, next) => {
 export let getBatchTeacher = expressAsyncHandler(async (req, res, next) => {
   let _batchId = req.params.batchId;
 
-  let theTeacher = await Teacher.find({ batchId: [_batchId] });
+  let query = {
+    batchId: { $in: [new Types.ObjectId(_batchId)] },
+  };
+
+  let result = await Teacher.find(query);
+
+  let response = {
+    res,
+    message: "successfully assigned",
+    result,
+    statusCode: HttpStatus.OK,
+  };
+
+  successResponse(response);
+});
+export let getBatchStudent = expressAsyncHandler(async (req, res, next) => {
+  let _batchId = req.params.batchId;
+
+  let query = {
+    batchId: { $in: [new Types.ObjectId(_batchId)] },
+  };
+
+  let result = await Student.find(query);
 
   let response = {
     res,

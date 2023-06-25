@@ -102,7 +102,7 @@ export default function MiniDrawer() {
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" noWrap sx={{ flexGrow: 1 }} component="div">
-            Mini variant drawer
+            Attendance System
           </Typography>
 
           <Button color="inherit" onClick={logout}>

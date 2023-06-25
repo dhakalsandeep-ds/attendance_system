@@ -78,7 +78,7 @@ const BatchView = () => {
 
   return (
     <div>
-      <Stack spacing={2} direction={"row"}>
+      {/* <Stack spacing={2} direction={"row"}>
         <Card>
           <CardContent className="blue-gradient">
             <Typography
@@ -130,7 +130,7 @@ const BatchView = () => {
             </Typography>
           </CardContent>
         </Card>
-      </Stack>
+      </Stack> */}
 
       {batch?.map((v, i) => {
         return (

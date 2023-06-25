@@ -20,7 +20,7 @@ export default function DisplayTable({ columns, rows }) {
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows.map((row, i) => (
+          {rows?.map((row, i) => (
             <TableRow
               key={i}
               sx={{ "&:last-child td, &:last-child th": { border: 0 } }}

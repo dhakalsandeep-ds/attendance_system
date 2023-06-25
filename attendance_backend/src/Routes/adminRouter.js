@@ -7,6 +7,7 @@ import {
   assignTeacher,
   getBatch,
   getBatchDetails,
+  getBatchStudent,
   getBatchTeacher,
   getStudent,
   getStudentDetail,
@@ -46,7 +47,7 @@ adminRouter
   .route("/teacher/:teacherId/:batchId")
   .put(isAuthenticated, isAuthorizedAdmin, assignTeacher);
 adminRouter
-  .route("/teacher/:batchId")
+  .route("/teacher/batch/:batchId")
   .get(isAuthenticated, isAuthorizedAdmin, getBatchTeacher);
 
 //Student
@@ -62,5 +63,8 @@ adminRouter
 adminRouter
   .route("/student/:studentId/:batchId")
   .put(isAuthenticated, isAuthorizedAdmin, insertStudent);
+adminRouter
+  .route("/student/batch/:batchId")
+  .get(isAuthenticated, isAuthorizedAdmin, getBatchStudent);
 
 export default adminRouter;

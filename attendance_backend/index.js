@@ -7,6 +7,7 @@ import adminRouter from "./src/Routes/adminRouter.js";
 import cors from "cors";
 import { TokenVerification } from "./src/middleware/TokenValidation.js";
 import { errorMiddleware } from "./src/helper/errorMiddleware.js";
+import { dateNow } from "./src/utils/Date.js";
 
 let app = express();
 let port = 8000;

@@ -48,7 +48,7 @@ const AdminLogin = () => {
         event.target.value
       )
     ) {
-      errors.push(` invalide email format`);
+      errors.push(` invalid email format`);
     }
   }
 

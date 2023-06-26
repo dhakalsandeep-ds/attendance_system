@@ -11,6 +11,7 @@ import TextField from "@mui/material/TextField";
 import useAdd from "../../context/add";
 import AddIcon from "@mui/icons-material/Add";
 import Toastify from "./../../components/Toastify";
+import { Card, CardContent, Grid, Stack } from "@mui/material";
 
 const style = {
   position: "absolute",
@@ -40,6 +41,7 @@ const TeacherView = () => {
   const [openToast, setOpenToast] = React.useState(false);
   let [toastMessage, setToastMessage] = useState();
   let [severity, setSeverity] = useState("error");
+  let [noTeachers, setNoTeachers] = useState(0);
 
   const handleOpenToast = () => {
     setOpenToast(true);
@@ -65,9 +67,11 @@ const TeacherView = () => {
     });
 
     let data = await response.json();
+    if (data.success) {
+      setNoTeachers(data.result.length);
+      setTeacher(data.result);
+    }
     console.log(data);
-
-    setTeacher(data.result);
   }
 
   useEffect(() => {
@@ -214,27 +218,41 @@ const TeacherView = () => {
 
   return (
     <div>
-      <Typography
-        level="h1"
-        sx={{
-          textAlign: "center",
-          backgroundColor: "lightblue",
-          color: "white",
-          height: "20px",
-          padding: "30px",
-          mb: "20px",
-        }}
-      >
-        Teachers
-      </Typography>
-      <Button
-        onClick={handleOpen}
-        variant="contained"
-        startIcon={<AddIcon></AddIcon>}
-        sx={{ marginBottom: "5px" }}
-      >
-        add
-      </Button>
+      <Grid container spacing={5}>
+        <Grid item xs={9}>
+          {" "}
+          <Button
+            onClick={handleOpen}
+            variant="outlined"
+            startIcon={<AddIcon></AddIcon>}
+            sx={{ marginBottom: "10px", boxShadow: 6 }}
+          >
+            add teacher
+          </Button>
+          <DisplayTable
+            columns={["name", "email", "action"]}
+            rows={teacher}
+            elevation={6}
+          ></DisplayTable>
+        </Grid>
+        <Grid item xs={3}>
+          <Stack sx={{ marginTop: "50px" }}>
+            <Card elevation={6}>
+              <Stack direction={"column"}>
+                <CardContent>
+                  <Typography gutterBottom variant="h5" component="div">
+                    Total teachers
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary">
+                    {noTeachers}
+                  </Typography>
+                </CardContent>
+              </Stack>
+            </Card>
+          </Stack>
+        </Grid>
+      </Grid>
+
       <ModalForm
         open={open}
         handleClose={handleClose}
@@ -303,10 +321,6 @@ const TeacherView = () => {
           })}
       </ModalForm>
 
-      <DisplayTable
-        columns={["name", "email", "action"]}
-        rows={teacher}
-      ></DisplayTable>
       <Toastify
         handleOpen={handleOpenToast}
         handleClose={handleCloseToast}

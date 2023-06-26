@@ -12,6 +12,9 @@ import "../../css/linear-gradient.css";
 import { useAuth } from "../../context/auth";
 import Divider from "@mui/material/Divider";
 import { useNavigate } from "react-router-dom";
+import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
+import AddIcon from "@mui/icons-material/Add";
 
 const columns = [
   { field: "id", headerName: "ID", width: 70 },
@@ -47,7 +50,8 @@ const rows = [
 ];
 
 const BatchView = () => {
-  let [batch, setBatch] = useState();
+  let [batch, setBatch] = useState([]);
+  let [noBatches, setNoBatches] = useState(0);
   let user = useAuth();
   const navigate = useNavigate();
 
@@ -63,6 +67,9 @@ const BatchView = () => {
     });
 
     let data = await response.json();
+    if (data.success) {
+      setNoBatches(data.result.length);
+    }
     console.log(data);
 
     setBatch(data.result);
@@ -78,75 +85,89 @@ const BatchView = () => {
 
   return (
     <div>
-      {/* <Stack spacing={2} direction={"row"}>
-        <Card>
-          <CardContent className="blue-gradient">
-            <Typography
-              gutterBottom
-              variant="h5"
-              sx={{ color: "white" }}
-              component="div"
-            >
-              Lizard
-            </Typography>
-            <Typography
-              variant="body2"
-              color="text.secondary"
-              sx={{ color: "white" }}
-            >
-              Lizards are a widespread group of squamate reptiles, with over
-              6,000 species, ranging across all continents except Antarctica
-            </Typography>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent className="blue-gradient">
-            <Typography
-              gutterBottom
-              variant="h5"
-              component="div"
-              sx={{ color: "white" }}
-            >
-              Lizard
-            </Typography>
-            <Typography
-              variant="body2"
-              color="text.secondary"
-              sx={{ color: "white" }}
-            >
-              Lizards are a widespread group of squamate reptiles, with over
-              6,000 species, ranging across all continents except Antarctica
-            </Typography>
-          </CardContent>
-        </Card>
-        <Card>
-          <CardContent>
-            <Typography gutterBottom variant="h5" component="div">
-              Lizard
-            </Typography>
-            <Typography variant="body2" color="text.secondary">
-              Lizards are a widespread group of squamate reptiles, with over
-              6,000 species, ranging across all continents except Antarctica
-            </Typography>
-          </CardContent>
-        </Card>
-      </Stack> */}
+      <Grid container spacing={4}>
+        <Grid item xs={8}>
+          <Button
+            variant="outlined"
+            sx={{ boxShadow: 6 }}
+            startIcon={<AddIcon />}
+          >
+            Add{" "}
+          </Button>
+          {batch?.map((v, i) => {
+            return (
+              <Card
+                key={i}
+                elevation={6}
+                sx={{
+                  marginTop: "10px",
+                  marginBottom: "10px",
+                  padding: "20px",
+                }}
+              >
+                <CardContent>
+                  <Grid container>
+                    <Grid
+                      item
+                      xs={6}
+                      onClick={(e) => handleBatchClick(e, v._id)}
+                    >
+                      <Stack direction="row" spacing={3}>
+                        <Typography gutterBottom variant="h5" color={"primary"}>
+                          Course:{v.course}
+                        </Typography>
+                        <Typography
+                          variant="body2"
+                          color={"primary"}
+                          sx={{ paddingTop: "8px" }}
+                        >
+                          name of batch: {v.name}
+                        </Typography>
+                      </Stack>
+                    </Grid>
+                    <Grid item xs={6}>
+                      <Button
+                        variant="outlined"
+                        color="success"
+                        onClick={(e) => console.log(e, row._id)}
+                        sx={{ marginRight: "6px" }}
+                        startIcon={<EditIcon></EditIcon>}
+                      >
+                        Edit
+                      </Button>
 
-      {batch?.map((v, i) => {
-        return (
-          <Card key={i} onClick={(e) => handleBatchClick(e, v._id)}>
-            <CardContent>
-              <Typography gutterBottom variant="h5" component="div">
-                Course:{v.course}
-              </Typography>
-              <Typography variant="body2" color="text.secondary">
-                name of batch: {v.name}
-              </Typography>
-            </CardContent>
-            <Divider></Divider>
-          </Card>
-        );
-      })}
+                      <Button
+                        onClick={(e) => console.log(e, row._id)}
+                        variant="outlined"
+                        color="error"
+                        startIcon={<DeleteIcon></DeleteIcon>}
+                      >
+                        Delete
+                      </Button>
+                    </Grid>
+                  </Grid>
+                </CardContent>
+              </Card>
+            );
+          })}
+        </Grid>
+        <Grid item xs={4}>
+          <Stack sx={{ marginTop: "50px" }}>
+            <Card elevation={6}>
+              <Stack direction={"column"}>
+                <CardContent>
+                  <Typography gutterBottom variant="h5" component="div">
+                    Total Batch
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary">
+                    {noBatches}
+                  </Typography>
+                </CardContent>
+              </Stack>
+            </Card>
+          </Stack>
+        </Grid>
+      </Grid>
 
       {/* <Stack sx={{ marginTop: "20px" }}>
         <DataGrid
@@ -161,6 +182,32 @@ const BatchView = () => {
           checkboxSelection
         />
       </Stack> */}
+      {/* {batch.map((v, i) => {
+        return (
+          <Stack spacing={2} direction={"row"}>
+            <Card>
+              <Stack direction={"column"}>
+                <CardContent className="blue-gradient">
+                  <Typography
+                    gutterBottom
+                    variant="h5"
+                    component="div"
+                    sx={{ color: "white" }}
+                  >
+                    {v.name}
+                  </Typography>
+                  <Typography
+                    variant="body2"
+                    color="text.secondary"
+                    sx={{ color: "white" }}
+                  >
+                    {v.course}
+                  </Typography>
+                </CardContent>
+              </Stack>
+            </Card>
+          </Stack> */}
+      {/* ); })} */}
     </div>
   );
 };

@@ -11,14 +11,10 @@ import Button from "@mui/material/Button";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 
-export default function DisplayTable({ columns, rows, elevation = 0 }) {
+export default function DisplayBatchTable({ columns, rows }) {
   return (
-    <TableContainer
-      component={Paper}
-      elevation={elevation}
-      sx={{ padding: "10px" }}
-    >
-      <Table>
+    <TableContainer component={Paper}>
+      <Table sx={{ minWidth: 650 }} aria-label="simple table">
         <TableHead>
           <TableRow>
             {columns.map((v, i) => {
@@ -34,13 +30,13 @@ export default function DisplayTable({ columns, rows, elevation = 0 }) {
                 sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
               >
                 <TableCell component="th" scope="row">
-                  {row.name}
+                  {row.course}
                 </TableCell>
 
-                <TableCell>{row.email}</TableCell>
+                <TableCell>{row.name}</TableCell>
                 <TableCell>
                   <Button
-                    variant="outlined"
+                    variant="contained"
                     color="success"
                     onClick={(e) => console.log(e, row._id)}
                     sx={{ marginRight: "6px" }}
@@ -51,7 +47,7 @@ export default function DisplayTable({ columns, rows, elevation = 0 }) {
 
                   <Button
                     onClick={(e) => console.log(e, row._id)}
-                    variant="outlined"
+                    variant="contained"
                     color="error"
                     startIcon={<DeleteIcon></DeleteIcon>}
                   >

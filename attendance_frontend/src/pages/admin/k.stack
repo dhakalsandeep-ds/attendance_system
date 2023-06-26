@@ -1,0 +1,53 @@
+{/* <Stack spacing={2} direction={"row"}>
+        <Card>
+          <CardContent className="blue-gradient">
+            <Typography
+              gutterBottom
+              variant="h5"
+              sx={{ color: "white" }}
+              component="div"
+            >
+              Lizard
+            </Typography>
+            <Typography
+              variant="body2"
+              color="text.secondary"
+              sx={{ color: "white" }}
+            >
+              Lizards are a widespread group of squamate reptiles, with over
+              6,000 species, ranging across all continents except Antarctica
+            </Typography>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardContent className="blue-gradient">
+            <Typography
+              gutterBottom
+              variant="h5"
+              component="div"
+              sx={{ color: "white" }}
+            >
+              Lizard
+            </Typography>
+            <Typography
+              variant="body2"
+              color="text.secondary"
+              sx={{ color: "white" }}
+            >
+              Lizards are a widespread group of squamate reptiles, with over
+              6,000 species, ranging across all continents except Antarctica
+            </Typography>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardContent>
+            <Typography gutterBottom variant="h5" component="div">
+              Lizard
+            </Typography>
+            <Typography variant="body2" color="text.secondary">
+              Lizards are a widespread group of squamate reptiles, with over
+              6,000 species, ranging across all continents except Antarctica
+            </Typography>
+          </CardContent>
+        </Card>
+      </Stack> */}

@@ -7,7 +7,7 @@ import Toolbar from "@mui/material/Toolbar";
 import List from "@mui/material/List";
 import CssBaseline from "@mui/material/CssBaseline";
 import Typography from "@mui/material/Typography";
-import Divider from "@mui/material/Divider";
+
 import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
@@ -96,7 +96,7 @@ export default function MiniDrawer() {
 
   return (
     <Box sx={{ display: "flex" }}>
-      <AppBar position="fixed">
+      <AppBar position="fixed" sx={{ backgroundColor: "#9c27b0" }}>
         <Toolbar>
           <IconButton
             color="inherit"
@@ -117,16 +117,12 @@ export default function MiniDrawer() {
           </Button>
         </Toolbar>
       </AppBar>
-      <Drawer
-        variant="permanent"
-        open={open}
-        sx={{ backgroundColor: "lightblue" }}
-      >
+      <Drawer variant="permanent" open={open}>
         <List
           sx={{
             marginTop: "60px",
             height: "100%",
-            backgroundColor: "#1976D2",
+            backgroundColor: "#9c27b0",
           }}
         >
           <ListItem disablePadding sx={{ display: "block" }}>
@@ -134,7 +130,7 @@ export default function MiniDrawer() {
               to="batch"
               style={({ isActive }) => ({
                 color: "white",
-                backgroundColor: isActive ? "darkblue" : "",
+                backgroundColor: isActive ? "#af52bf" : "",
                 display: "block",
                 textDecoration: "none",
               })}
@@ -177,14 +173,13 @@ export default function MiniDrawer() {
                 )}
               </ListItemButton>
             </NavLink>
-            <Divider color="white" />
           </ListItem>
           <ListItem disablePadding sx={{ display: "block" }}>
             <NavLink
               to="admin"
               style={({ isActive }) => ({
                 color: "white",
-                backgroundColor: isActive ? "darkblue" : "",
+                backgroundColor: isActive ? "#af52bf" : "",
                 display: "block",
                 textDecoration: "none",
               })}
@@ -227,14 +222,13 @@ export default function MiniDrawer() {
                 )}
               </ListItemButton>
             </NavLink>
-            <Divider color="white" />
           </ListItem>
           <ListItem disablePadding sx={{ display: "block" }}>
             <NavLink
               to="teacher"
               style={({ isActive }) => ({
                 color: "white",
-                backgroundColor: isActive ? "darkblue" : "",
+                backgroundColor: isActive ? "#af52bf" : "",
                 display: "block",
                 textDecoration: "none",
               })}
@@ -277,7 +271,6 @@ export default function MiniDrawer() {
                 )}
               </ListItemButton>
             </NavLink>
-            <Divider color="white" />
           </ListItem>
 
           <ListItem disablePadding sx={{ display: "block" }}>
@@ -285,7 +278,7 @@ export default function MiniDrawer() {
               to="student"
               style={({ isActive }) => ({
                 color: "white",
-                backgroundColor: isActive ? "darkblue" : "",
+                backgroundColor: isActive ? "#af52bf" : "",
                 display: "block",
                 textDecoration: "none",
               })}
@@ -328,10 +321,8 @@ export default function MiniDrawer() {
                 )}
               </ListItemButton>
             </NavLink>
-            <Divider color="white" />
           </ListItem>
         </List>
-        <Divider />
       </Drawer>
       <Box component="main" sx={{ flexGrow: 1, p: 3, marginTop: "50px" }}>
         <Outlet></Outlet>

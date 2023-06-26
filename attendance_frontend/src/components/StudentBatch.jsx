@@ -5,6 +5,7 @@ import {
   MenuItem,
   Paper,
   Select,
+  Stack,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
@@ -143,12 +144,18 @@ const StudentBatch = () => {
 
   return (
     <div>
-      <Paper elevation={10}>
-        <Button onClick={(e) => handleOpen()}>Assign Student</Button>
-        <Typography variant="h5" gutterBottom>
-          {" "}
-          Batch Student
-        </Typography>
+      <Paper elevation={10} sx={{ padding: "15px" }}>
+        <Stack marginBottom={"10px"}>
+          <Button
+            variant="outlined"
+            startIcon={<AddIcon></AddIcon>}
+            onClick={(e) => handleOpen()}
+            sx={{ width: "fit-content" }}
+          >
+            Assign Teacher
+          </Button>
+        </Stack>
+
         <DisplayTable
           columns={["name", "email", "action"]}
           rows={batchStudent}

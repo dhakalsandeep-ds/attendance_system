@@ -41,7 +41,7 @@ export default function StudentTeacherBatch() {
         <Tabs value={value} onChange={handleChange}>
           <Tab label="Teacher" />
           <Tab label="Student" />
-          <Tab label="Attendance" />
+          <Tab label="Today Attendance" />
         </Tabs>
       </Box>
       <TabPanel value={value} index={0}>

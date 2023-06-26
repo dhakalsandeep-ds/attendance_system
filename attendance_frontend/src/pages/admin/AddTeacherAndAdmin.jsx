@@ -28,7 +28,7 @@ const AddTeacherAndAdmin = () => {
 
   return (
     <div>
-      <Button onClick={(e) => goBack(e)}>go back</Button>
+      {/* <Button onClick={(e) => goBack(e)}>go back</Button> */}
 
       <StudentTeacherBatch></StudentTeacherBatch>
     </div>

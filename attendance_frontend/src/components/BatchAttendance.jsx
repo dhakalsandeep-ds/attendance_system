@@ -12,6 +12,7 @@ import {
   TableRow,
 } from "@mui/material";
 import Toastify from "./Toastify";
+import SendIcon from "@mui/icons-material/Send";
 
 const BatchAttendance = () => {
   let [batchStudent, setBatchStudent] = useState([]);
@@ -102,8 +103,8 @@ const BatchAttendance = () => {
   }, []);
   return (
     <div>
-      <TableContainer component={Paper}>
-        <Table sx={{ minWidth: 650 }} aria-label="simple table">
+      <TableContainer component={Paper} sx={{ padding: "10px" }} elevation={6}>
+        <Table sx={{ minWidth: 650 }}>
           <TableHead>
             <TableRow>
               {["name", new Date().toLocaleDateString()].map((v, i) => {
@@ -121,19 +122,28 @@ const BatchAttendance = () => {
                   {row.name}
                 </TableCell>
 
-                <TableCell>
-                  <Button
-                    onClick={(e) => {
-                      if (batchStudent[i].status === "A") {
-                        batchStudent[i].status = "P";
-                      } else if (batchStudent[i].status === "P") {
-                        batchStudent[i].status = "L";
-                      } else if (batchStudent[i].status === "L") {
-                        batchStudent[i].status = "A";
-                      }
-                      console.log(batchStudent[i].status);
+                <TableCell
+                  onClick={(e) => {
+                    if (batchStudent[i].status === "A") {
+                      batchStudent[i].status = "P";
+                    } else if (batchStudent[i].status === "P") {
+                      batchStudent[i].status = "L";
+                    } else if (batchStudent[i].status === "L") {
+                      batchStudent[i].status = "A";
+                    }
+                    console.log(batchStudent[i].status);
 
-                      setBatchStudent([...batchStudent]);
+                    setBatchStudent([...batchStudent]);
+                  }}
+                >
+                  <Button
+                    sx={{
+                      color:
+                        batchStudent[i].status === "A"
+                          ? "red"
+                          : batchStudent[i].status === "P"
+                          ? "primary"
+                          : "orange",
                     }}
                   >
                     {row.status}
@@ -143,7 +153,14 @@ const BatchAttendance = () => {
             ))}
           </TableBody>
         </Table>
-        <Button onClick={(e) => register()}>register</Button>
+        <Button
+          variant="outlined"
+          startIcon={<SendIcon></SendIcon>}
+          onClick={(e) => register()}
+          sx={{ marginTop: "10px" }}
+        >
+          register
+        </Button>
       </TableContainer>
 
       <Toastify

@@ -114,7 +114,7 @@ export let updatePasswordStudent = expressAsyncHandler(async (req, res, next) =>
   }
   let _hashPassword= await hashPassword(req.body.newPassword)
   let result=await Student.findByIdAndUpdate({_id:studentId},{password:_hashPassword})
-  console.log(result)
+
   let response = {
     res,
     result:{id:studentId},

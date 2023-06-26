@@ -9,7 +9,8 @@ import { TokenVerification } from "./src/middleware/TokenValidation.js";
 import { errorMiddleware } from "./src/helper/errorMiddleware.js";
 import { dateNow } from "./src/utils/Date.js";
 
-let app = express();
+let app = new express();
+
 let port = 8000;
 app.use(cors());
 app.use(json());

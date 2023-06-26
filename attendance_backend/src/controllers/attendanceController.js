@@ -2,6 +2,8 @@ import expressAsyncHandler from "express-async-handler";
 import { Attendance, Student } from "../schema/model.js";
 import { successResponse } from "../helper/successResponse.js";
 import { HttpStatus } from "../config/constant.js";
+import { Parser } from "json2csv";
+import { dateNow } from "../utils/Date.js";
 
 
 export let studentList = expressAsyncHandler(async (req, res, next) => {
@@ -19,7 +21,10 @@ export let studentList = expressAsyncHandler(async (req, res, next) => {
 export let submitAttendance = expressAsyncHandler(async (req, res, next) => {
   let _batchId = req.params.batchId;
   let _data = req.body.data;
-  let check = await Attendance.find({ batchId: _batchId, Date:Date.now })
+  let _date=new Date(dateNow())
+ 
+  let check = await Attendance.find({ batchId: _batchId, date: _date.toISOString()})
+
   if (check[0] !== undefined) {
     let error = new Error("Attendance for today is already submitted")
     error.statusCode = 409
@@ -70,7 +75,6 @@ export let getAttendanceByDate = expressAsyncHandler(async (req, res, next) => {
 export let getAllAttendance = expressAsyncHandler(async (req, res, next) => {
   let _batchId = req.params.batchId
   let result = await Attendance.find({ batchId: _batchId })
-  console.log(typeof(result[1].date))
   // let result = await Attendance.find({ batchId: _batchId })
   //   .populate({
   //     path: "studentId",
@@ -88,3 +92,43 @@ export let getAllAttendance = expressAsyncHandler(async (req, res, next) => {
 
   // successResponse(response);
 });
+
+export let exportAllAttendance= expressAsyncHandler(async (req, res, next) => {
+  const parser = new Parser();  
+  let myData=await Attendance.find({batchId: req.params.batchId})
+  .populate({path:"studentId"})
+  let _myData=myData.map((curr)=>{
+    return {
+      Date:curr.date.toISOString().split("T")[0],
+      name:curr.studentId.name,
+      status: (curr.status===0)?"present":(curr.status===1)?"absent":"leave"
+      
+    }
+  })
+  let _myDataSorted=_myData.sort((a, b) => new Date(a.Date) - new Date(b.Date))
+    let csv = parser.parse(_myDataSorted)
+    res.setHeader("Content-Type","text/csv")
+    res.setHeader("Content-Disposition","attachment:filename=userData.csv")
+    res.status(200).end(csv)
+})
+
+export let exportAttendanceByDate= expressAsyncHandler(async (req, res, next) => {
+  const parser = new Parser();
+  let desiredYear=req.params.year
+  let desiredMonth=req.params.month  
+  let myData=await Attendance.find({batchId: req.params.batchId,year:desiredYear,month:desiredMonth})
+  .populate({path:"studentId"})
+  let _myData=myData.map((curr)=>{
+    return {
+      Date:curr.date.toISOString().split("T")[0],
+      name:curr.studentId.name,
+      status: (curr.status===0)?"present":(curr.status===1)?"absent":"leave"
+      
+    }
+  })
+  let _myDataSorted=_myData.sort((a, b) => new Date(a.Date) - new Date(b.Date))
+    let csv = parser.parse(_myDataSorted)
+    res.setHeader("Content-Type","text/csv")
+    res.setHeader("Content-Disposition","attachment:filename=userData.csv")
+    res.status(200).end(csv)
+})

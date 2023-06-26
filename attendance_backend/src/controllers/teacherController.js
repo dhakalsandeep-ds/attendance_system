@@ -80,7 +80,7 @@ export let updatePasswordTeacher = expressAsyncHandler(async (req, res, next) =>
   }
   let _hashPassword= await hashPassword(req.body.newPassword)
   let result=await Teacher.findByIdAndUpdate({_id:teacherId},{password:_hashPassword})
-  console.log(result)
+
   let response = {
     res,
     result:{id:teacherId},

@@ -12,8 +12,11 @@ import {
 import { generateToken, verifyToken } from "../utils/token.js";
 import { comparePassword, hashPassword } from "../utils/Hashing.js";
 import { Types } from "mongoose";
+import { dateNow } from "../utils/Date.js";
 
 export let loginAdmin = expressAsyncHandler(async (req, res, next) => {
+  let display= dateNow()
+  console.log(display)
   let email = req.body.email;
   let password = req.body.password;
   let result = await Admin.findOne({ email });

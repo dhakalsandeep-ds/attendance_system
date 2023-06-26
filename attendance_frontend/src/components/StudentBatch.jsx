@@ -21,6 +21,7 @@ import { useAuth } from "../context/auth";
 import DisplayTable from "./DisplayTable";
 import ModalForm from "./ModalForm";
 import Toastify from "./Toastify";
+import BatchTable from "./BatchTable";
 
 const StudentBatch = () => {
   const navigate = useNavigate();
@@ -156,10 +157,10 @@ const StudentBatch = () => {
           </Button>
         </Stack>
 
-        <DisplayTable
+        <BatchTable
           columns={["name", "email", "action"]}
           rows={batchStudent}
-        ></DisplayTable>
+        ></BatchTable>
       </Paper>
 
       <ModalForm

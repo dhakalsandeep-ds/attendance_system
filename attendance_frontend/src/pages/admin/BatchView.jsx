@@ -15,6 +15,9 @@ import { useNavigate } from "react-router-dom";
 import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import AddIcon from "@mui/icons-material/Add";
+import Toastify from "../../components/Toastify";
+import ModalForm from "../../components/ModalForm";
+import { TextField } from "@mui/material";
 
 const columns = [
   { field: "id", headerName: "ID", width: 70 },
@@ -52,8 +55,138 @@ const rows = [
 const BatchView = () => {
   let [batch, setBatch] = useState([]);
   let [noBatches, setNoBatches] = useState(0);
+  let [toastMessage, setToastMessage] = useState();
+  let [severity, setSeverity] = useState();
+  let [openToast, setOpenToast] = useState(false);
+  let [course, setCourse] = useState("");
+  let [name, setName] = useState("");
+  let [courseErrors, setCourseErrors] = useState([]);
+  let [nameErrors, setNameErrors] = useState([]);
+  let [isCourseError, setIsCourseError] = useState(false);
+  let [isNameError, setIsNameError] = useState(false);
+  const [open, setOpen] = React.useState(false);
   let user = useAuth();
   const navigate = useNavigate();
+
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+
+  const handleOpenToast = () => {
+    setOpenToast(true);
+  };
+
+  const handleCloseToast = () => {
+    setOpenToast(false);
+  };
+
+  function required(event, errors) {
+    if (event.target.value === "") {
+      errors.push(`${event.target.name} is required`);
+    }
+  }
+  const checks = {
+    course: [required],
+    name: [required],
+  };
+
+  async function handleChange(e) {
+    if (e.target.name === "course") {
+      handleCourseChange(e);
+    } else if (e.target.name === "name") {
+      handleNameChange(e);
+    }
+  }
+  function handleNameChange(e) {
+    setName(e.target.value);
+    let errors = [];
+
+    checks.name.forEach((v) => {
+      v(e, errors);
+      // if (v === "required") {
+      //   if (e.target.value === "") {
+      //     errors.push("password is required");
+      //   }
+      // }
+    });
+    if (errors.length === 0) {
+      setIsNameError(false);
+    } else {
+      setIsNameError(true);
+    }
+    setNameErrors(errors);
+  }
+
+  function handleCourseChange(e) {
+    setCourse(e.target.value);
+
+    let errors = [];
+
+    checks.course.forEach((v) => {
+      v(e, errors);
+      // if (v === "required") {
+      //   if (e.target.value === "") {
+      //     errors.push("email is required");
+      //   }
+      // }
+    });
+    if (errors.length !== 0) {
+      setIsCourseError(true);
+    } else {
+      setIsCourseError(false);
+    }
+    setCourseErrors(errors);
+  }
+
+  async function handleSubmit() {
+    if (course === "" || name === "") {
+      if (course === "" && !courseErrors.includes("course is required")) {
+        setIsCourseError(true);
+        setCourseErrors([...courseErrors, "course is required"]);
+      }
+      if (name === "" && !nameErrors.includes("name is required")) {
+        setIsNameError(true);
+        setNameErrors([...nameErrors, "name is required"]);
+      }
+      return;
+    }
+    if (courseErrors.length !== 0 || nameErrors.length !== 0) {
+      console.log("cannot call error is there");
+      return;
+    }
+    let headersList = {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${user.token()}`,
+    };
+
+    let bodyContent = JSON.stringify({ name, course });
+    let data;
+    try {
+      let response = await fetch("http://localhost:8000/admin/batch/", {
+        method: "post",
+        body: bodyContent,
+        headers: headersList,
+      });
+
+      data = await response.json();
+    } catch (e) {
+      setOpenToast(true);
+      setToastMessage("something went wrong");
+      setSeverity("error");
+      handleClose();
+    }
+    if (data.success) {
+      setOpenToast(true);
+      setToastMessage(data.message);
+      setSeverity("success");
+      handleClose();
+    } else {
+      setOpenToast(true);
+      setToastMessage(data.message);
+      setSeverity("error");
+      handleClose();
+    }
+    console.log(data);
+  }
 
   async function fetchBatch() {
     let headersList = {
@@ -91,8 +224,9 @@ const BatchView = () => {
             variant="outlined"
             sx={{ boxShadow: 6 }}
             startIcon={<AddIcon />}
+            onClick={(e) => handleOpen()}
           >
-            Add{" "}
+            Add Batch{" "}
           </Button>
           {batch?.map((v, i) => {
             return (
@@ -109,41 +243,38 @@ const BatchView = () => {
                   <Grid container>
                     <Grid
                       item
-                      xs={6}
+                      xs={8}
                       onClick={(e) => handleBatchClick(e, v._id)}
+                      sx={{ marginBottom: "3px" }}
                     >
-                      <Stack direction="row" spacing={3}>
-                        <Typography gutterBottom variant="h5" color={"primary"}>
-                          Course:{v.course}
+                      <Stack direction={"column"} flexWrap="wrap">
+                        <Typography variant="h5">
+                          Course:{v.course} <br></br>
                         </Typography>
-                        <Typography
-                          variant="body2"
-                          color={"primary"}
-                          sx={{ paddingTop: "8px" }}
-                        >
-                          name of batch: {v.name}
+                        <Typography variant="body2" color="text.secondary">
+                          name of batch {v.name}
                         </Typography>
                       </Stack>
                     </Grid>
-                    <Grid item xs={6}>
-                      <Button
-                        variant="outlined"
-                        color="success"
-                        onClick={(e) => console.log(e, row._id)}
-                        sx={{ marginRight: "6px" }}
-                        startIcon={<EditIcon></EditIcon>}
-                      >
-                        Edit
-                      </Button>
+                    <Grid item xs={4}>
+                      <Stack direction={"column"} flexWrap="wrap">
+                        <Button
+                          variant="outlined"
+                          color="success"
+                          onClick={(e) => console.log(e, row._id)}
+                          sx={{ marginRight: "6px", width: "fit-content" }}
+                          startIcon={<EditIcon></EditIcon>}
+                        ></Button>
+                      </Stack>
 
-                      <Button
+                      {/* <Button
                         onClick={(e) => console.log(e, row._id)}
                         variant="outlined"
                         color="error"
                         startIcon={<DeleteIcon></DeleteIcon>}
                       >
-                        Delete
-                      </Button>
+                        
+                      </Button> */}
                     </Grid>
                   </Grid>
                 </CardContent>
@@ -168,6 +299,61 @@ const BatchView = () => {
           </Stack>
         </Grid>
       </Grid>
+
+      <ModalForm
+        open={open}
+        handleClose={handleClose}
+        handleSubmit={handleSubmit}
+      >
+        <TextField
+          error={isNameError ? true : false}
+          style={{ marginTop: "20px" }}
+          onChange={handleChange}
+          value={name}
+          id="standard-basic"
+          label="name*"
+          variant="standard"
+          fullWidth={true}
+          name="name"
+        />
+        {nameErrors.length !== 0 &&
+          nameErrors.map((v, i) => {
+            return (
+              <div style={{ color: "red", marginTop: "5px" }} key={i}>
+                {" "}
+                {v}{" "}
+              </div>
+            );
+          })}
+        <TextField
+          error={isCourseError ? true : false}
+          style={{ marginTop: "20px" }}
+          onChange={handleChange}
+          value={course}
+          id="standard-basic"
+          label="course*"
+          variant="standard"
+          fullWidth={true}
+          name="course"
+        />
+        {courseErrors.length !== 0 &&
+          courseErrors.map((v, i) => {
+            return (
+              <div style={{ color: "red", marginTop: "5px" }} key={i}>
+                {" "}
+                {v}{" "}
+              </div>
+            );
+          })}
+      </ModalForm>
+
+      <Toastify
+        handleOpen={handleOpenToast}
+        handleClose={handleCloseToast}
+        message={toastMessage}
+        severity={severity}
+        open={openToast}
+      ></Toastify>
 
       {/* <Stack sx={{ marginTop: "20px" }}>
         <DataGrid

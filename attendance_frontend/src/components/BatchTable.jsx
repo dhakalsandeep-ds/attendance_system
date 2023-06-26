@@ -11,12 +11,11 @@ import Button from "@mui/material/Button";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 
-export default function DisplayTable({
+export default function BatchTable({
   columns,
   rows,
   elevation = 0,
-  handleEditOpen,
-  handleDeleteOpen,
+  handleUnassign,
 }) {
   return (
     <TableContainer
@@ -46,19 +45,13 @@ export default function DisplayTable({
                 <TableCell>{row.email}</TableCell>
                 <TableCell>
                   <Button
-                    variant="outlined"
-                    color="success"
-                    onClick={(e) => handleEditOpen(e, row._id)}
-                    sx={{ marginRight: "6px" }}
-                    startIcon={<EditIcon></EditIcon>}
-                  ></Button>
-
-                  <Button
-                    onClick={(e) => handleDeleteOpen(e, row._id)}
+                    onClick={(e) => handleUnassign(e, row._id)}
                     variant="outlined"
                     color="error"
                     startIcon={<DeleteIcon></DeleteIcon>}
-                  ></Button>
+                  >
+                    unassign
+                  </Button>
                 </TableCell>
               </TableRow>
             ))}

@@ -1,10 +1,11 @@
 import { Schema } from "mongoose";
+import { dateNow } from "../utils/Date.js";
 
 export let attendanceSchema = Schema({
   date: {
     type: Date,
     immutable:true,
-    default: Date.now
+    default: dateNow()
   },
   status:{
     type:Number,
@@ -19,5 +20,11 @@ export let attendanceSchema = Schema({
   batchId: {
     type: Schema.ObjectId,
     ref: "Batch"
+  },
+  year:{
+    type:Number
+  },
+  month:{
+    type:Number
   }
 });

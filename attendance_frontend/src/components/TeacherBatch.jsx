@@ -19,6 +19,7 @@ import StudentTeacherBatch from "./StudentTeacherBatch";
 import { useAuth } from "../context/auth";
 import DisplayTable from "./DisplayTable";
 import ModalForm from "./ModalForm";
+import Toastify from "./Toastify";
 
 const TeacherBatch = () => {
   const navigate = useNavigate();
@@ -28,6 +29,17 @@ const TeacherBatch = () => {
   let [teacher, setTeacher] = useState("");
   const [open, setOpen] = React.useState(false);
   let [batchTeacher, setBatchTeacher] = useState([]);
+  let [toastMessage, setToastMessage] = useState();
+  let [severity, setSeverity] = useState();
+  let [openToast, setOpenToast] = useState(false);
+
+  const handleOpenToast = () => {
+    setOpenToast(true);
+  };
+
+  const handleCloseToast = () => {
+    setOpenToast(false);
+  };
 
   const user = useAuth();
 
@@ -41,17 +53,35 @@ const TeacherBatch = () => {
     };
 
     let bodyContent = JSON.stringify({ ok: "ok" });
+    let data;
+    try {
+      let response = await fetch(
+        "http://localhost:8000/admin/teacher/" + teacher + "/" + batchId,
+        {
+          method: "put",
 
-    let response = await fetch(
-      "http://localhost:8000/admin/teacher/" + teacher + "/" + batchId,
-      {
-        method: "put",
+          headers: headersList,
+        }
+      );
 
-        headers: headersList,
-      }
-    );
-
-    let data = await response.json();
+      data = await response.json();
+    } catch (e) {
+      setOpenToast(true);
+      setToastMessage("something went wrong");
+      setSeverity("error");
+      handleClose();
+    }
+    if (data.success) {
+      setOpenToast(true);
+      setToastMessage(data.message);
+      setSeverity("success");
+      handleClose();
+    } else {
+      setOpenToast(true);
+      setToastMessage(data.message);
+      setSeverity("error");
+      handleClose();
+    }
     console.log(data);
   }
 
@@ -72,8 +102,9 @@ const TeacherBatch = () => {
 
     let data = await response.json();
     console.log(data);
-
-    setTeachers(data.result);
+    if (data.success) {
+      setTeachers(data.result);
+    }
   }
 
   useEffect(() => {
@@ -157,6 +188,13 @@ const TeacherBatch = () => {
           </Select>
         </FormControl>
       </ModalForm>
+      <Toastify
+        handleOpen={handleOpenToast}
+        handleClose={handleCloseToast}
+        message={toastMessage}
+        severity={severity}
+        open={openToast}
+      ></Toastify>
     </div>
   );
 };

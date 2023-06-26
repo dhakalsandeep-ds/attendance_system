@@ -9,6 +9,8 @@ import ModalForm from "./../../components/ModalForm";
 import DisplayTable from "./../../components/DisplayTable";
 import TextField from "@mui/material/TextField";
 import useAdd from "../../context/add";
+import AddIcon from "@mui/icons-material/Add";
+import Toastify from "../../components/Toastify";
 
 const style = {
   position: "absolute",
@@ -35,6 +37,18 @@ const StudentView = () => {
   let [passwordErrors, setPasswordErrors] = useState([]);
   let [nameErrors, setNameErrors] = useState([]);
   const [open, setOpen] = React.useState(false);
+
+  let [toastMessage, setToastMessage] = useState();
+  let [severity, setSeverity] = useState();
+  let [openToast, setOpenToast] = useState(false);
+
+  const handleOpenToast = () => {
+    setOpenToast(true);
+  };
+
+  const handleCloseToast = () => {
+    setOpenToast(false);
+  };
 
   let [add] = useAdd({
     url: "http://localhost:8000/admin/student",
@@ -65,10 +79,26 @@ const StudentView = () => {
     fetchStudent();
   }, []);
 
+  function required(event, errors) {
+    if (event.target.value === "") {
+      errors.push(`${event.target.name} is required`);
+    }
+  }
+
+  function checkEmailFormat(event, errors) {
+    if (
+      !/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(
+        event.target.value
+      )
+    ) {
+      errors.push(` invalide email format`);
+    }
+  }
+
   const checks = {
-    email: ["required"],
-    password: ["required"],
-    name: ["required"],
+    email: [required, checkEmailFormat],
+    password: [required],
+    name: [required],
   };
 
   async function handleChange(e) {
@@ -85,12 +115,14 @@ const StudentView = () => {
     setName(e.target.value);
     let errors = [];
 
-    checks.password.forEach((v) => {
-      if (v === "required") {
-        if (e.target.value === "") {
-          errors.push("name is required");
-        }
-      }
+    checks.name.forEach((v) => {
+      v(e, errors);
+
+      // if (v === "required") {
+      //   if (e.target.value === "") {
+      //     errors.push("name is required");
+      //   }
+      // }
     });
     if (errors.length === 0) {
       setIsNameError(false);
@@ -104,11 +136,7 @@ const StudentView = () => {
     let errors = [];
 
     checks.password.forEach((v) => {
-      if (v === "required") {
-        if (e.target.value === "") {
-          errors.push("password is required");
-        }
-      }
+      v(e, errors);
     });
     if (errors.length === 0) {
       setIsPasswordError(false);
@@ -124,11 +152,7 @@ const StudentView = () => {
     let errors = [];
 
     checks.email.forEach((v) => {
-      if (v === "required") {
-        if (e.target.value === "") {
-          errors.push("email is required");
-        }
-      }
+      v(e, errors);
     });
     if (errors.length !== 0) {
       setIsEmailError(true);
@@ -150,8 +174,8 @@ const StudentView = () => {
         setPasswordErrors([...passwordErrors, "password is required"]);
       }
       if (name === "" && !nameErrors.includes("name is required")) {
-        setIsEmailError(true);
-        setEmailErrors([...passwordErrors, "name is required"]);
+        setIsNameError(true);
+        setNameErrors([...passwordErrors, "name is required"]);
       }
       return;
     }
@@ -164,13 +188,69 @@ const StudentView = () => {
       return;
     }
     console.log("submitted", name, email, password);
-    let ans = add({ name, email, password });
-    console.log(ans);
+
+    let headersList = {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${user.token()}`,
+    };
+
+    let bodyContent = JSON.stringify({ name, email, password });
+
+    let data;
+    try {
+      let response = await fetch("http://localhost:8000/admin/student", {
+        method: "POST",
+        body: bodyContent,
+        headers: headersList,
+      });
+
+      data = await response.json();
+    } catch (e) {
+      setOpenToast(true);
+      setToastMessage("something went wrong");
+      setSeverity("error");
+      handleClose();
+    }
+
+    console.log(data);
+
+    if (data.success) {
+      setOpenToast(true);
+      setToastMessage(data.message);
+      setSeverity("success");
+      handleClose();
+    } else {
+      setOpenToast(true);
+      setToastMessage(data.message);
+      setSeverity("error");
+      handleClose();
+    }
+    console.log(data);
   }
 
   return (
     <div>
-      <Button onClick={handleOpen}>add</Button>
+      <Typography
+        level="h1"
+        sx={{
+          textAlign: "center",
+          backgroundColor: "lightblue",
+          color: "white",
+          height: "20px",
+          padding: "30px",
+          mb: "20px",
+        }}
+      >
+        Students
+      </Typography>
+      <Button
+        onClick={handleOpen}
+        variant="contained"
+        startIcon={<AddIcon></AddIcon>}
+        sx={{ marginBottom: "10px" }}
+      >
+        add
+      </Button>
       <ModalForm
         open={open}
         handleClose={handleClose}
@@ -243,6 +323,14 @@ const StudentView = () => {
         columns={["name", "email", "action"]}
         rows={student}
       ></DisplayTable>
+
+      <Toastify
+        handleOpen={handleOpenToast}
+        handleClose={handleCloseToast}
+        message={toastMessage}
+        severity={severity}
+        open={openToast}
+      ></Toastify>
     </div>
   );
 };

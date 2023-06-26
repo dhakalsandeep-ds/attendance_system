@@ -8,6 +8,9 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import Button from "@mui/material/Button";
 
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
+
 export default function DisplayTable({ columns, rows }) {
   return (
     <TableContainer component={Paper}>
@@ -20,27 +23,44 @@ export default function DisplayTable({ columns, rows }) {
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows?.map((row, i) => (
-            <TableRow
-              key={i}
-              sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-            >
-              <TableCell component="th" scope="row">
-                {row.name}
-              </TableCell>
+          {rows.length !== 0 &&
+            rows.map((row, i) => (
+              <TableRow
+                key={i}
+                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+              >
+                <TableCell component="th" scope="row">
+                  {row.name}
+                </TableCell>
 
-              <TableCell>{row.email}</TableCell>
-              <TableCell>
-                <Button onClick={(e) => console.log(e, row._id)}>Edit</Button>
-                <Button
-                  onClick={(e) => console.log(e, row._id)}
-                  sx={{ color: "red" }}
-                >
-                  Delete
-                </Button>
-              </TableCell>
+                <TableCell>{row.email}</TableCell>
+                <TableCell>
+                  <Button
+                    variant="contained"
+                    color="success"
+                    onClick={(e) => console.log(e, row._id)}
+                    sx={{ marginRight: "6px" }}
+                    startIcon={<EditIcon></EditIcon>}
+                  >
+                    Edit
+                  </Button>
+
+                  <Button
+                    onClick={(e) => console.log(e, row._id)}
+                    variant="contained"
+                    color="error"
+                    startIcon={<DeleteIcon></DeleteIcon>}
+                  >
+                    Delete
+                  </Button>
+                </TableCell>
+              </TableRow>
+            ))}
+          {rows.length === 0 && (
+            <TableRow>
+              <TableCell>no data</TableCell>
             </TableRow>
-          ))}
+          )}
         </TableBody>
       </Table>
     </TableContainer>

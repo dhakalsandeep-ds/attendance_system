@@ -23,9 +23,15 @@ export const AuthProvider = ({ children }) => {
     });
 
     let data = await response.json();
+    let success = data.success;
+
+    if (!success) {
+      return data;
+    }
     localStorage.setItem("token", data.result.token);
 
     console.log("redirecting ....");
+
     navigate("/admin/batch", { replace: true });
   };
 

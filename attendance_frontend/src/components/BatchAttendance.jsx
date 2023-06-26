@@ -11,9 +11,21 @@ import {
   TableHead,
   TableRow,
 } from "@mui/material";
+import Toastify from "./Toastify";
 
 const BatchAttendance = () => {
   let [batchStudent, setBatchStudent] = useState([]);
+  let [toastMessage, setToastMessage] = useState();
+  let [severity, setSeverity] = useState();
+  let [openToast, setOpenToast] = useState(false);
+
+  const handleOpenToast = () => {
+    setOpenToast(true);
+  };
+
+  const handleCloseToast = () => {
+    setOpenToast(false);
+  };
 
   let { batchId } = useParams();
   let user = useAuth();
@@ -52,17 +64,36 @@ const BatchAttendance = () => {
     };
 
     let bodyContent = JSON.stringify({ data: batchStudent });
+    let data;
+    try {
+      let response = await fetch(
+        "http://localhost:8000/attendance/submit/" + batchId,
+        {
+          method: "post",
+          headers: headersList,
+          body: bodyContent,
+        }
+      );
 
-    let response = await fetch(
-      "http://localhost:8000/attendance/submit/" + batchId,
-      {
-        method: "post",
-        headers: headersList,
-        body: bodyContent,
-      }
-    );
+      data = await response.json();
+    } catch (e) {
+      setOpenToast(true);
+      setToastMessage("something went wrong");
+      setSeverity("error");
+      handleClose();
+    }
+    if (data.success) {
+      setOpenToast(true);
+      setToastMessage(data.message);
+      setSeverity("success");
+      handleClose();
+    } else {
+      setOpenToast(true);
+      setToastMessage(data.message);
+      setSeverity("error");
+      handleClose();
+    }
 
-    let data = await response.json();
     console.log(data);
   }
 
@@ -114,6 +145,14 @@ const BatchAttendance = () => {
         </Table>
         <Button onClick={(e) => register()}>register</Button>
       </TableContainer>
+
+      <Toastify
+        handleOpen={handleOpenToast}
+        handleClose={handleCloseToast}
+        message={toastMessage}
+        severity={severity}
+        open={openToast}
+      ></Toastify>
     </div>
   );
 };

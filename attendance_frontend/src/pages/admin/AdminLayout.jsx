@@ -23,8 +23,15 @@ import { FaChalkboardTeacher } from "react-icons/fa";
 import Stack from "@mui/material/Stack";
 import Button from "@mui/material/Button";
 import { useAuth } from "../../context/auth";
+import { IoIosLogOut } from "react-icons/io";
+import { PiStudent } from "react-icons/pi";
+import { MdOutlineClass } from "react-icons/md";
+import { BsListCheck } from "react-icons/bs";
+import { RiAdminLine } from "react-icons/ri";
+import { RiTeamLine } from "react-icons/ri";
+import { Tooltip } from "@mui/material";
 
-const drawerWidth = 240;
+const drawerWidth = 150;
 
 const openedMixin = (theme) => ({
   width: drawerWidth,
@@ -106,7 +113,7 @@ export default function MiniDrawer() {
           </Typography>
 
           <Button color="inherit" onClick={logout}>
-            Logout
+            <IoIosLogOut size={20} />
           </Button>
         </Toolbar>
       </AppBar>
@@ -124,64 +131,12 @@ export default function MiniDrawer() {
         >
           <ListItem disablePadding sx={{ display: "block" }}>
             <NavLink
-              to="teacher"
-              style={({ isActive }) => ({
-                color: "white",
-                backgroundColor: isActive ? "darkblue" : "",
-                display: "block",
-              })}
-            >
-              <ListItemButton
-                sx={{
-                  minHeight: 48,
-                  justifyContent: open ? "initial" : "center",
-                  px: 2.5,
-                }}
-              >
-                {open && (
-                  <Stack direction="row">
-                    <ListItemIcon
-                      sx={{
-                        minWidth: 0,
-                        mr: open ? 3 : "auto",
-                        justifyContent: "center",
-                        fontWeight: "bold",
-                      }}
-                    >
-                      <FaChalkboardTeacher
-                        size={25}
-                        color="white"
-                      ></FaChalkboardTeacher>
-                    </ListItemIcon>
-                    <span>student</span>
-                  </Stack>
-                )}
-                {!open && (
-                  <ListItemIcon
-                    sx={{
-                      minWidth: 0,
-                      mr: open ? 3 : "auto",
-                      justifyContent: "center",
-                      fontWeight: "bold",
-                    }}
-                  >
-                    <FaChalkboardTeacher
-                      size={25}
-                      color="white"
-                    ></FaChalkboardTeacher>
-                  </ListItemIcon>
-                )}
-              </ListItemButton>
-            </NavLink>
-            <Divider color="white" />
-          </ListItem>
-          <ListItem disablePadding sx={{ display: "block" }}>
-            <NavLink
               to="batch"
               style={({ isActive }) => ({
                 color: "white",
                 backgroundColor: isActive ? "darkblue" : "",
                 display: "block",
+                textDecoration: "none",
               })}
             >
               <ListItemButton
@@ -201,28 +156,24 @@ export default function MiniDrawer() {
                         fontWeight: "bold",
                       }}
                     >
-                      <FaChalkboardTeacher
-                        size={25}
-                        color="white"
-                      ></FaChalkboardTeacher>
+                      <MdOutlineClass size={25} color="white"></MdOutlineClass>
                     </ListItemIcon>
-                    <span>student</span>
+                    <span>Batches</span>
                   </Stack>
                 )}
                 {!open && (
-                  <ListItemIcon
-                    sx={{
-                      minWidth: 0,
-                      mr: open ? 3 : "auto",
-                      justifyContent: "center",
-                      fontWeight: "bold",
-                    }}
-                  >
-                    <FaChalkboardTeacher
-                      size={25}
-                      color="white"
-                    ></FaChalkboardTeacher>
-                  </ListItemIcon>
+                  <Tooltip title="Admins" arrow>
+                    <ListItemIcon
+                      sx={{
+                        minWidth: 0,
+                        mr: open ? 3 : "auto",
+                        justifyContent: "center",
+                        fontWeight: "bold",
+                      }}
+                    >
+                      <MdOutlineClass size={25} color="white"></MdOutlineClass>
+                    </ListItemIcon>
+                  </Tooltip>
                 )}
               </ListItemButton>
             </NavLink>
@@ -235,6 +186,7 @@ export default function MiniDrawer() {
                 color: "white",
                 backgroundColor: isActive ? "darkblue" : "",
                 display: "block",
+                textDecoration: "none",
               })}
             >
               <ListItemButton
@@ -254,28 +206,24 @@ export default function MiniDrawer() {
                         fontWeight: "bold",
                       }}
                     >
-                      <FaChalkboardTeacher
-                        size={25}
-                        color="white"
-                      ></FaChalkboardTeacher>
+                      <RiAdminLine size={25} color="white"></RiAdminLine>
                     </ListItemIcon>
-                    <span>student</span>
+                    <span style={{ color: "white" }}>Admins</span>
                   </Stack>
                 )}
                 {!open && (
-                  <ListItemIcon
-                    sx={{
-                      minWidth: 0,
-                      mr: open ? 3 : "auto",
-                      justifyContent: "center",
-                      fontWeight: "bold",
-                    }}
-                  >
-                    <FaChalkboardTeacher
-                      size={25}
-                      color="white"
-                    ></FaChalkboardTeacher>
-                  </ListItemIcon>
+                  <Tooltip title="Admins" arrow>
+                    <ListItemIcon
+                      sx={{
+                        minWidth: 0,
+                        mr: open ? 3 : "auto",
+                        justifyContent: "center",
+                        fontWeight: "bold",
+                      }}
+                    >
+                      <RiAdminLine size={25} color="white"></RiAdminLine>
+                    </ListItemIcon>
+                  </Tooltip>
                 )}
               </ListItemButton>
             </NavLink>
@@ -283,11 +231,12 @@ export default function MiniDrawer() {
           </ListItem>
           <ListItem disablePadding sx={{ display: "block" }}>
             <NavLink
-              to="attendance"
+              to="teacher"
               style={({ isActive }) => ({
                 color: "white",
                 backgroundColor: isActive ? "darkblue" : "",
                 display: "block",
+                textDecoration: "none",
               })}
             >
               <ListItemButton
@@ -307,33 +256,30 @@ export default function MiniDrawer() {
                         fontWeight: "bold",
                       }}
                     >
-                      <FaChalkboardTeacher
-                        size={25}
-                        color="white"
-                      ></FaChalkboardTeacher>
+                      <RiTeamLine size={25} color="white"></RiTeamLine>
                     </ListItemIcon>
-                    <span>student</span>
+                    <span>Teachers</span>
                   </Stack>
                 )}
                 {!open && (
-                  <ListItemIcon
-                    sx={{
-                      minWidth: 0,
-                      mr: open ? 3 : "auto",
-                      justifyContent: "center",
-                      fontWeight: "bold",
-                    }}
-                  >
-                    <FaChalkboardTeacher
-                      size={25}
-                      color="white"
-                    ></FaChalkboardTeacher>
-                  </ListItemIcon>
+                  <Tooltip title="Teachers" arrow>
+                    <ListItemIcon
+                      sx={{
+                        minWidth: 0,
+                        mr: open ? 3 : "auto",
+                        justifyContent: "center",
+                        fontWeight: "bold",
+                      }}
+                    >
+                      <RiTeamLine size={25} color="white"></RiTeamLine>
+                    </ListItemIcon>
+                  </Tooltip>
                 )}
               </ListItemButton>
             </NavLink>
             <Divider color="white" />
           </ListItem>
+
           <ListItem disablePadding sx={{ display: "block" }}>
             <NavLink
               to="student"
@@ -341,6 +287,7 @@ export default function MiniDrawer() {
                 color: "white",
                 backgroundColor: isActive ? "darkblue" : "",
                 display: "block",
+                textDecoration: "none",
               })}
             >
               <ListItemButton
@@ -360,28 +307,24 @@ export default function MiniDrawer() {
                         fontWeight: "bold",
                       }}
                     >
-                      <FaChalkboardTeacher
-                        size={25}
-                        color="white"
-                      ></FaChalkboardTeacher>
+                      <PiStudent size={25} color="white"></PiStudent>
                     </ListItemIcon>
-                    <span>student</span>
+                    <span>Students</span>
                   </Stack>
                 )}
                 {!open && (
-                  <ListItemIcon
-                    sx={{
-                      minWidth: 0,
-                      mr: open ? 3 : "auto",
-                      justifyContent: "center",
-                      fontWeight: "bold",
-                    }}
-                  >
-                    <FaChalkboardTeacher
-                      size={25}
-                      color="white"
-                    ></FaChalkboardTeacher>
-                  </ListItemIcon>
+                  <Tooltip title="Students" arrow>
+                    <ListItemIcon
+                      sx={{
+                        minWidth: 0,
+                        mr: open ? 3 : "auto",
+                        justifyContent: "center",
+                        fontWeight: "bold",
+                      }}
+                    >
+                      <PiStudent size={25} color="white"></PiStudent>
+                    </ListItemIcon>
+                  </Tooltip>
                 )}
               </ListItemButton>
             </NavLink>

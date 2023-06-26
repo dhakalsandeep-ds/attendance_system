@@ -10,6 +10,11 @@ import Paper from "@mui/material/Paper";
 // import Table from "../../components/Table";
 // import useLocalStorage from "../../../../attendance_backend/src/hooks/useLocalStorage";
 import { useAuth } from "../../context/auth";
+import { Snackbar } from "@mui/material";
+import MuiAlert from "@mui/material/Alert";
+import IconButton from "@mui/material/IconButton";
+import CloseIcon from "@mui/icons-material/Close";
+import Toastify from "./../../components/Toastify";
 
 const AdminLogin = () => {
   let [email, setEmail] = useState("");
@@ -18,12 +23,38 @@ const AdminLogin = () => {
   let [passwordErrors, setPasswordErrors] = useState([]);
   let [isEmailError, setIsEmailError] = useState(false);
   let [isPasswordError, setIsPasswordError] = useState(false);
+  let [openToast, setOpenToast] = useState(false);
+  let [toastMessage, setToastMessage] = useState();
 
   const user = useAuth();
 
+  const handleOpenToast = () => {
+    setOpenToast(true);
+  };
+
+  const handleCloseToast = () => {
+    setOpenToast(false);
+  };
+
+  function required(event, errors) {
+    if (event.target.value === "") {
+      errors.push(`${event.target.name} is required`);
+    }
+  }
+
+  function checkEmailFormat(event, errors) {
+    if (
+      !/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(
+        event.target.value
+      )
+    ) {
+      errors.push(` invalide email format`);
+    }
+  }
+
   const checks = {
-    email: ["required"],
-    password: ["required"],
+    email: [required, checkEmailFormat],
+    password: [required],
   };
 
   async function handleChange(e) {
@@ -39,11 +70,12 @@ const AdminLogin = () => {
     let errors = [];
 
     checks.password.forEach((v) => {
-      if (v === "required") {
-        if (e.target.value === "") {
-          errors.push("password is required");
-        }
-      }
+      v(e, errors);
+      // if (v === "required") {
+      //   if (e.target.value === "") {
+      //     errors.push("password is required");
+      //   }
+      // }
     });
     if (errors.length === 0) {
       setIsPasswordError(false);
@@ -59,11 +91,12 @@ const AdminLogin = () => {
     let errors = [];
 
     checks.email.forEach((v) => {
-      if (v === "required") {
-        if (e.target.value === "") {
-          errors.push("email is required");
-        }
-      }
+      v(e, errors);
+      // if (v === "required") {
+      //   if (e.target.value === "") {
+      //     errors.push("email is required");
+      //   }
+      // }
     });
     if (errors.length !== 0) {
       setIsEmailError(true);
@@ -90,8 +123,14 @@ const AdminLogin = () => {
       console.log("cannot call error is there");
       return;
     }
-    user.login({ email, password });
+    const da = await user.login({ email, password });
+    console.log("da", da);
+    if (!da.success) {
+      setOpenToast(true);
+      setToastMessage(da.message);
+    }
   }
+  console.log("toastOpen", openToast);
 
   const paperStyle = {
     padding: "50px",
@@ -157,6 +196,14 @@ const AdminLogin = () => {
           Login
         </Button>
       </Paper>
+
+      <Toastify
+        handleOpen={handleOpenToast}
+        handleClose={handleCloseToast}
+        message={toastMessage}
+        severity="error"
+        open={openToast}
+      ></Toastify>
     </div>
   );
 };

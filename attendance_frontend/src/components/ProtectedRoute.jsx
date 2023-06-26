@@ -8,34 +8,43 @@ const validateToken = async (token) => {
   });
   let headersList = {
     "Content-Type": "application/json",
+    Authorization: `Bearer ${token}`,
   };
-  let response = await fetch("http://localhost:8000/admin/validate", {
-    body: bodyContent,
+  let response = await fetch("http://localhost:8000/verifyToken", {
     headers: headersList,
   });
-
+  console.log(response);
   let ans = await response.json();
+
   return ans.success;
 };
 
 const ProtectedRoute = ({ children }) => {
   const user = useAuth();
-  // const token = user.token();
 
-  // const isTokenValid = validateToken(token);
+  const token = user.token();
+  let isTokenValid;
+  if (token) {
+    isTokenValid = validateToken(user.token());
+    console.log(isTokenValid, "isTokenValid");
+  } else {
+    isTokenValid = false;
+    console.log("inside else");
+  }
 
-  // if (isTokenValid) {
-  //   return children;
-  // }
-
-  // return <Navigate to="/"></Navigate>;
-
-  if (user.token()) {
-    console.log(children);
+  if (isTokenValid) {
+    console.log("outlet");
     return <Outlet></Outlet>;
   }
 
-  return <Navigate to="/admin" replace={true}></Navigate>;
+  return <Navigate to="/admin"></Navigate>;
+
+  // if (user.token()) {
+  //   console.log(children);
+  //   return <Outlet></Outlet>;
+  // }
+
+  // return <Navigate to="/admin" replace={true}></Navigate>;
 };
 
 export default ProtectedRoute;

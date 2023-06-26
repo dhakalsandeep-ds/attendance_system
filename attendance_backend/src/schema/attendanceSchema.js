@@ -20,5 +20,4 @@ export let attendanceSchema = Schema({
     type: Schema.ObjectId,
     ref: "Batch"
   }
-
 });

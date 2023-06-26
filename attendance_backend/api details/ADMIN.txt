@@ -76,3 +76,32 @@ method: GET
 //Assign student to class
 url: /admin/:studentId/:batchId
 method: PUT
+
+//update teacher
+url: /admin/teacher/:teacherId
+method: PUT
+FORMAT OF DATA TO SEND IN REQ BODY
+req.body={
+    data:{
+        name:"newname",
+    }
+}
+//update student
+url: /admin/student/:studentId
+method: PUT
+FORMAT OF DATA TO SEND IN REQ BODY
+req.body={
+    data:{
+        name:"newname",
+    }
+}
+
+//delete teacher
+url: /admin/teacher/:teacherId
+method: delete
+
+//delete student
+url: /admin/set/:teacherId
+method: delete
+
+

@@ -53,27 +53,6 @@ export let logoutStudent = expressAsyncHandler(async(req,res,next)=>{
 
 })
 
-// export let getStudent = expressAsyncHandler(async (req, res, next) => {
-//   let result = await Student.find({
-//     batchId: "6481986943933fbec54ae4b7",
-//   }).populate({
-//     path: "batchId",
-//     match: {
-//       name: "mern2",
-//     },
-//   });
-
-//   console.log(result, "resutl ..........................");
-
-//   let response = {
-//     res: res,
-//     message: "sucess",
-//     result: result,
-//     statusCode: HttpStatus.CREATED,
-//   };
-
-//   successResponse(response);
-// })
 
 export let showEnrolledClasses=expressAsyncHandler(async(req,res,next)=>{
   let _studentId=req.body.info.id
@@ -122,3 +101,26 @@ export let attendanceDetail = expressAsyncHandler(async (req, res, next) => {
 
   successResponse(response);
 })
+
+export let updatePasswordStudent = expressAsyncHandler(async (req, res, next) => {
+  let studentId = req.body.info.id
+  let theStudent = await Student.findOne({ _id:studentId})
+  let currentPassword=req.body.currentPassword
+  if(!await comparePassword(currentPassword,theStudent.password))
+  {
+    let error = new Error("Password didn't match")
+    error.statusCode=401
+    throw error    
+  }
+  let _hashPassword= await hashPassword(req.body.newPassword)
+  let result=await Student.findByIdAndUpdate({_id:studentId},{password:_hashPassword})
+  console.log(result)
+  let response = {
+    res,
+    result:{id:studentId},
+    message: "Password Changed Successfully",
+    statusCode: HttpStatus.OK,
+  };
+
+  successResponse(response);
+});

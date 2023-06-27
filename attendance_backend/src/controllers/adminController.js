@@ -13,6 +13,8 @@ import { generateToken, verifyToken } from "../utils/token.js";
 import { comparePassword, hashPassword } from "../utils/Hashing.js";
 import { Types } from "mongoose";
 import { dateNow } from "../utils/Date.js";
+import { batchSchema } from "../schema/batchSchema.js";
+import { deleteElementByIndex, findIndex } from "../utils/arrayMethods.js";
 
 export let loginAdmin = expressAsyncHandler(async (req, res, next) => {
   let display= dateNow()
@@ -273,23 +275,7 @@ export let addTeacher = expressAsyncHandler(async (req, res, next) => {
   successResponse(response);
 });
 
-export let assignTeacher = expressAsyncHandler(async (req, res, next) => {
-  let _batchId = req.params.batchId;
-  let teacherId = req.params.teacherId;
-  let theTeacher = await Teacher.findById(teacherId);
-  theTeacher.batchId.push(_batchId);
-  let result = await Teacher.findByIdAndUpdate(teacherId, theTeacher, {
-    new: true,
-  });
-  let response = {
-    res,
-    message: "successfully assigned",
-    result,
-    statusCode: HttpStatus.OK,
-  };
 
-  successResponse(response);
-});
 export let getBatchTeacher = expressAsyncHandler(async (req, res, next) => {
   let _batchId = req.params.batchId;
 
@@ -441,7 +427,7 @@ export let updateTeacher = expressAsyncHandler(async (req, res, next) => {
 export let deleteTeacher = expressAsyncHandler(async (req, res, next) => {
   let teacherId = req.params.teacherId
   
-  let result = await Teacher.findByIdAndDelete(teacherId)
+  let result = await Teacher.findByIdAndDelete(teacherId,{new:true})
   let response = {
     res,
     message: "Teacher Account Deleted successfully",
@@ -465,3 +451,56 @@ export let deleteStudent = expressAsyncHandler(async (req, res, next) => {
   successResponse(response);
 })
 
+export let unAssignTeacher=expressAsyncHandler(async (req, res, next) => {
+  let _batchId=req.params.batchId
+  let _teacherId = req.params.teacherId
+  let theTeacher = await Teacher.findById(_teacherId)
+
+  let indexToDelete=findIndex(_batchId,theTeacher.batchId)
+  deleteElementByIndex(theTeacher.batchId,indexToDelete)
+
+  let result = await Teacher.findByIdAndUpdate(_teacherId, theTeacher, {
+    new: true,
+  });
+  let response = {
+    res,
+    message: "Unassigned Success",
+    result,
+    statusCode: HttpStatus.OK,
+  };
+
+  successResponse(response);
+})
+
+
+export let assignTeacher = expressAsyncHandler(async (req, res, next) => {
+  let _batchId = req.params.batchId;
+  let teacherId = req.params.teacherId;
+  let theTeacher = await Teacher.findById(teacherId);
+  theTeacher.batchId.push(_batchId);
+  let result = await Teacher.findByIdAndUpdate(teacherId, theTeacher, {
+    new: true,
+  });
+  let response = {
+    res,
+    message: "successfully assigned",
+    result,
+    statusCode: HttpStatus.OK,
+  };
+
+  successResponse(response);
+});
+
+export let updateCourse=expressAsyncHandler(async (req, res, next) => {
+let name=req.body.name
+let course=req.body.course
+let _batchId=req.params.batchId
+let result=await Batch.findByIdAndUpdate(_batchId,{name,course},{new:true})
+let response = {
+  res,
+  message:"success",
+  result,
+  statusCode:HttpStatus.OK
+}
+successResponse(response)
+})

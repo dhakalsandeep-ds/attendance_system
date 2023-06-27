@@ -174,7 +174,7 @@ export default function MiniDrawer() {
               </ListItemButton>
             </NavLink>
           </ListItem>
-          <ListItem disablePadding sx={{ display: "block" }}>
+          {/* <ListItem disablePadding sx={{ display: "block" }}>
             <NavLink
               to="admin"
               style={({ isActive }) => ({
@@ -222,7 +222,7 @@ export default function MiniDrawer() {
                 )}
               </ListItemButton>
             </NavLink>
-          </ListItem>
+          </ListItem> */}
           <ListItem disablePadding sx={{ display: "block" }}>
             <NavLink
               to="teacher"

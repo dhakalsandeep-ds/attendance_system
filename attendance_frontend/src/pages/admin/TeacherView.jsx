@@ -12,6 +12,10 @@ import useAdd from "../../context/add";
 import AddIcon from "@mui/icons-material/Add";
 import Toastify from "./../../components/Toastify";
 import { Card, CardContent, Grid, Stack } from "@mui/material";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
+import EditForm from "./../../components/EditForm";
+import DeleteModel from "../../components/DeleteModel";
 
 const style = {
   position: "absolute",
@@ -42,6 +46,14 @@ const TeacherView = () => {
   let [toastMessage, setToastMessage] = useState();
   let [severity, setSeverity] = useState("error");
   let [noTeachers, setNoTeachers] = useState(0);
+  let [edit, setEdit] = useState(false);
+  let [editTeacherId, setEditTeacherId] = useState("");
+  let [deleTeOpen, setDeleteOpen] = useState(false);
+  let [deleteId, setDeleteId] = useState("");
+  let [deleteTeacher, setDeleteTeacher] = useState(false);
+
+  console.log(email, "email");
+  console.log(name, "name");
 
   const handleOpenToast = () => {
     setOpenToast(true);
@@ -53,7 +65,157 @@ const TeacherView = () => {
 
   let user = useAuth();
   const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+  const handleClose = () => {
+    setEmail("");
+    setName("");
+    setPassword("");
+    setEmailErrors([]);
+    setPasswordErrors([]);
+    setNameErrors([]);
+    setIsEmailError(false);
+    setIsPasswordError(false);
+    setIsNameError(false);
+    setOpen(false);
+  };
+  console.log("edit valued:", edit);
+
+  async function handleEditOpen(e, id) {
+    await fetch("http://localhost:8000/admin/teacher/" + id, {
+      headers: {
+        Authorization: `Bearer ${user.token()}`,
+      },
+    })
+      .then((data) => data.json())
+      .then((data) => {
+        setEmail(data.result.email);
+        setName(data.result.name);
+        setEditTeacherId(id);
+        setEdit(true);
+        console.log(data);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  }
+  async function handleEditClose(e) {
+    setEmail("");
+    setName("");
+    setEmailErrors([]);
+    setPasswordErrors([]);
+    setNameErrors([]);
+    setIsEmailError(false);
+    setIsPasswordError(false);
+    setIsNameError(false);
+    setEdit(false);
+    console.log("inside edit k", edit);
+  }
+
+  async function handleEditSubmit(e, id) {
+    if (email === "" || name === "") {
+      if (email === "" && !emailErrors.includes("email is required")) {
+        setIsEmailError(true);
+        setEmailErrors([...emailErrors, "email is required"]);
+      }
+
+      if (name === "" && !nameErrors.includes("name is required")) {
+        setIsEmailError(true);
+        setEmailErrors([...nameErrors, "name is required"]);
+      }
+      return;
+    }
+    if (emailErrors.length !== 0 || nameErrors.length !== 0) {
+      console.log("cannot call error is there");
+      return;
+    }
+    let headersList = {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${user.token()}`,
+    };
+
+    let bodyContent = JSON.stringify({ data: { name, email } });
+    let data;
+    try {
+      let response = await fetch(
+        "http://localhost:8000/admin/teacher/" + editTeacherId,
+        {
+          method: "put",
+          body: bodyContent,
+          headers: headersList,
+        }
+      );
+
+      data = await response.json();
+    } catch (e) {
+      setOpenToast(true);
+      setToastMessage("something went wrong");
+      setSeverity("error");
+      handleClose();
+      handleEditClose();
+    }
+
+    console.log("data......", data);
+    if (data.success) {
+      setSeverity("success");
+      setToastMessage(data.message);
+      handleOpenToast();
+      handleEditClose();
+    } else {
+      setOpenToast(true);
+      setToastMessage(data.message);
+      setSeverity("error");
+      handleEditClose();
+    }
+    console.log("edit submit");
+  }
+
+  async function handleDeleteOpen(e, id) {
+    setDeleteId(id);
+    setDeleteOpen(true);
+    console.log("handleClose");
+  }
+  async function handleDeleteClose(e, id) {
+    setDeleteOpen(false);
+    console.log("handleClose");
+  }
+
+  async function handleDeleteSubmit(e, id) {
+    let data;
+    try {
+      let response = await fetch(
+        "http://localhost:8000/admin/teacher/" + deleteId,
+        {
+          method: "get",
+
+          headers: {
+            Authorization: `Bearer ${user.token()}`,
+          },
+        }
+      );
+
+      data = await response.json();
+    } catch (e) {
+      setOpenToast(true);
+      setToastMessage("something went wrong");
+      setSeverity("error");
+      handleClose();
+      handleEditClose();
+    }
+
+    console.log("data......", data);
+    if (data.success) {
+      setSeverity("success");
+      setToastMessage(data.message);
+      handleOpenToast();
+      handleDeleteClose();
+      han;
+      fetchTeacher();
+    } else {
+      setOpenToast(true);
+      setToastMessage(data.message);
+      setSeverity("error");
+      handleDeleteClose();
+    }
+  }
 
   async function fetchTeacher() {
     let headersList = {
@@ -167,8 +329,8 @@ const TeacherView = () => {
         setPasswordErrors([...passwordErrors, "password is required"]);
       }
       if (name === "" && !nameErrors.includes("name is required")) {
-        setIsEmailError(true);
-        setEmailErrors([...passwordErrors, "name is required"]);
+        setIsNameError(true);
+        setNameErrors([...nameErrors, "name is required"]);
       }
       return;
     }
@@ -233,6 +395,8 @@ const TeacherView = () => {
             columns={["name", "email", "action"]}
             rows={teacher}
             elevation={6}
+            handleEditOpen={handleEditOpen}
+            handleDeleteOpen={handleDeleteOpen}
           ></DisplayTable>
         </Grid>
         <Grid item xs={3}>
@@ -252,6 +416,12 @@ const TeacherView = () => {
           </Stack>
         </Grid>
       </Grid>
+
+      <DeleteModel
+        open={deleTeOpen}
+        handleDeleteClose={handleDeleteClose}
+        handleDeleteSubmit={handleDeleteSubmit}
+      ></DeleteModel>
 
       <ModalForm
         open={open}
@@ -320,6 +490,53 @@ const TeacherView = () => {
             );
           })}
       </ModalForm>
+
+      <EditForm
+        open={edit}
+        handleClose={handleEditClose}
+        handleSubmit={handleEditSubmit}
+      >
+        <TextField
+          error={isNameError ? true : false}
+          style={{ marginTop: "20px" }}
+          onChange={handleChange}
+          value={name}
+          id="standard-basic"
+          label="name*"
+          variant="standard"
+          fullWidth={true}
+          name="name"
+        />
+        {nameErrors.length !== 0 &&
+          nameErrors.map((v, i) => {
+            return (
+              <div style={{ color: "red", marginTop: "5px" }} key={i}>
+                {" "}
+                {v}{" "}
+              </div>
+            );
+          })}
+        <TextField
+          value={email}
+          error={isEmailError ? true : false}
+          style={{ marginTop: "20px" }}
+          onChange={handleChange}
+          id="standard-basic"
+          label="email*"
+          variant="standard"
+          fullWidth={true}
+          name="email"
+        />
+        {emailErrors.length !== 0 &&
+          emailErrors.map((v, i) => {
+            return (
+              <div style={{ color: "red", marginTop: "5px" }} key={i}>
+                {" "}
+                {v}{" "}
+              </div>
+            );
+          })}
+      </EditForm>
 
       <Toastify
         handleOpen={handleOpenToast}

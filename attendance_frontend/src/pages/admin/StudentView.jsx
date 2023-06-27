@@ -12,6 +12,7 @@ import useAdd from "../../context/add";
 import AddIcon from "@mui/icons-material/Add";
 import Toastify from "../../components/Toastify";
 import { Card, CardContent, Grid, Stack } from "@mui/material";
+import EditForm from "../../components/EditForm";
 
 const style = {
   position: "absolute",
@@ -43,6 +44,8 @@ const StudentView = () => {
   let [severity, setSeverity] = useState();
   let [openToast, setOpenToast] = useState(false);
   let [noStudents, setNoStudents] = useState(0);
+  let [edit, setEdit] = useState(false);
+  let [editStudentId, setEditStudentId] = useState("");
 
   const handleOpenToast = () => {
     setOpenToast(true);
@@ -52,13 +55,106 @@ const StudentView = () => {
     setOpenToast(false);
   };
 
-  let [add] = useAdd({
-    url: "http://localhost:8000/admin/student",
-  });
-
   let user = useAuth();
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+
+  async function handleEditOpen(e, id) {
+    await fetch("http://localhost:8000/admin/student/" + id, {
+      headers: {
+        Authorization: `Bearer ${user.token()}`,
+      },
+    })
+      .then((data) => data.json())
+      .then((data) => {
+        setEmail(data.result.email);
+        setName(data.result.name);
+        setEditStudentId(id);
+        setEdit(true);
+        console.log(data);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+  }
+  async function handleEditClose(e) {
+    setEmail("");
+    setName("");
+    setEmailErrors([]);
+
+    setNameErrors([]);
+    setIsEmailError(false);
+
+    setIsNameError(false);
+    setEdit(false);
+    console.log("inside edit k", edit);
+  }
+
+  async function handleEditSubmit(e, id) {
+    if (email === "" || name === "") {
+      if (email === "" && !emailErrors.includes("email is required")) {
+        setIsEmailError(true);
+        setEmailErrors([...emailErrors, "email is required"]);
+      }
+
+      if (name === "" && !nameErrors.includes("name is required")) {
+        setIsEmailError(true);
+        setEmailErrors([...nameErrors, "name is required"]);
+      }
+      return;
+    }
+    if (emailErrors.length !== 0 || nameErrors.length !== 0) {
+      console.log("cannot call error is there");
+      return;
+    }
+    let headersList = {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${user.token()}`,
+    };
+
+    let bodyContent = JSON.stringify({ data: { name, email } });
+    let data;
+    try {
+      let response = await fetch(
+        "http://localhost:8000/admin/student/" + editStudentId,
+        {
+          method: "put",
+          body: bodyContent,
+          headers: headersList,
+        }
+      );
+
+      data = await response.json();
+    } catch (e) {
+      setOpenToast(true);
+      setToastMessage("something went wrong");
+      setSeverity("error");
+      handleClose();
+      handleEditClose();
+    }
+
+    console.log("data......", data);
+    if (data.success) {
+      setSeverity("success");
+      setToastMessage(data.message);
+      handleOpenToast();
+      setEdit(false);
+      handleEditClose();
+      fetchStudent();
+    } else {
+      setOpenToast(true);
+      setToastMessage(data.message);
+      setSeverity("error");
+      setEdit(false);
+      handleEditClose();
+    }
+    console.log("edit submit");
+  }
+
+  async function handleDeleteOpen(e, id) {
+    setDeleteTeacher(true);
+    console.log("handleClose");
+  }
 
   async function fetchStudent() {
     let headersList = {
@@ -246,12 +342,14 @@ const StudentView = () => {
             startIcon={<AddIcon></AddIcon>}
             sx={{ marginBottom: "10px", boxShadow: 6 }}
           >
-            add
+            Add Student
           </Button>
           <DisplayTable
             columns={["name", "email", "action"]}
             rows={student}
             elevation={6}
+            handleEditOpen={handleEditOpen}
+            handleDeleteOpen={handleDeleteOpen}
           ></DisplayTable>
         </Grid>
         <Grid item xs={3}>
@@ -339,6 +437,53 @@ const StudentView = () => {
             );
           })}
       </ModalForm>
+
+      <EditForm
+        open={edit}
+        handleClose={handleEditClose}
+        handleSubmit={handleEditSubmit}
+      >
+        <TextField
+          error={isNameError ? true : false}
+          style={{ marginTop: "20px" }}
+          onChange={handleChange}
+          value={name}
+          id="standard-basic"
+          label="name*"
+          variant="standard"
+          fullWidth={true}
+          name="name"
+        />
+        {nameErrors.length !== 0 &&
+          nameErrors.map((v, i) => {
+            return (
+              <div style={{ color: "red", marginTop: "5px" }} key={i}>
+                {" "}
+                {v}{" "}
+              </div>
+            );
+          })}
+        <TextField
+          value={email}
+          error={isEmailError ? true : false}
+          style={{ marginTop: "20px" }}
+          onChange={handleChange}
+          id="standard-basic"
+          label="email*"
+          variant="standard"
+          fullWidth={true}
+          name="email"
+        />
+        {emailErrors.length !== 0 &&
+          emailErrors.map((v, i) => {
+            return (
+              <div style={{ color: "red", marginTop: "5px" }} key={i}>
+                {" "}
+                {v}{" "}
+              </div>
+            );
+          })}
+      </EditForm>
 
       <Toastify
         handleOpen={handleOpenToast}

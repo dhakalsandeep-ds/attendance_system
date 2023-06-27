@@ -5,7 +5,6 @@ import { HttpStatus } from "../config/constant.js";
 import { Parser } from "json2csv";
 import { dateNow } from "../utils/Date.js";
 
-
 export let studentList = expressAsyncHandler(async (req, res, next) => {
   let _batchId = req.params.batchId;
   let studentList = await Student.find({ batchId: _batchId });
@@ -21,25 +20,28 @@ export let studentList = expressAsyncHandler(async (req, res, next) => {
 export let submitAttendance = expressAsyncHandler(async (req, res, next) => {
   let _batchId = req.params.batchId;
   let _data = req.body.data;
-  let _date=new Date(dateNow())
- 
-  let check = await Attendance.find({ batchId: _batchId, date: _date.toISOString()})
+  let _date = new Date(dateNow());
+
+  let check = await Attendance.find({
+    batchId: _batchId,
+    date: _date.toISOString(),
+  });
 
   if (check[0] !== undefined) {
-    let error = new Error("Attendance for today is already submitted")
-    error.statusCode = 409
-    throw error
+    let error = new Error("Attendance for today is already submitted");
+    error.statusCode = 409;
+    throw error;
   }
-  _data.year=new Date().getYear()+1900
-  _data.month=new Date().getMonth()+1
+  _data.year = new Date().getYear() + 1900;
+  _data.month = new Date().getMonth() + 1;
   for (let i = 0; i < _data.length; i++) {
     let status = _data[i].status === "P" ? 0 : _data[i].status === "A" ? 1 : 2;
     await Attendance.create({
       status,
       studentId: _data[i].studentId,
       batchId: _batchId,
-      year:_data.year,
-      month:_data.month
+      year: _data.year,
+      month: _data.month,
     });
   }
   let response = {
@@ -50,12 +52,15 @@ export let submitAttendance = expressAsyncHandler(async (req, res, next) => {
   successResponse(response);
 });
 
-
 export let getAttendanceByDate = expressAsyncHandler(async (req, res, next) => {
-  let _batchId = req.params.batchId
-  let desiredYear=req.params.year
-  let desiredMonth=req.params.month
- let result = await Attendance.find({ batchId: _batchId,year:desiredYear,month:desiredMonth })
+  let _batchId = req.params.batchId;
+  let desiredYear = req.params.year;
+  let desiredMonth = req.params.month;
+  let result = await Attendance.find({
+    batchId: _batchId,
+    year: desiredYear,
+    month: desiredMonth,
+  })
     .populate({
       path: "studentId",
     })
@@ -73,8 +78,8 @@ export let getAttendanceByDate = expressAsyncHandler(async (req, res, next) => {
 });
 
 export let getAllAttendance = expressAsyncHandler(async (req, res, next) => {
-  let _batchId = req.params.batchId
-  let result = await Attendance.find({ batchId: _batchId })
+  let _batchId = req.params.batchId;
+  let result = await Attendance.find({ batchId: _batchId });
   // let result = await Attendance.find({ batchId: _batchId })
   //   .populate({
   //     path: "studentId",
@@ -93,42 +98,56 @@ export let getAllAttendance = expressAsyncHandler(async (req, res, next) => {
   // successResponse(response);
 });
 
-export let exportAllAttendance= expressAsyncHandler(async (req, res, next) => {
-  const parser = new Parser();  
-  let myData=await Attendance.find({batchId: req.params.batchId})
-  .populate({path:"studentId"})
-  let _myData=myData.map((curr)=>{
-    return {
-      Date:curr.date.toISOString().split("T")[0],
-      name:curr.studentId.name,
-      status: (curr.status===0)?"present":(curr.status===1)?"absent":"leave"
-      
-    }
-  })
-  let _myDataSorted=_myData.sort((a, b) => new Date(a.Date) - new Date(b.Date))
-    let csv = parser.parse(_myDataSorted)
-    res.setHeader("Content-Type","text/csv")
-    res.setHeader("Content-Disposition","attachment:filename=userData.csv")
-    res.status(200).end(csv)
-})
-
-export let exportAttendanceByDate= expressAsyncHandler(async (req, res, next) => {
+export let exportAllAttendance = expressAsyncHandler(async (req, res, next) => {
   const parser = new Parser();
-  let desiredYear=req.params.year
-  let desiredMonth=req.params.month  
-  let myData=await Attendance.find({batchId: req.params.batchId,year:desiredYear,month:desiredMonth})
-  .populate({path:"studentId"})
-  let _myData=myData.map((curr)=>{
+  let myData = await Attendance.find({ batchId: req.params.batchId }).populate({
+    path: "studentId",
+  });
+  let _myData = myData.map((curr) => {
     return {
-      Date:curr.date.toISOString().split("T")[0],
-      name:curr.studentId.name,
-      status: (curr.status===0)?"present":(curr.status===1)?"absent":"leave"
-      
-    }
-  })
-  let _myDataSorted=_myData.sort((a, b) => new Date(a.Date) - new Date(b.Date))
-    let csv = parser.parse(_myDataSorted)
-    res.setHeader("Content-Type","text/csv")
-    res.setHeader("Content-Disposition","attachment:filename=userData.csv")
-    res.status(200).end(csv)
-})
+      Date: curr.date.toISOString().split("T")[0],
+      name: curr.studentId.name,
+      status:
+        curr.status === 0 ? "present" : curr.status === 1 ? "absent" : "leave",
+    };
+  });
+  let _myDataSorted = _myData.sort(
+    (a, b) => new Date(a.Date) - new Date(b.Date)
+  );
+  let csv = parser.parse(_myDataSorted);
+  res.setHeader("Content-Type", "text/csv");
+  res.setHeader("Content-Disposition", "attachment:filename=userData.csv");
+  res.status(200).end(csv);
+});
+
+export let exportAttendanceByDate = expressAsyncHandler(
+  async (req, res, next) => {
+    const parser = new Parser();
+    let desiredYear = req.params.year;
+    let desiredMonth = req.params.month;
+    let myData = await Attendance.find({
+      batchId: req.params.batchId,
+      year: desiredYear,
+      month: desiredMonth,
+    }).populate({ path: "studentId" });
+    let _myData = myData.map((curr) => {
+      return {
+        Date: curr.date.toISOString().split("T")[0],
+        name: curr.studentId.name,
+        status:
+          curr.status === 0
+            ? "present"
+            : curr.status === 1
+            ? "absent"
+            : "leave",
+      };
+    });
+    let _myDataSorted = _myData.sort(
+      (a, b) => new Date(a.Date) - new Date(b.Date)
+    );
+    let csv = parser.parse(_myDataSorted);
+    res.setHeader("Content-Type", "text/csv");
+    res.setHeader("Content-Disposition", "attachment:filename=userData.csv");
+    res.status(200).end(csv);
+  }
+);

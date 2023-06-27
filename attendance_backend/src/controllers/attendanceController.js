@@ -13,7 +13,7 @@ export let studentList = expressAsyncHandler(async (req, res, next) => {
     result: studentList,
     message: "All students of this Batch",
     statusCode: HttpStatus.OK,
-  };
+  };  
   successResponse(response);
 });
 

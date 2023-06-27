@@ -1,5 +1,7 @@
 import { Router } from "express";
 import {
+  exportAllAttendance,
+  exportAttendanceByDate,
   getAllAttendance,
   getAttendanceByDate,
   studentList,
@@ -22,4 +24,12 @@ attendanceRouter
   attendanceRouter
   .route("/:batchId")
   .get(isAuthenticated, isAuthorized, getAllAttendance);
+
+  attendanceRouter
+  .route("/export/:batchId")
+  .get(isAuthenticated, isAuthorized, exportAllAttendance);
+
+  attendanceRouter
+  .route("/export/:batchId/:year/:month")
+  .get(isAuthenticated, isAuthorized, exportAttendanceByDate);
 export default attendanceRouter;

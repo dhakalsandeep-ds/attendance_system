@@ -16,11 +16,11 @@ import { dateNow } from "../utils/Date.js";
 
 export let loginAdmin = expressAsyncHandler(async (req, res, next) => {
   let display= dateNow()
-  console.log(display)
+
   let email = req.body.email;
   let password = req.body.password;
   let result = await Admin.findOne({ email });
-  console.log(result);
+  
   let jwt_token;
   if (await comparePassword(password, result.password)) {
     let infoObj = {

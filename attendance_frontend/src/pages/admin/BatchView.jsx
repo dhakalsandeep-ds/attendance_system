@@ -224,7 +224,7 @@ const BatchView = () => {
             variant="outlined"
             sx={{ boxShadow: 6 }}
             startIcon={<AddIcon />}
-            onClick={(e) => handleOpen()}
+            onClick={(e) => handleOpen(e)}
           >
             Add Batch{" "}
           </Button>

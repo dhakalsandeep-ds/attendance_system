@@ -56,6 +56,10 @@ method: GET
 url: /admin/:teacherId/:batchId
 method: PUT
 
+//UnAssign teacher
+url: /admin/:teacherId/:batchId
+method:patch
+
 //GET ALL STUDENT
 url: /admin/student
 method: GET
@@ -105,3 +109,6 @@ url: /admin/set/:teacherId
 method: delete
 
 
+//update course
+url: /admin/batch/:batchId
+method:PUT

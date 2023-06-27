@@ -18,6 +18,8 @@ import {
   insertStudent,
   loginAdmin,
   logout,
+  unAssignTeacher,
+  updateCourse,
   updateStudent,
   updateTeacher,
 } from "../controllers/adminController.js";
@@ -26,16 +28,18 @@ import { isAuthenticated } from "../middleware/isAuthenticated.js";
 
 let adminRouter = Router();
 
-adminRouter.route("/login").post(loginAdmin);
-adminRouter.route("/logout").get(isAuthenticated, isAuthorizedAdmin, logout);
-adminRouter.route("/add").post(isAuthenticated, isAuthorizedAdmin, addAdmin);
+adminRouter.route("/login").post(loginAdmin)
+adminRouter.route("/logout").get(isAuthenticated, isAuthorizedAdmin, logout)
+adminRouter.route("/add").post(isAuthenticated, isAuthorizedAdmin, addAdmin)
 
 //Batch operation
-adminRouter.route("/batch").get(isAuthenticated, isAuthorizedAdmin, getBatch);
-adminRouter.route("/batch").post(isAuthenticated, isAuthorizedAdmin, addBatch);
-adminRouter
-  .route("/batch/:batchId")
-  .get(isAuthenticated, isAuthorizedAdmin, getBatchDetails);
+adminRouter.route("/batch")
+  .get(isAuthenticated, isAuthorizedAdmin, getBatch)
+  .post(isAuthenticated, isAuthorizedAdmin, addBatch)
+adminRouter.route("/batch/:batchId")
+.get(isAuthenticated, isAuthorizedAdmin, getBatchDetails)
+.put(isAuthenticated, isAuthorizedAdmin,updateCourse)
+
 
 //Teacher
 adminRouter
@@ -50,10 +54,11 @@ adminRouter
   .delete(isAuthenticated, isAuthorizedAdmin, deleteTeacher)
 adminRouter
   .route("/teacher/:teacherId/:batchId")
-  .put(isAuthenticated, isAuthorizedAdmin, assignTeacher);
+  .put(isAuthenticated, isAuthorizedAdmin, assignTeacher)
+  .patch(isAuthenticated, isAuthorizedAdmin,unAssignTeacher)
 adminRouter
   .route("/teacher/batch/:batchId")
-  .get(isAuthenticated, isAuthorizedAdmin, getBatchTeacher);
+  .get(isAuthenticated, isAuthorizedAdmin, getBatchTeacher)
 
 
 
@@ -70,9 +75,9 @@ adminRouter
   .delete(isAuthenticated, isAuthorizedAdmin, deleteStudent)
 adminRouter
   .route("/student/:studentId/:batchId")
-  .put(isAuthenticated, isAuthorizedAdmin, insertStudent);
+  .put(isAuthenticated, isAuthorizedAdmin, insertStudent)
 adminRouter
   .route("/student/batch/:batchId")
-  .get(isAuthenticated, isAuthorizedAdmin, getBatchStudent);
+  .get(isAuthenticated, isAuthorizedAdmin, getBatchStudent)
 
 export default adminRouter;

@@ -7,11 +7,9 @@ import adminRouter from "./src/Routes/adminRouter.js";
 import cors from "cors";
 import { TokenVerification } from "./src/middleware/TokenValidation.js";
 import { errorMiddleware } from "./src/helper/errorMiddleware.js";
-import { dateNow } from "./src/utils/Date.js";
+import { PORT } from "./src/config/constant.js";
 
 let app = new express();
-
-let port = 8000;
 app.use(cors());
 app.use(json());
 
@@ -24,7 +22,7 @@ app.use(express.static("./public"))
 app.use(errorMiddleware)
 connectDb()
 
-app.listen(port, () => {
-  console.log(`app is listening at port number ${port}`);
-  console.log(`http://localhost:${port}/`);
+app.listen(PORT, () => {
+  console.log(`app is listening at port number ${PORT}`);
+  console.log(`http://localhost:${PORT}/`);
 })

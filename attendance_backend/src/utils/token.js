@@ -1,13 +1,13 @@
 import jwt from "jsonwebtoken";
-import { secretKey } from "../config/constant.js";
+import { SECRETKEY } from "../config/constant.js";
 
 export let verifyToken = async (token) => {
-  let infoObj = await jwt.verify(token, secretKey);
+  let infoObj = await jwt.verify(token, SECRETKEY);
   return infoObj;
 };
 
 export let generateToken = async (infoObj, expireInfo) => {
-  let token = await jwt.sign(infoObj, secretKey, expireInfo);
+  let token = await jwt.sign(infoObj, SECRETKEY, expireInfo);
 
   return token;
 };

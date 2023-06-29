@@ -34,5 +34,5 @@ url: attendance/export/:batchId
 method: get
 
 //export  report to excel by date       [admin,teacher]
-url: attendance/export/:batchId
+url: attendance/export/:batchId/:year/:month
 method: get

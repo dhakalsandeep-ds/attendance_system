@@ -1,10 +1,4 @@
-//teacher login
-url: /teacher/login
-method: POST
-data={
-    email:"manishkdka123@gmail.com"
-    password:"*******"
-}
+
 
 //teacher logout
 url: /teacher/logout

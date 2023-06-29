@@ -1,65 +1,54 @@
-import { HttpStatus, secretKey } from "../config/constant.js";
+import { HttpStatus } from "../config/constant.js";
 import { successResponse } from "../helper/successResponse.js";
 import expressAsyncHandler from "express-async-handler";
-import {
-  Admin,
-  Attendance,
-  Batch,
-  Student,
-  Teacher,
-  Token,
-} from "../schema/model.js";
-import { generateToken, verifyToken } from "../utils/token.js";
-import { comparePassword, hashPassword } from "../utils/Hashing.js";
+import { Admin, Batch, Student, Teacher } from "../schema/model.js";
+import { hashPassword } from "../utils/Hashing.js";
 import { Types } from "mongoose";
-import { dateNow } from "../utils/Date.js";
+import { deleteElementByIndex, findIndex } from "../utils/arrayMethods.js";
 
-export let loginAdmin = expressAsyncHandler(async (req, res, next) => {
-  let display = dateNow();
+// export let loginAdmin =expressAsyncHandler(async (req, res, next) => {
+//   let email = req.body.email
+//   let password = req.body.password
+//   let result = await Admin.findOne({ email })
+//   if(result===null)
+//     errorResponse({res,message: "Credential didn't match",statusCode:401})
+//   let jwt_token;
+//   if (await comparePassword(password, result.password)) {
+//     let infoObj = {
+//       id: result._id,
+//       role: "admin",
+//     };
+//     let expireInfo = {
+//       expiresIn: "365d",
+//     };
+//   jwt_token = await generateToken(infoObj, expireInfo);
+//     await Token.create({ token: jwt_token });
+//   }
+//   else
+//   errorResponse({res,message: "Credential didn't match",statusCode:401})
 
-  let email = req.body.email;
-  let password = req.body.password;
-  let result = await Admin.findOne({ email });
+//   let response = {
+//     res: res,
+//     message: "success",
+//     result: {
+//       token: jwt_token,
+//     },
+//     statusCode: HttpStatus.OK,
+//   };
 
-  let jwt_token;
-  if (await comparePassword(password, result.password)) {
-    let infoObj = {
-      id: result._id,
-      role: "admin",
-    };
-    let expireInfo = {
-      expiresIn: "365d",
-    };
-    jwt_token = await generateToken(infoObj, expireInfo);
-    await Token.create({ token: jwt_token });
-  } else {
-    let error = new Error("Credential didn't match");
-    error.statusCode = 401;
-    throw error;
-  }
+//   successResponse(response);
+// })
+// export let logout = expressAsyncHandler(async (req, res, next) => {
+//   let id = req.body.token.tokenId;
+//   await Token.findByIdAndDelete({ _id: id });
+//   let response = {
+//     res: res,
+//     message: "successfully logged out",
+//     statusCode: HttpStatus.OK,
+//   };
 
-  let response = {
-    res: res,
-    message: "success",
-    result: {
-      token: jwt_token,
-    },
-    statusCode: HttpStatus.OK,
-  };
-
-  successResponse(response);
-});
-export let logout = expressAsyncHandler(async (req, res, next) => {
-  let id = req.body.token.tokenId;
-  await Token.findByIdAndDelete({ _id: id });
-  let response = {
-    res: res,
-    message: "successfully logged out",
-    statusCode: HttpStatus.OK,
-  };
-
-  successResponse(response);
-});
+//   successResponse(response);
+// });
 
 export let addAdmin = expressAsyncHandler(async (req, res, next) => {
   let email = req.body.email;
@@ -67,23 +56,22 @@ export let addAdmin = expressAsyncHandler(async (req, res, next) => {
   let adminData = await Admin.findOne({ email });
 
   if (adminData) {
-    let error = new Error("Duplicate email.");
+    let error = new Error("User already exists");
     error.statusCode = 409;
     throw error;
   } else {
     let _hashPassword = await hashPassword(password);
-    req.body.password = _hashPassword;
-    let result = await Admin.create(req.body);
+    let result = await Admin.create({ email, password: _hashPassword });
     delete result._doc.password;
-    let infoObj = {
-      id: result._id,
-      role: "admin",
-    };
-    let expireInfo = {
-      expiresIn: "1d",
-    };
-    let token = await generateToken(infoObj, expireInfo);
-    await Token.create({ token });
+    // let infoObj = {
+    //   id: result._id,
+    //   role: "admin",
+    // }
+    // let expireInfo = {
+    //   expiresIn: "1d",
+    // }
+    // let token = await generateToken(infoObj, expireInfo);
+    // await Token.create({ token });
 
     let response = {
       res,
@@ -102,7 +90,7 @@ export let addBatch = expressAsyncHandler(async (req, res, next) => {
 
   let response = {
     res,
-    message: "success",
+    message: "Batch Created",
     result,
     statusCode: HttpStatus.CREATED,
   };
@@ -233,7 +221,7 @@ export let getBatch = expressAsyncHandler(async (req, res, next) => {
 
   let response = {
     res: res,
-    message: "success",
+    message: "All Batch detail",
     result: result,
     statusCode: HttpStatus.OK,
   };
@@ -243,7 +231,14 @@ export let getBatch = expressAsyncHandler(async (req, res, next) => {
 
 export let getBatchDetails = expressAsyncHandler(async (req, res, next) => {
   let id = req.params.batchId;
-  let result = await Batch.findOne({ _id: id });
+  try {
+    var result = await Batch.findOne({ _id: id });
+  } catch (error) {
+    error.statusCode = 404;
+    error.message = "Invalid BatchId";
+    throw error;
+  }
+
   let response = {
     res,
     message: "Batch Detail",
@@ -255,10 +250,13 @@ export let getBatchDetails = expressAsyncHandler(async (req, res, next) => {
 });
 export let getTeacher = expressAsyncHandler(async (req, res, next) => {
   let result = await Teacher.find({});
-
+  result = result.map((element) => {
+    delete element._doc.password;
+    return element;
+  });
   let response = {
     res: res,
-    message: "Teacher Detail",
+    message: "All Teachers detail",
     result: result,
     statusCode: HttpStatus.OK,
   };
@@ -276,36 +274,19 @@ export let addTeacher = expressAsyncHandler(async (req, res, next) => {
   //   error.statusCode=404
   //   throw error
   // }
-  password = await hashPassword(password);
-  let result = await Teacher.create({ name, email, password });
-
+  let hashed_password = await hashPassword(password);
+  let result = await Teacher.create({ name, email, password: hashed_password });
+  delete result._doc.password;
   let response = {
     res: res,
-    message: "success",
-    result: result,
-    statusCode: HttpStatus.OK,
-  };
-
-  successResponse(response);
-});
-
-export let assignTeacher = expressAsyncHandler(async (req, res, next) => {
-  let _batchId = req.params.batchId;
-  let teacherId = req.params.teacherId;
-  let theTeacher = await Teacher.findById(teacherId);
-  theTeacher.batchId.push(_batchId);
-  let result = await Teacher.findByIdAndUpdate(teacherId, theTeacher, {
-    new: true,
-  });
-  let response = {
-    res,
-    message: "successfully assigned",
+    message: "Teacher Added",
     result,
-    statusCode: HttpStatus.OK,
+    statusCode: HttpStatus.CREATED,
   };
 
   successResponse(response);
 });
+
 export let getBatchTeacher = expressAsyncHandler(async (req, res, next) => {
   let _batchId = req.params.batchId;
 
@@ -347,11 +328,14 @@ export let getBatchStudent = expressAsyncHandler(async (req, res, next) => {
 // })
 export let getStudent = expressAsyncHandler(async (req, res, next) => {
   let result = await Student.find({});
-
+  result = result.map((element, index) => {
+    delete element._doc.password;
+    return element;
+  });
   let response = {
-    res: res,
-    message: "success",
-    result: result,
+    res,
+    message: "All students detail",
+    result,
     statusCode: HttpStatus.OK,
   };
 
@@ -364,10 +348,10 @@ export let addStudent = expressAsyncHandler(async (req, res, next) => {
   let password = req.body.password;
   password = await hashPassword(password);
   let result = await Student.create({ name, email, password });
-
+  delete result._doc.password;
   let response = {
     res,
-    message: "student added successfully",
+    message: "Student added",
     result,
     statusCode: HttpStatus.CREATED,
   };
@@ -377,8 +361,13 @@ export let addStudent = expressAsyncHandler(async (req, res, next) => {
 
 export let getStudentDetail = expressAsyncHandler(async (req, res, next) => {
   let id = req.params.studentId;
-  let result = await Student.findOne({ _id: id });
-
+  try {
+    var result = await Student.findOne({ _id: id });
+  } catch (error) {
+    error.statusCode = 404;
+    error.message = "Invalid StudentId";
+    throw error;
+  }
   let response = {
     res: res,
     message: "success",
@@ -391,8 +380,13 @@ export let getStudentDetail = expressAsyncHandler(async (req, res, next) => {
 
 export let getTeacherDetail = expressAsyncHandler(async (req, res, next) => {
   let id = req.params.teacherId;
-  let result = await Teacher.findOne({ _id: id });
-
+  try {
+    var result = await Teacher.findOne({ _id: id });
+  } catch (error) {
+    error.statusCode = 404;
+    error.message = "Invalid TeacherId";
+    throw error;
+  }
   let response = {
     res,
     message: "success",
@@ -406,7 +400,25 @@ export let getTeacherDetail = expressAsyncHandler(async (req, res, next) => {
 export let insertStudent = expressAsyncHandler(async (req, res, next) => {
   let _batchId = req.params.batchId;
   let studentId = req.params.studentId;
-  let theStudent = await Student.findById(studentId);
+  try {
+    var theStudent = await Student.findById(studentId);
+  } catch (error) {
+    error.statusCode = 404;
+    error.message = "Invalid studentId";
+    throw error;
+  }
+  try {
+    var checkIfBatchExists = await Batch.findOne({ _id: _batchId });
+  } catch (error) {
+    error.statusCode = 404;
+    error.message = "Invalid BatchId";
+    throw error;
+  }
+  if (checkIfBatchExists === null) {
+    let error = new Error("No such batch exists");
+    error.statusCode = 404;
+    throw error;
+  }
   theStudent.batchId.push(_batchId);
   let result = await Student.findByIdAndUpdate(studentId, theStudent, {
     new: true,
@@ -425,9 +437,15 @@ export let updateStudent = expressAsyncHandler(async (req, res, next) => {
   let studentId = req.params.studentId;
   let _data = req.body.data;
   delete _data.password;
-  let result = await Student.findByIdAndUpdate(studentId, _data, {
-    new: true,
-  });
+  try {
+    var result = await Student.findByIdAndUpdate(studentId, _data, {
+      new: true,
+    });
+  } catch (error) {
+    error.statusCode = 404;
+    error.message = "Invalid studentId";
+    throw error;
+  }
   let response = {
     res,
     message: "Student Updated successfully",
@@ -441,9 +459,15 @@ export let updateTeacher = expressAsyncHandler(async (req, res, next) => {
   let teacherId = req.params.teacherId;
   let _data = req.body.data;
   delete _data.password;
-  let result = await Teacher.findByIdAndUpdate(teacherId, _data, {
-    new: true,
-  });
+  try {
+    let result = await Teacher.findByIdAndUpdate(teacherId, _data, {
+      new: true,
+    });
+  } catch (error) {
+    error.statusCode = 404;
+    error.message = "Invalid teacherId";
+    throw error;
+  }
   let response = {
     res,
     message: "Teacher Updated successfully",
@@ -455,10 +479,19 @@ export let updateTeacher = expressAsyncHandler(async (req, res, next) => {
 });
 
 export let deleteTeacher = expressAsyncHandler(async (req, res, next) => {
-  let _teacherId = req.params.teacherId;
-  console.log("teacher");
-
-  let result = await Teacher.findByIdAndDelete(_teacherId);
+  let teacherId = req.params.teacherId;
+  try {
+    var result = await Teacher.findByIdAndDelete(teacherId, { new: true });
+  } catch (error) {
+    error.message = "Invalid teacherId";
+    error.statusCode = 404;
+    throw error;
+  }
+  if (result === null) {
+    let error = new Error("No such teacher exists");
+    error.statusCode = 404;
+    throw error;
+  }
   let response = {
     res,
     message: "Teacher Account Deleted successfully",
@@ -471,7 +504,18 @@ export let deleteTeacher = expressAsyncHandler(async (req, res, next) => {
 
 export let deleteStudent = expressAsyncHandler(async (req, res, next) => {
   let studentId = req.params.studentId;
-  let result = await Student.findByIdAndDelete(studentId);
+  try {
+    var result = await Student.findByIdAndDelete(studentId);
+  } catch (error) {
+    error.message = "Invalid studentId";
+    error.statusCode = 404;
+    throw error;
+  }
+  if (result === null) {
+    let error = new Error("No such student exists");
+    error.statusCode = 404;
+    throw error;
+  }
   let response = {
     res,
     message: "Student Account Deleted successfully",
@@ -479,5 +523,92 @@ export let deleteStudent = expressAsyncHandler(async (req, res, next) => {
     statusCode: HttpStatus.OK,
   };
 
+  successResponse(response);
+});
+
+export let unAssignTeacher = expressAsyncHandler(async (req, res, next) => {
+  let _batchId = req.params.batchId;
+  let _teacherId = req.params.teacherId;
+  try {
+    var theTeacher = await Teacher.findById(_teacherId);
+  } catch (error) {
+    error.statusCode = 404;
+    error.message = "Invalid teacherId";
+    throw error;
+  }
+  let indexToDelete = findIndex(_batchId, theTeacher.batchId);
+  deleteElementByIndex(theTeacher.batchId, indexToDelete);
+
+  let result = await Teacher.findByIdAndUpdate(_teacherId, theTeacher, {
+    new: true,
+  });
+  let response = {
+    res,
+    message: "Teacher Unassigned",
+    result,
+    statusCode: HttpStatus.OK,
+  };
+
+  successResponse(response);
+});
+
+export let assignTeacher = expressAsyncHandler(async (req, res, next) => {
+  let _batchId = req.params.batchId;
+  let teacherId = req.params.teacherId;
+  try {
+    var theTeacher = await Teacher.findById(teacherId);
+  } catch (error) {
+    error.statusCode = 404;
+    error.message = "Invalid TeacherId";
+    throw error;
+  }
+  try {
+    var checkIfBatchExists = await Batch.findOne({ _id: _batchId });
+  } catch (error) {
+    error.statusCode = 404;
+    error.message = "Invalid BatchId";
+    throw error;
+  }
+  if (checkIfBatchExists === null) {
+    let error = new Error("No such batch exists");
+    error.statusCode = 404;
+    throw error;
+  }
+  theTeacher.batchId.push(_batchId);
+  let result = await Teacher.findByIdAndUpdate(teacherId, theTeacher, {
+    new: true,
+  });
+  let response = {
+    res,
+    message: "Teacher Assigned",
+    result,
+    statusCode: HttpStatus.OK,
+  };
+
+  successResponse(response);
+});
+
+export let updateCourse = expressAsyncHandler(async (req, res, next) => {
+  let name = req.body.name;
+  let course = req.body.course;
+  let _batchId = req.params.batchId;
+  try {
+    var result = await Batch.findByIdAndUpdate(
+      _batchId,
+      { name, course },
+      { new: true }
+    );
+  } catch (error) {
+    error.statusCode = 404;
+    error.message = "Invalid BatchId";
+    throw error;
+  }
+
+  let response = {
+    res,
+    message: "Batch detail updated",
+    result,
+    statusCode: HttpStatus.OK,
+  };
   successResponse(response);
 });

@@ -1,4 +1,4 @@
-import expressAsyncHandler from "express-async-handler"
+
 
 // export let compareDate=expressAsyncHandler(async(someDate)=>{
 //     let dateNow=new Date()
@@ -19,7 +19,3 @@ import expressAsyncHandler from "express-async-handler"
 export let dateNow = ()=> new Date().toISOString().split("T")[0]
 
 export let matchDate=(rawString)=>new Date(rawString).toISOString()
-
-export let compareDate=(one,two)=>{
-
-}

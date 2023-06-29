@@ -1,6 +1,8 @@
+import 'dotenv/config'
+
 export const HttpStatus = {
   CONTINUE: 100,
-  SWITCHING_PROTOCOLS: 101,
+  SWITCHING_PROTOCOLS: 101,       //must sent when websocket is accepted
   PROCESSING: 102,
   OK: 200, //success, get, delete
   CREATED: 201, //success, create update
@@ -58,4 +60,6 @@ export const HttpStatus = {
 
 };
 
-export let secretKey = "dw3SecretKey"
+export let SECRETKEY = process.env.SECRETKEY
+export let PORT=process.env.PORT
+export let MONGO_URL=process.env.MONGO_URL

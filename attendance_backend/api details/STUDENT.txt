@@ -1,10 +1,4 @@
-//student login
-url: /student/login
-method: POST
-data={
-    email:"manishkdka123@gmail.com"
-    password:"*******"
-}
+
 
 //student logout
 url: /student/logout

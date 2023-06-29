@@ -1,57 +1,57 @@
 import expressAsyncHandler from "express-async-handler";
-import { Attendance, Student, Token} from "../schema/model.js";
+import { Attendance, Student} from "../schema/model.js";
 import { successResponse } from "../helper/successResponse.js";
 import { HttpStatus } from "../config/constant.js";
 import { comparePassword } from "../utils/Hashing.js";
-import { generateToken } from "../utils/token.js";
 
-export let loginStudent=expressAsyncHandler(async(req,res,next)=>{
-  let email=req.body.email
-  let password=req.body.password
-  let result = await Student.findOne({email});
-  let jwt_token;
-  if (await comparePassword(password,result.password)){
-    let infoObj={
-      id:result._id,
-      role:"student"
-    }
-    let expireInfo={
-      expiresIn:"365d"
-    }
-    jwt_token = await generateToken(infoObj, expireInfo);
-    await Token.create({token:jwt_token})
-  }
-    else{
-    let error= new Error("Credential didn't match")
-    error.statusCode=401
-    throw error
-    }
 
-  let response = {
-    res,
-    message: "student login successful",
-    result: 
-      {
-        token:jwt_token,
-      },
-    statusCode: HttpStatus.OK,
-  };
+// export let loginStudent=expressAsyncHandler(async(req,res,next)=>{
+//   let email=req.body.email
+//   let password=req.body.password
+//   let result = await Student.findOne({email});
+//   let jwt_token;
+//   if (await comparePassword(password,result.password)){
+//     let infoObj={
+//       id:result._id,
+//       role:"student"
+//     }
+//     let expireInfo={
+//       expiresIn:"365d"
+//     }
+//     jwt_token = await generateToken(infoObj, expireInfo);
+//     await Token.create({token:jwt_token})
+//   }
+//     else{
+//     let error= new Error("Credential didn't match")
+//     error.statusCode=401
+//     throw error
+//     }
 
-  successResponse(response);
-})
+//   let response = {
+//     res,
+//     message: "student login successful",
+//     result: 
+//       {
+//         token:jwt_token,
+//       },
+//     statusCode: HttpStatus.OK,
+//   };
 
-export let logoutStudent = expressAsyncHandler(async(req,res,next)=>{
-  let id=req.body.token.tokenId
-  await Token.findByIdAndDelete({_id:id})
-  let response = {
-    res: res,
-    message: "successfully logged out",
-    statusCode: HttpStatus.OK,
-  };
+//   successResponse(response);
+// })
 
-  successResponse(response);
+// export let logoutStudent = expressAsyncHandler(async(req,res,next)=>{
+//   let id=req.body.token.tokenId
+//   await Token.findByIdAndDelete({_id:id})
+//   let response = {
+//     res: res,
+//     message: "successfully logged out",
+//     statusCode: HttpStatus.OK,
+//   };
 
-})
+//   successResponse(response);
+
+// })
 
 
 export let showEnrolledClasses=expressAsyncHandler(async(req,res,next)=>{

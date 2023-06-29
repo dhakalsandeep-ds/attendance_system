@@ -16,8 +16,6 @@ import {
   getTeacher,
   getTeacherDetail,
   insertStudent,
-  loginAdmin,
-  logout,
   unAssignTeacher,
   updateCourse,
   updateStudent,
@@ -26,10 +24,9 @@ import {
 import { isAuthorizedAdmin } from "../middleware/isAuthorized.js";
 import { isAuthenticated } from "../middleware/isAuthenticated.js";
 
-let adminRouter = Router();
+let adminRouter = Router()
 
-adminRouter.route("/login").post(loginAdmin)
-adminRouter.route("/logout").get(isAuthenticated, isAuthorizedAdmin, logout)
+// adminRouter.route("/logout").get(isAuthenticated, isAuthorizedAdmin, logout)
 adminRouter.route("/add").post(isAuthenticated, isAuthorizedAdmin, addAdmin)
 
 //Batch operation

@@ -153,7 +153,7 @@ const StudentBatch = () => {
             onClick={(e) => handleOpen()}
             sx={{ width: "fit-content" }}
           >
-            Assign Teacher
+            Assign Student
           </Button>
         </Stack>
 

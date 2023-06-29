@@ -18,6 +18,7 @@ import {
   insertStudent,
   loginAdmin,
   logout,
+  updateBatch,
   updateStudent,
   updateTeacher,
 } from "../controllers/adminController.js";
@@ -35,19 +36,22 @@ adminRouter.route("/batch").get(isAuthenticated, isAuthorizedAdmin, getBatch);
 adminRouter.route("/batch").post(isAuthenticated, isAuthorizedAdmin, addBatch);
 adminRouter
   .route("/batch/:batchId")
+  .put(isAuthenticated, isAuthorizedAdmin, updateBatch);
+adminRouter
+  .route("/batch/:batchId")
   .get(isAuthenticated, isAuthorizedAdmin, getBatchDetails);
 
 //Teacher
 adminRouter
   .route("/teacher")
   .get(isAuthenticated, isAuthorizedAdmin, getTeacher)
-  .post(isAuthenticated, isAuthorizedAdmin, addTeacher)
+  .post(isAuthenticated, isAuthorizedAdmin, addTeacher);
 
 adminRouter
   .route("/teacher/:teacherId")
   .get(isAuthenticated, isAuthorizedAdmin, getTeacherDetail)
   .put(isAuthenticated, isAuthorizedAdmin, updateTeacher)
-  .delete(isAuthenticated, isAuthorizedAdmin, deleteTeacher)
+  .delete(isAuthenticated, isAuthorizedAdmin, deleteTeacher);
 adminRouter
   .route("/teacher/:teacherId/:batchId")
   .put(isAuthenticated, isAuthorizedAdmin, assignTeacher);
@@ -55,19 +59,17 @@ adminRouter
   .route("/teacher/batch/:batchId")
   .get(isAuthenticated, isAuthorizedAdmin, getBatchTeacher);
 
-
-
 //Student
 adminRouter
   .route("/student")
   .get(isAuthenticated, isAuthorizedAdmin, getStudent)
-  .post(isAuthenticated, isAuthorizedAdmin, addStudent)
+  .post(isAuthenticated, isAuthorizedAdmin, addStudent);
 
 adminRouter
   .route("/student/:studentId")
   .get(isAuthenticated, isAuthorizedAdmin, getStudentDetail)
   .put(isAuthenticated, isAuthorizedAdmin, updateStudent)
-  .delete(isAuthenticated, isAuthorizedAdmin, deleteStudent)
+  .delete(isAuthenticated, isAuthorizedAdmin, deleteStudent);
 adminRouter
   .route("/student/:studentId/:batchId")
   .put(isAuthenticated, isAuthorizedAdmin, insertStudent);

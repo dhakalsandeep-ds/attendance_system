@@ -158,18 +158,33 @@ export default function MiniDrawer() {
                   </Stack>
                 )}
                 {!open && (
-                  <Tooltip title="Admins" arrow>
+                  <Stack direction="column">
                     <ListItemIcon
                       sx={{
                         minWidth: 0,
                         mr: open ? 3 : "auto",
                         justifyContent: "center",
                         fontWeight: "bold",
+                        padding: "14px",
                       }}
                     >
                       <MdOutlineClass size={25} color="white"></MdOutlineClass>
                     </ListItemIcon>
-                  </Tooltip>
+                    <span>Batches</span>
+                  </Stack>
+
+                  // <Tooltip title="Admins" arrow>
+                  //   <ListItemIcon
+                  //     sx={{
+                  //       minWidth: 0,
+                  //       mr: open ? 3 : "auto",
+                  //       justifyContent: "center",
+                  //       fontWeight: "bold",
+                  //     }}
+                  //   >
+                  //     <MdOutlineClass size={25} color="white"></MdOutlineClass>
+                  //   </ListItemIcon>
+                  // </Tooltip>
                 )}
               </ListItemButton>
             </NavLink>
@@ -256,18 +271,20 @@ export default function MiniDrawer() {
                   </Stack>
                 )}
                 {!open && (
-                  <Tooltip title="Teachers" arrow>
+                  <Stack direction="column">
                     <ListItemIcon
                       sx={{
                         minWidth: 0,
                         mr: open ? 3 : "auto",
                         justifyContent: "center",
                         fontWeight: "bold",
+                        padding: "14px",
                       }}
                     >
                       <RiTeamLine size={25} color="white"></RiTeamLine>
                     </ListItemIcon>
-                  </Tooltip>
+                    <span>Teachers</span>
+                  </Stack>
                 )}
               </ListItemButton>
             </NavLink>
@@ -306,18 +323,20 @@ export default function MiniDrawer() {
                   </Stack>
                 )}
                 {!open && (
-                  <Tooltip title="Students" arrow>
+                  <Stack direction="column">
                     <ListItemIcon
                       sx={{
                         minWidth: 0,
                         mr: open ? 3 : "auto",
                         justifyContent: "center",
                         fontWeight: "bold",
+                        padding: "14px",
                       }}
                     >
                       <PiStudent size={25} color="white"></PiStudent>
                     </ListItemIcon>
-                  </Tooltip>
+                    <span>Students</span>
+                  </Stack>
                 )}
               </ListItemButton>
             </NavLink>

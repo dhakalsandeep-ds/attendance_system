@@ -13,6 +13,7 @@ import AddIcon from "@mui/icons-material/Add";
 import Toastify from "../../components/Toastify";
 import { Card, CardContent, Grid, Stack } from "@mui/material";
 import EditForm from "../../components/EditForm";
+import DeleteModel from "../../components/DeleteModel";
 
 const style = {
   position: "absolute",
@@ -46,6 +47,56 @@ const StudentView = () => {
   let [noStudents, setNoStudents] = useState(0);
   let [edit, setEdit] = useState(false);
   let [editStudentId, setEditStudentId] = useState("");
+  let [deleTeOpen, setDeleteOpen] = useState(false);
+  let [deleteId, setDeleteId] = useState("");
+
+  async function handleDeleteOpen(e, id) {
+    setDeleteId(id);
+    setDeleteOpen(true);
+    console.log("handleClose");
+  }
+  async function handleDeleteClose(e, id) {
+    setDeleteOpen(false);
+    console.log("handleClose");
+  }
+  async function handleDeleteSubmit(e, id) {
+    let data;
+    try {
+      let response = await fetch(
+        "http://localhost:8000/admin/student/" + deleteId,
+        {
+          method: "delete",
+
+          headers: {
+            Authorization: `Bearer ${user.token()}`,
+          },
+        }
+      );
+
+      data = await response.json();
+    } catch (e) {
+      setOpenToast(true);
+      setToastMessage("something went wrong");
+      setSeverity("error");
+      handleClose();
+      handleEditClose();
+    }
+
+    console.log("data......", data);
+    if (data.success) {
+      setSeverity("success");
+      setToastMessage(data.message);
+      handleOpenToast();
+      handleDeleteClose();
+
+      fetchStudent();
+    } else {
+      setOpenToast(true);
+      setToastMessage(data.message);
+      setSeverity("error");
+      handleDeleteClose();
+    }
+  }
 
   const handleOpenToast = () => {
     setOpenToast(true);
@@ -149,11 +200,6 @@ const StudentView = () => {
       handleEditClose();
     }
     console.log("edit submit");
-  }
-
-  async function handleDeleteOpen(e, id) {
-    setDeleteTeacher(true);
-    console.log("handleClose");
   }
 
   async function fetchStudent() {
@@ -484,6 +530,12 @@ const StudentView = () => {
             );
           })}
       </EditForm>
+
+      <DeleteModel
+        open={deleTeOpen}
+        handleDeleteClose={handleDeleteClose}
+        handleDeleteSubmit={handleDeleteSubmit}
+      ></DeleteModel>
 
       <Toastify
         handleOpen={handleOpenToast}

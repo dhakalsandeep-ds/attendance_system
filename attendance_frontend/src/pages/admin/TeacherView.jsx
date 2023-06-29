@@ -41,8 +41,8 @@ const TeacherView = () => {
   let [emailErrors, setEmailErrors] = useState([]);
   let [passwordErrors, setPasswordErrors] = useState([]);
   let [nameErrors, setNameErrors] = useState([]);
-  const [open, setOpen] = React.useState(false);
-  const [openToast, setOpenToast] = React.useState(false);
+  const [open, setOpen] = useState(false);
+  const [openToast, setOpenToast] = useState(false);
   let [toastMessage, setToastMessage] = useState();
   let [severity, setSeverity] = useState("error");
   let [noTeachers, setNoTeachers] = useState(0);
@@ -50,7 +50,6 @@ const TeacherView = () => {
   let [editTeacherId, setEditTeacherId] = useState("");
   let [deleTeOpen, setDeleteOpen] = useState(false);
   let [deleteId, setDeleteId] = useState("");
-  let [deleteTeacher, setDeleteTeacher] = useState(false);
 
   console.log(email, "email");
   console.log(name, "name");
@@ -184,7 +183,7 @@ const TeacherView = () => {
       let response = await fetch(
         "http://localhost:8000/admin/teacher/" + deleteId,
         {
-          method: "get",
+          method: "delete",
 
           headers: {
             Authorization: `Bearer ${user.token()}`,
@@ -207,7 +206,7 @@ const TeacherView = () => {
       setToastMessage(data.message);
       handleOpenToast();
       handleDeleteClose();
-      han;
+
       fetchTeacher();
     } else {
       setOpenToast(true);

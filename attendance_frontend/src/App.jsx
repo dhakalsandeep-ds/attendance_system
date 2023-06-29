@@ -12,11 +12,20 @@ import TeacherView from "./pages/admin/TeacherView";
 import StudentView from "./pages/admin/StudentView";
 import AttendanceView from "./pages/admin/AttendanceView";
 import AddTeacherAndAdmin from "./pages/admin/AddTeacherAndAdmin";
+import { OwnIDInit } from "@ownid/react";
+import RegisterComponent from "./pages/admin/RegisterAdmin";
 
 function App() {
   return (
     <AuthProvider>
+      <div className="App">
+        <OwnIDInit config={{ appId: "6kb4iorm9vgl8f" }} />
+      </div>
       <Routes>
+        <Route
+          path="/"
+          element={<RegisterComponent></RegisterComponent>}
+        ></Route>
         <Route path="/admin">
           <Route
             index

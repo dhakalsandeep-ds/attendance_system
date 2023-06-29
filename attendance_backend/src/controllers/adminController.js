@@ -15,12 +15,12 @@ import { Types } from "mongoose";
 import { dateNow } from "../utils/Date.js";
 
 export let loginAdmin = expressAsyncHandler(async (req, res, next) => {
-  let display= dateNow()
+  let display = dateNow();
 
   let email = req.body.email;
   let password = req.body.password;
   let result = await Admin.findOne({ email });
-  
+
   let jwt_token;
   if (await comparePassword(password, result.password)) {
     let infoObj = {
@@ -105,6 +105,22 @@ export let addBatch = expressAsyncHandler(async (req, res, next) => {
     message: "success",
     result,
     statusCode: HttpStatus.CREATED,
+  };
+
+  successResponse(response);
+});
+export let updateBatch = expressAsyncHandler(async (req, res, next) => {
+  let batchId = req.params.batchId;
+  let _data = req.body.data;
+  delete _data.password;
+  let result = await Batch.findByIdAndUpdate(batchId, _data, {
+    new: true,
+  });
+  let response = {
+    res,
+    message: "Batch Updated successfully",
+    result,
+    statusCode: HttpStatus.OK,
   };
 
   successResponse(response);
@@ -213,7 +229,7 @@ export let addBatch = expressAsyncHandler(async (req, res, next) => {
 //   // }
 // });
 export let getBatch = expressAsyncHandler(async (req, res, next) => {
-  let result = await Batch.find({})
+  let result = await Batch.find({});
 
   let response = {
     res: res,
@@ -340,7 +356,7 @@ export let getStudent = expressAsyncHandler(async (req, res, next) => {
   };
 
   successResponse(response);
-})
+});
 
 export let addStudent = expressAsyncHandler(async (req, res, next) => {
   let name = req.body.name;
@@ -357,7 +373,7 @@ export let addStudent = expressAsyncHandler(async (req, res, next) => {
   };
 
   successResponse(response);
-})
+});
 
 export let getStudentDetail = expressAsyncHandler(async (req, res, next) => {
   let id = req.params.studentId;
@@ -371,7 +387,7 @@ export let getStudentDetail = expressAsyncHandler(async (req, res, next) => {
   };
 
   successResponse(response);
-})
+});
 
 export let getTeacherDetail = expressAsyncHandler(async (req, res, next) => {
   let id = req.params.teacherId;
@@ -385,7 +401,7 @@ export let getTeacherDetail = expressAsyncHandler(async (req, res, next) => {
   };
 
   successResponse(response);
-})
+});
 
 export let insertStudent = expressAsyncHandler(async (req, res, next) => {
   let _batchId = req.params.batchId;
@@ -403,13 +419,13 @@ export let insertStudent = expressAsyncHandler(async (req, res, next) => {
   };
 
   successResponse(response);
-})
+});
 
 export let updateStudent = expressAsyncHandler(async (req, res, next) => {
-  let studentId = req.params.studentId
-  let _data=req.body.data
-  delete _data.password
-  let result = await Student.findByIdAndUpdate(studentId,_data, {
+  let studentId = req.params.studentId;
+  let _data = req.body.data;
+  delete _data.password;
+  let result = await Student.findByIdAndUpdate(studentId, _data, {
     new: true,
   });
   let response = {
@@ -420,12 +436,12 @@ export let updateStudent = expressAsyncHandler(async (req, res, next) => {
   };
 
   successResponse(response);
-})
+});
 export let updateTeacher = expressAsyncHandler(async (req, res, next) => {
-  let teacherId = req.params.teacherId
-  let _data=req.body.data
-  delete _data.password
-  let result = await Teacher.findByIdAndUpdate(teacherId,_data, {
+  let teacherId = req.params.teacherId;
+  let _data = req.body.data;
+  delete _data.password;
+  let result = await Teacher.findByIdAndUpdate(teacherId, _data, {
     new: true,
   });
   let response = {
@@ -436,12 +452,13 @@ export let updateTeacher = expressAsyncHandler(async (req, res, next) => {
   };
 
   successResponse(response);
-})
+});
 
 export let deleteTeacher = expressAsyncHandler(async (req, res, next) => {
-  let teacherId = req.params.teacherId
-  
-  let result = await Teacher.findByIdAndDelete(teacherId)
+  let _teacherId = req.params.teacherId;
+  console.log("teacher");
+
+  let result = await Teacher.findByIdAndDelete(_teacherId);
   let response = {
     res,
     message: "Teacher Account Deleted successfully",
@@ -450,10 +467,10 @@ export let deleteTeacher = expressAsyncHandler(async (req, res, next) => {
   };
 
   successResponse(response);
-})
+});
 
 export let deleteStudent = expressAsyncHandler(async (req, res, next) => {
-  let studentId = req.params.studentId
+  let studentId = req.params.studentId;
   let result = await Student.findByIdAndDelete(studentId);
   let response = {
     res,
@@ -463,5 +480,4 @@ export let deleteStudent = expressAsyncHandler(async (req, res, next) => {
   };
 
   successResponse(response);
-})
-
+});

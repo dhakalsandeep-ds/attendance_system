@@ -69,13 +69,13 @@ export let addAdmin = expressAsyncHandler(async (req, res, next) => {
   let adminData = await Admin.findOne({ email });
 
   if (adminData) {
-    let error = new Error("Duplicate email.");
+    let error = new Error("User already exists");
     error.statusCode = 409;
     throw error;
   } else {
     let _hashPassword = await hashPassword(password);
     req.body.password = _hashPassword;
-    let result = await Admin.create(req.body);
+    let result = await Admin.create({email,password});
     delete result._doc.password;
     let infoObj = {
       id: result._id,

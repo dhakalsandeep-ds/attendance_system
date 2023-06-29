@@ -1,7 +1,7 @@
 import expressAsyncHandler from "express-async-handler";
 import mongoose from "mongoose";
+import { MONGO_URL } from "../config/constant.js";
 export let connectDb = expressAsyncHandler(async () => {
-  let port = "mongodb://127.0.0.1:27017/attendance_sy";
-    await mongoose.connect(port);
-    console.log(`expressApp is connected to mongodb  at port ${port}`);
+    await mongoose.connect(MONGO_URL)
+    console.log(`expressApp is connected to mongodb`)
 })

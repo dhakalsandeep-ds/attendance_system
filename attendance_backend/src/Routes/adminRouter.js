@@ -7,6 +7,7 @@ import {
   assignTeacher,
   deleteStudent,
   deleteTeacher,
+  getAdmin,
   getBatch,
   getBatchDetails,
   getBatchStudent,
@@ -28,6 +29,7 @@ let adminRouter = Router();
 
 // adminRouter.route("/logout").get(isAuthenticated, isAuthorizedAdmin, logout)
 adminRouter.route("/add").post(isAuthenticated, isAuthorizedAdmin, addAdmin);
+adminRouter.route("/all").get(isAuthenticated, isAuthorizedAdmin, getAdmin);
 
 //Batch operation
 adminRouter

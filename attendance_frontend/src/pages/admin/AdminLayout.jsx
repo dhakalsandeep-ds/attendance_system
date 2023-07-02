@@ -30,6 +30,7 @@ import { BsListCheck } from "react-icons/bs";
 import { RiAdminLine } from "react-icons/ri";
 import { RiTeamLine } from "react-icons/ri";
 import { Tooltip } from "@mui/material";
+import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
 
 const drawerWidth = 150;
 
@@ -125,6 +126,78 @@ export default function MiniDrawer() {
             backgroundColor: "#9c27b0",
           }}
         >
+          <ListItem disablePadding sx={{ display: "block" }}>
+            <NavLink
+              to="list"
+              style={({ isActive }) => ({
+                color: "white",
+                backgroundColor: isActive ? "#af52bf" : "",
+                display: "block",
+                textDecoration: "none",
+              })}
+            >
+              <ListItemButton
+                sx={{
+                  minHeight: 48,
+                  justifyContent: open ? "initial" : "center",
+                  px: 2.5,
+                }}
+              >
+                {open && (
+                  <Stack direction="row">
+                    <ListItemIcon
+                      sx={{
+                        minWidth: 0,
+                        mr: open ? 3 : "auto",
+                        justifyContent: "center",
+                        fontWeight: "bold",
+                      }}
+                    >
+                      <AdminPanelSettingsIcon
+                        size={25}
+                        color={"white"}
+                        sx={{ color: "white" }}
+                      ></AdminPanelSettingsIcon>
+                    </ListItemIcon>
+                    <span>Admins</span>
+                  </Stack>
+                )}
+                {!open && (
+                  <Stack direction="column">
+                    <ListItemIcon
+                      sx={{
+                        minWidth: 0,
+                        mr: open ? 3 : "auto",
+                        justifyContent: "center",
+                        fontWeight: "bold",
+                        padding: "14px",
+                      }}
+                    >
+                      <AdminPanelSettingsIcon
+                        size={25}
+                        color="white"
+                        sx={{ color: "white" }}
+                      ></AdminPanelSettingsIcon>
+                    </ListItemIcon>
+                    <span>Admins</span>
+                  </Stack>
+
+                  // <Tooltip title="Admins" arrow>
+                  //   <ListItemIcon
+                  //     sx={{
+                  //       minWidth: 0,
+                  //       mr: open ? 3 : "auto",
+                  //       justifyContent: "center",
+                  //       fontWeight: "bold",
+                  //     }}
+                  //   >
+                  //     <MdOutlineClass size={25} color="white"></MdOutlineClass>
+                  //   </ListItemIcon>
+                  // </Tooltip>
+                )}
+              </ListItemButton>
+            </NavLink>
+          </ListItem>
           <ListItem disablePadding sx={{ display: "block" }}>
             <NavLink
               to="batch"

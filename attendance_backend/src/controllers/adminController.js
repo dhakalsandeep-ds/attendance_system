@@ -225,6 +225,7 @@ export let getBatch = expressAsyncHandler(async (req, res, next) => {
     result: result,
     statusCode: HttpStatus.OK,
   };
+  console.log("all batches getting");
 
   successResponse(response);
 });
@@ -257,6 +258,21 @@ export let getTeacher = expressAsyncHandler(async (req, res, next) => {
   let response = {
     res: res,
     message: "All Teachers detail",
+    result: result,
+    statusCode: HttpStatus.OK,
+  };
+
+  successResponse(response);
+});
+export let getAdmin = expressAsyncHandler(async (req, res, next) => {
+  let result = await Admin.find({});
+  result = result.map((element) => {
+    delete element._doc.password;
+    return element;
+  });
+  let response = {
+    res: res,
+    message: "All Batch detail",
     result: result,
     statusCode: HttpStatus.OK,
   };
@@ -459,8 +475,9 @@ export let updateTeacher = expressAsyncHandler(async (req, res, next) => {
   let teacherId = req.params.teacherId;
   let _data = req.body.data;
   delete _data.password;
+  let result;
   try {
-    let result = await Teacher.findByIdAndUpdate(teacherId, _data, {
+    result = await Teacher.findByIdAndUpdate(teacherId, _data, {
       new: true,
     });
   } catch (error) {

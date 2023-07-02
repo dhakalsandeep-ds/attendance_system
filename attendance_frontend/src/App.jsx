@@ -14,6 +14,7 @@ import AttendanceView from "./pages/admin/AttendanceView";
 import AddTeacherAndAdmin from "./pages/admin/AddTeacherAndAdmin";
 import { OwnIDInit } from "@ownid/react";
 import RegisterComponent from "./pages/admin/RegisterAdmin";
+import AdminList from "./pages/admin/AdminList";
 
 function App() {
   return (
@@ -38,6 +39,7 @@ function App() {
 
           <Route element={<ProtectedRoute></ProtectedRoute>}>
             <Route element={<AdminLayout></AdminLayout>}>
+              <Route path="list" element={<AdminList></AdminList>}></Route>
               <Route
                 path="batch/:batchId"
                 element={<AddTeacherAndAdmin></AddTeacherAndAdmin>}

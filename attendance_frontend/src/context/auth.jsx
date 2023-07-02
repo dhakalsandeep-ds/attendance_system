@@ -16,7 +16,7 @@ export const AuthProvider = ({ children }) => {
       password: password,
     });
 
-    let response = await fetch("http://localhost:8000/admin/login", {
+    let response = await fetch("http://localhost:8000/login", {
       method: "POST",
       body: bodyContent,
       headers: headersList,
@@ -29,6 +29,7 @@ export const AuthProvider = ({ children }) => {
       return data;
     }
     localStorage.setItem("token", data.result.token);
+    localStorage.setItem("email", email);
 
     console.log("redirecting ....");
 
@@ -39,7 +40,7 @@ export const AuthProvider = ({ children }) => {
     let token = localStorage.getItem("token");
     if (token) {
       console.log("insideeee");
-      let response = await fetch("http://localhost:8000/admin/logout", {
+      let response = await fetch("http://localhost:8000/logout", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -55,8 +56,13 @@ export const AuthProvider = ({ children }) => {
     return token ? token : null;
   };
 
+  const email = () => {
+    let email = localStorage.getItem("email");
+    return email ? email : null;
+  };
+
   return (
-    <AuthContext.Provider value={{ token, login, logout }}>
+    <AuthContext.Provider value={{ token, login, logout, email }}>
       {children}
     </AuthContext.Provider>
   );

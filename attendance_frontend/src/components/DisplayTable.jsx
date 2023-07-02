@@ -10,6 +10,8 @@ import Button from "@mui/material/Button";
 
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
+import { OwnID } from "@ownid/react";
+import { useAuth } from "./../context/auth";
 
 export default function DisplayTable({
   columns,
@@ -18,6 +20,14 @@ export default function DisplayTable({
   handleEditOpen,
   handleDeleteOpen,
 }) {
+  let [OwnIdDat, setOwnIdData] = React.useState(null);
+  let user = useAuth();
+
+  function onRegister(ownIdData) {
+    console.log("ownIdDat", ownIdData);
+    console.log("ownIdData", ownIdData);
+    setOwnIdData(ownIdData.data);
+  }
   return (
     <TableContainer
       component={Paper}
@@ -59,6 +69,30 @@ export default function DisplayTable({
                     color="error"
                     startIcon={<DeleteIcon></DeleteIcon>}
                   ></Button>
+                  <Button
+                    onClick={(e) => handleDeleteOpen(e, row._id)}
+                    variant="outlined"
+                    color="error"
+                  >
+                    {row.ownIdData ? (
+                      "yes"
+                    ) : user.email() === row.email ? (
+                      <OwnID
+                        type="register"
+                        options={{
+                          variant: "button-faceid",
+                          infoTooltip: true,
+                        }}
+                        loginIdField={row.email}
+                        onError={(error) => {
+                          console.log(error, "error");
+                        }}
+                        onRegister={onRegister}
+                      />
+                    ) : (
+                      "no"
+                    )}
+                  </Button>
                 </TableCell>
               </TableRow>
             ))}

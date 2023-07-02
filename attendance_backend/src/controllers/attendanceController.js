@@ -13,9 +13,9 @@ export let studentList = expressAsyncHandler(async (req, res, next) => {
     result: studentList,
     message: "All students of this Batch",
     statusCode: HttpStatus.OK,
-  };  
+  };
   successResponse(response);
-})
+});
 
 export let submitAttendance = expressAsyncHandler(async (req, res, next) => {
   let _batchId = req.params.batchId;
@@ -50,23 +50,24 @@ export let submitAttendance = expressAsyncHandler(async (req, res, next) => {
     statusCode: HttpStatus.OK,
   };
   successResponse(response);
-})
+});
 
 export let getAttendanceByDate = expressAsyncHandler(async (req, res, next) => {
+  console.log(req.body, "alfjla,,,,,,,,,,,,,,,,,,,,,,,,,");
   let _batchId = req.params.batchId;
   let desiredYear = req.params.year;
   let desiredMonth = req.params.month;
+  console.log(_batchId, desiredYear, desiredMonth, ".....");
   let result = await Attendance.find({
     batchId: _batchId,
     year: desiredYear,
     month: desiredMonth,
-  })
-    .populate({
-      path: "studentId",
-    })
-    .populate({
-      path: "batchId",
-    });
+  }).populate({
+    path: "studentId",
+  });
+  // .populate({
+  //   path: "batchId",
+  // });
   let response = {
     res,
     message: "Attendance Report",
@@ -75,7 +76,7 @@ export let getAttendanceByDate = expressAsyncHandler(async (req, res, next) => {
   };
 
   successResponse(response);
-})
+});
 
 export let getAllAttendance = expressAsyncHandler(async (req, res, next) => {
   let _batchId = req.params.batchId;
@@ -96,7 +97,7 @@ export let getAllAttendance = expressAsyncHandler(async (req, res, next) => {
   // };
 
   // successResponse(response);
-})
+});
 
 export let exportAllAttendance = expressAsyncHandler(async (req, res, next) => {
   const parser = new Parser();
@@ -118,7 +119,7 @@ export let exportAllAttendance = expressAsyncHandler(async (req, res, next) => {
   res.setHeader("Content-Type", "text/csv");
   res.setHeader("Content-Disposition", "attachment:filename=userData.csv");
   res.status(200).end(csv);
-})
+});
 
 export let exportAttendanceByDate = expressAsyncHandler(
   async (req, res, next) => {
@@ -150,4 +151,4 @@ export let exportAttendanceByDate = expressAsyncHandler(
     res.setHeader("Content-Disposition", "attachment:filename=userData.csv");
     res.status(200).end(csv);
   }
-)
+);

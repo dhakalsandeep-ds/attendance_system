@@ -7,6 +7,8 @@ import Box from "@mui/material/Box";
 import TeacherBatch from "./TeacherBatch";
 import StudentBatch from "./StudentBatch";
 import BatchAttendance from "./BatchAttendance";
+import { useState } from "react";
+import PreviousAttendanceAll from "./PreviousAttendanceAll";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -29,7 +31,7 @@ function TabPanel(props) {
 }
 
 export default function StudentTeacherBatch() {
-  const [value, setValue] = React.useState(0);
+  const [value, setValue] = useState(0);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -42,6 +44,7 @@ export default function StudentTeacherBatch() {
           <Tab label="Teacher" />
           <Tab label="Student" />
           <Tab label="Today Attendance" />
+          <Tab label="Previous Attendance" />
         </Tabs>
       </Box>
       <TabPanel value={value} index={0}>
@@ -52,6 +55,9 @@ export default function StudentTeacherBatch() {
       </TabPanel>
       <TabPanel value={value} index={2}>
         <BatchAttendance></BatchAttendance>
+      </TabPanel>
+      <TabPanel value={value} index={3}>
+        <PreviousAttendanceAll></PreviousAttendanceAll>
       </TabPanel>
     </Box>
   );

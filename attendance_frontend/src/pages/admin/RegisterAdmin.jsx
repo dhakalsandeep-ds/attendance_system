@@ -21,7 +21,7 @@ export default function RegisterComponent() {
       ownIdData: ownIdData,
     };
     const response = await fetch(
-      "https://f933-103-148-23-182.ngrok-free.app/setOwnIDDataByLoginId",
+      "https://e62c-103-148-23-152.ngrok-free.app/setOwnIDDataByLoginId",
       {
         method: "POST",
         headers: {
@@ -54,9 +54,24 @@ export default function RegisterComponent() {
           console.log(error, "error");
         }}
         onRegister={onRegister}
+        onBeforeRegister={(ownIdData) => {
+          console.log("inside before register", ownIdData);
+        }}
+        onMagicLink={(ownIdData) => {
+          console.log("on magic link", ownIdData);
+        }}
+        appId="6kb4iorm9vgl8f"
       />
       <h1>login</h1>
       <Login></Login>
     </form>
   );
 }
+
+// onMagicLink?: (response: IOwnIdDataRS) => void;
+// onMagicLinkError?: (errorMessage: string) => void;
+// onBeforeLogin?: (response: IOwnIdDataRS) => void | Promise<void>;
+// onBeforeRegister?: (response: IOwnIdDataRS) => void | Promise<void>;
+// onLogin?: (response: IOwnIdDataRS) => void;
+// onRegister?: (response: IOwnIdDataRS) => void;
+// onError?: (error: string) => void;

@@ -53,6 +53,11 @@ import { deleteElementByIndex, findIndex } from "../utils/arrayMethods.js";
 export let addAdmin = expressAsyncHandler(async (req, res, next) => {
   let email = req.body.email;
   let password = req.body.password;
+  if(!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/.test(password)){
+    let error=new Error("Password Too Weak")
+    error.statusCode=401
+    throw error
+  }
   let adminData = await Admin.findOne({ email });
 
   if (adminData) {
@@ -283,15 +288,15 @@ export let getAdmin = expressAsyncHandler(async (req, res, next) => {
 export let addTeacher = expressAsyncHandler(async (req, res, next) => {
   let name = req.body.name;
   let email = req.body.email;
-  let password = req.body.password;
-  // if(await Batch.findOne({email}))
-  // {
-  //   let error=new Error("Invalid batch id")
-  //   error.statusCode=404
-  //   throw error
-  // }
+  let password = req.body.password; 
+  if(!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/.test(password)){
+    let error=new Error("Password Too Weak")
+    error.statusCode=401
+    throw error
+  }
   let hashed_password = await hashPassword(password);
-  let result = await Teacher.create({ name, email, password: hashed_password });
+  var result = await Teacher.create({ name, email, password: hashed_password });
+
   delete result._doc.password;
   let response = {
     res: res,
@@ -362,6 +367,11 @@ export let addStudent = expressAsyncHandler(async (req, res, next) => {
   let name = req.body.name;
   let email = req.body.email;
   let password = req.body.password;
+  if(!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/.test(password)){
+    let error=new Error("Password Too Weak")
+    error.statusCode=401
+    throw error
+  }
   password = await hashPassword(password);
   let result = await Student.create({ name, email, password });
   delete result._doc.password;

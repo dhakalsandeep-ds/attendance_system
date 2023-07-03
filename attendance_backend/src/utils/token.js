@@ -1,5 +1,6 @@
 import jwt from "jsonwebtoken";
 import { SECRETKEY } from "../config/constant.js";
+import expressAsyncHandler from "express-async-handler";
 
 export let verifyToken = async (token) => {
   let infoObj = await jwt.verify(token, SECRETKEY);
@@ -11,5 +12,4 @@ export let generateToken = async (infoObj, expireInfo) => {
 
   return token;
 };
-
 

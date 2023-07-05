@@ -8,9 +8,12 @@ import cors from "cors";
 import { errorMiddleware } from "./src/helper/errorMiddleware.js";
 import { PORT } from "./src/config/constant.js";
 import { helperRouter } from "./src/Routes/helperRouter.js";
+import { removeExpiredToken } from "./src/utils/token.js";
+import { dateNow } from "./src/utils/Date.js";
 
 let app = new express();
-connectDb();
+connectDb()
+removeExpiredToken()
 app.use(cors());
 app.use(json());
 app.use((req,res,next)=>{

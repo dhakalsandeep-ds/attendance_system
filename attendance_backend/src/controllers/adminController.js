@@ -269,21 +269,27 @@ export let getTeacher = expressAsyncHandler(async (req, res, next) => {
 
   successResponse(response);
 });
+
+
 export let getAdmin = expressAsyncHandler(async (req, res, next) => {
   let result = await Admin.find({});
+  // console.log(result)
   result = result.map((element) => {
     delete element._doc.password;
     return element;
   });
   let response = {
     res: res,
-    message: "All Batch detail",
+    message: "All Admin detail",
     result: result,
     statusCode: HttpStatus.OK,
   };
 
   successResponse(response);
 });
+
+
+
 
 export let addTeacher = expressAsyncHandler(async (req, res, next) => {
   let name = req.body.name;

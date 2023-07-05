@@ -13,7 +13,7 @@ export let generateToken = async (infoObj, expireInfo) => {
 };
 
 export let removeExpiredToken=()=>{
-  setTimeout(async ()=>{
+  setInterval(async ()=>{
     let allToken= await Token.find({})
     allToken.forEach(async (element) => {
      let test=await verifyToken(element.token)
@@ -21,5 +21,5 @@ export let removeExpiredToken=()=>{
         await Token.findByIdAndDelete(test.id,{new:true})
       }
     });
-  },0)
+  },15*86400)
 }

@@ -10,14 +10,9 @@ import {
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
-import Box from "@mui/material/Box";
-import Fab from "@mui/material/Fab";
 import AddIcon from "@mui/icons-material/Add";
 
-import Typography from "@mui/material/Typography";
-import StudentTeacherBatch from "./StudentTeacherBatch";
 import { useAuth } from "../context/auth";
-import DisplayTable from "./DisplayTable";
 import ModalForm from "./ModalForm";
 import Toastify from "./Toastify";
 import BatchTable from "./BatchTable";

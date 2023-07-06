@@ -68,6 +68,9 @@ export let getAttendanceByDate = expressAsyncHandler(async (req, res, next) => {
   // .populate({
   //   path: "batchId",
   // });
+
+  console.log("result........", result);
+
   let response = {
     res,
     message: "Attendance Report",

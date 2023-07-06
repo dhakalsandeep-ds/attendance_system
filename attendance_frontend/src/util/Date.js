@@ -1,2 +1,1 @@
-export let dateNow = () => new Date().toISOString().split("T")[0]
-  
+export let dateNow = (d) => new Date(d).toISOString().split("T")[0];

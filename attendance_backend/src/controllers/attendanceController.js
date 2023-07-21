@@ -137,7 +137,7 @@ export let exportAttendanceByDate = expressAsyncHandler(
     let _myData = myData.map((curr) => {
       return {
         Date: curr.date.toISOString().split("T")[0],
-        name: curr.studentId.name,
+        name: curr.studentId?.name || "no name",
         status:
           curr.status === 0
             ? "present"
@@ -150,6 +150,7 @@ export let exportAttendanceByDate = expressAsyncHandler(
       (a, b) => new Date(a.Date) - new Date(b.Date)
     );
     let csv = parser.parse(_myDataSorted);
+    console.log(csv, "csv.......");
     res.setHeader("Content-Type", "text/csv");
     res.setHeader("Content-Disposition", "attachment:filename=userData.csv");
     res.status(200).end(csv);

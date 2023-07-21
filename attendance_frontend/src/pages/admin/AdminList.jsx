@@ -307,7 +307,7 @@ const AdminList = () => {
   }
 
   async function handleSubmit() {
-    if (email === "" || password === "" || name === "") {
+    if (email === "" || password === "") {
       console.log(emailErrors);
       if (email === "" && !emailErrors.includes("email is required")) {
         setIsEmailError(true);
@@ -317,32 +317,25 @@ const AdminList = () => {
         setIsPasswordError(true);
         setPasswordErrors([...passwordErrors, "password is required"]);
       }
-      if (name === "" && !nameErrors.includes("name is required")) {
-        setIsNameError(true);
-        setNameErrors([...passwordErrors, "name is required"]);
-      }
+
       return;
     }
-    if (
-      emailErrors.length !== 0 ||
-      passwordErrors.length !== 0 ||
-      nameErrors.length !== 0
-    ) {
+    if (emailErrors.length !== 0 || passwordErrors.length !== 0) {
       console.log("cannot call error is there");
       return;
     }
-    console.log("submitted", name, email, password);
+    console.log("submitted", email, password);
 
     let headersList = {
       "Content-Type": "application/json",
       Authorization: `Bearer ${user.token()}`,
     };
 
-    let bodyContent = JSON.stringify({ name, email, password });
+    let bodyContent = JSON.stringify({ email, password });
 
     let data;
     try {
-      let response = await fetch("http://localhost:8000/admin/student", {
+      let response = await fetch("http://localhost:8000/admin/add", {
         method: "POST",
         body: bodyContent,
         headers: headersList,
@@ -385,10 +378,11 @@ const AdminList = () => {
             startIcon={<AddIcon></AddIcon>}
             sx={{ marginBottom: "10px", boxShadow: 6 }}
           >
-            Add Student
+            Add Admin
           </Button>
           <DisplayTable
-            columns={["name", "email", "action"]}
+            admin="admin"
+            columns={["email"]}
             rows={student}
             elevation={6}
             handleEditOpen={handleEditOpen}
@@ -401,7 +395,7 @@ const AdminList = () => {
               <Stack direction={"column"}>
                 <CardContent>
                   <Typography gutterBottom variant="h5" component="div">
-                    Total Students
+                    Total Admins
                   </Typography>
                   <Typography variant="body2" color="text.secondary">
                     {noStudents}
@@ -418,17 +412,6 @@ const AdminList = () => {
         handleClose={handleClose}
         handleSubmit={handleSubmit}
       >
-        <TextField
-          error={isNameError ? true : false}
-          style={{ marginTop: "20px" }}
-          onChange={handleChange}
-          value={name}
-          id="standard-basic"
-          label="name*"
-          variant="standard"
-          fullWidth={true}
-          name="name"
-        />
         {nameErrors.length !== 0 &&
           nameErrors.map((v, i) => {
             return (
@@ -486,26 +469,6 @@ const AdminList = () => {
         handleClose={handleEditClose}
         handleSubmit={handleEditSubmit}
       >
-        <TextField
-          error={isNameError ? true : false}
-          style={{ marginTop: "20px" }}
-          onChange={handleChange}
-          value={name}
-          id="standard-basic"
-          label="name*"
-          variant="standard"
-          fullWidth={true}
-          name="name"
-        />
-        {nameErrors.length !== 0 &&
-          nameErrors.map((v, i) => {
-            return (
-              <div style={{ color: "red", marginTop: "5px" }} key={i}>
-                {" "}
-                {v}{" "}
-              </div>
-            );
-          })}
         <TextField
           value={email}
           error={isEmailError ? true : false}

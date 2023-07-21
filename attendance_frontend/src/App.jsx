@@ -5,39 +5,42 @@ import { Route, Routes } from "react-router-dom";
 import HideRoute from "./components/HideRoute";
 import ProtectedRoute from "./components/ProtectedRoute";
 import { AuthProvider } from "./context/auth";
-import AdminLogin from "./pages/admin/AdminLogin";
-import AdminLayout from "./pages/admin/AdminLayout";
-import BatchView from "./pages/admin/BatchView";
-import TeacherView from "./pages/admin/TeacherView";
-import StudentView from "./pages/admin/StudentView";
-import AttendanceView from "./pages/admin/AttendanceView";
 import AddTeacherAndAdmin from "./pages/admin/AddTeacherAndAdmin";
-import { OwnIDInit } from "@ownid/react";
-import RegisterComponent from "./pages/admin/RegisterAdmin";
+import AdminLayout from "./pages/admin/AdminLayout";
 import AdminList from "./pages/admin/AdminList";
+import AdminLogin from "./pages/admin/AdminLogin";
+import AttendanceView from "./pages/admin/AttendanceView";
+import BatchViewTeacher from "./pages/teacher/BatchViewTeacher";
+import StudentView from "./pages/admin/StudentView";
+import TeacherView from "./pages/admin/TeacherView";
+import BatchView from "./pages/admin/BatchView";
+import TeacherLogin from "./pages/Teacher/TeacherLogin";
+import BatchAttendanceTeacher from "./pages/Teacher/BatchAttendanceTeacher";
+import StudentLogin from "./pages/Student/StudentLogin";
+import BatchViewStudent from "./pages/Student/BatchViewStudent";
+import AttendanceViewStudent from "./pages/Student/AttendanceViewStudent";
+import StudentLayout from "./pages/Student/StudentLayout";
+import TeacherLayout from "./pages/Teacher/TeacherLayout";
 
 function App() {
   return (
     <AuthProvider>
-      <div className="App">
-        <OwnIDInit config={{ appId: "6kb4iorm9vgl8f" }} />
-      </div>
+      <div className="App"></div>
       <Routes>
-        <Route
-          path="/"
-          element={<RegisterComponent></RegisterComponent>}
-        ></Route>
+        <Route path="/*" element={<h1>page not found</h1>}>
+          {" "}
+        </Route>
         <Route path="/admin">
           <Route
             index
             element={
-              <HideRoute>
+              <HideRoute redirect="/admin/list">
                 <AdminLogin></AdminLogin>
               </HideRoute>
             }
           ></Route>
 
-          <Route element={<ProtectedRoute></ProtectedRoute>}>
+          <Route element={<ProtectedRoute redirect="/admin"></ProtectedRoute>}>
             <Route element={<AdminLayout></AdminLayout>}>
               <Route path="list" element={<AdminList></AdminList>}></Route>
               <Route
@@ -45,6 +48,82 @@ function App() {
                 element={<AddTeacherAndAdmin></AddTeacherAndAdmin>}
               ></Route>
               <Route path="batch" element={<BatchView></BatchView>}></Route>
+              <Route
+                path="teacher"
+                element={<TeacherView></TeacherView>}
+              ></Route>
+              <Route
+                path="student"
+                element={<StudentView></StudentView>}
+              ></Route>
+              <Route
+                path="attendance"
+                element={<AttendanceView></AttendanceView>}
+              ></Route>
+            </Route>
+          </Route>
+        </Route>
+        <Route path="/student">
+          <Route
+            index
+            element={
+              <HideRoute redirect={"/student/batch"}>
+                <StudentLogin></StudentLogin>
+              </HideRoute>
+            }
+          ></Route>
+
+          <Route
+            element={<ProtectedRoute redirect="/student"></ProtectedRoute>}
+          >
+            <Route element={<StudentLayout></StudentLayout>}>
+              <Route path="list" element={<AdminList></AdminList>}></Route>
+              <Route
+                path="batch/:batchId"
+                element={<AttendanceViewStudent></AttendanceViewStudent>}
+              ></Route>
+              <Route
+                path="batch"
+                element={<BatchViewStudent></BatchViewStudent>}
+              ></Route>
+              <Route
+                path="teacher"
+                element={<TeacherView></TeacherView>}
+              ></Route>
+              <Route
+                path="student"
+                element={<StudentView></StudentView>}
+              ></Route>
+              <Route
+                path="attendance"
+                element={<AttendanceView></AttendanceView>}
+              ></Route>
+            </Route>
+          </Route>
+        </Route>
+        <Route path="/teacher">
+          <Route
+            index
+            element={
+              <HideRoute redirect="/teacher/batch">
+                <TeacherLogin></TeacherLogin>
+              </HideRoute>
+            }
+          ></Route>
+
+          <Route
+            element={<ProtectedRoute redirect="/teacher"></ProtectedRoute>}
+          >
+            <Route element={<TeacherLayout></TeacherLayout>}>
+              <Route path="list" element={<AdminList></AdminList>}></Route>
+              <Route
+                path="batch/:batchId"
+                element={<BatchAttendanceTeacher></BatchAttendanceTeacher>}
+              ></Route>
+              <Route
+                path="batch"
+                element={<BatchViewTeacher></BatchViewTeacher>}
+              ></Route>
               <Route
                 path="teacher"
                 element={<TeacherView></TeacherView>}

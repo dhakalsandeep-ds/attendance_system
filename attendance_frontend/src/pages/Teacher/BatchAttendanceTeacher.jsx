@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useAuth } from "../context/auth";
+import { useAuth } from "../../context/auth";
 import { useParams } from "react-router-dom";
 import {
   Button,
@@ -11,10 +11,11 @@ import {
   TableHead,
   TableRow,
 } from "@mui/material";
-import Toastify from "./Toastify";
+import Toastify from "../../components/Toastify";
 import SendIcon from "@mui/icons-material/Send";
+import Typography from "@mui/material/Typography";
 
-const BatchAttendance = () => {
+const BatchAttendanceTeacher = () => {
   let [batchStudent, setBatchStudent] = useState([]);
   let [toastMessage, setToastMessage] = useState();
   let [severity, setSeverity] = useState();
@@ -103,6 +104,18 @@ const BatchAttendance = () => {
   }, []);
   return (
     <div>
+      <Typography
+        variant="h5"
+        sx={{
+          marginBottom: "15px",
+          padding: "10px",
+          textAlign: "center",
+        }}
+        color="primary"
+      >
+        {" "}
+        Take Attendance
+      </Typography>
       <TableContainer component={Paper} sx={{ padding: "10px" }} elevation={6}>
         <Table sx={{ minWidth: 650 }}>
           <TableHead>
@@ -174,4 +187,4 @@ const BatchAttendance = () => {
   );
 };
 
-export default BatchAttendance;
+export default BatchAttendanceTeacher;

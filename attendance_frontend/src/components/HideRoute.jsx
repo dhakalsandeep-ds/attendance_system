@@ -19,7 +19,7 @@ const validateToken = async (token = "") => {
   return ans.success;
 };
 
-const HideRoute = ({ children }) => {
+const HideRoute = ({ redirect, children }) => {
   const user = useAuth();
   const token = user.token();
   console.log(token, "token");
@@ -32,7 +32,7 @@ const HideRoute = ({ children }) => {
     console.log("inside else");
   }
   if (isTokenValid) {
-    return <Navigate to="/admin/batch" replace={true}></Navigate>;
+    return <Navigate to={redirect} replace={true}></Navigate>;
   }
 
   return children;

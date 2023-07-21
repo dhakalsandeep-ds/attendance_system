@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useAuth } from "../context/auth";
+import { useAuth } from "../../context/auth";
 import { useParams } from "react-router-dom";
 import {
   IconButton,
@@ -12,14 +12,14 @@ import {
   TableHead,
   TableRow,
 } from "@mui/material";
-import Toastify from "./Toastify";
+import Toastify from "../../components/Toastify";
 import SendIcon from "@mui/icons-material/Send";
 import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
 import Button from "@mui/material/Button";
 import DownloadIcon from "@mui/icons-material/Download";
 
-const PreviousAttendanceAll = () => {
+const AttendanceViewStudent = () => {
   let [batchReport, setBatchReport] = useState([]);
   let [toastMessage, setToastMessage] = useState();
   let [severity, setSeverity] = useState();
@@ -63,12 +63,7 @@ const PreviousAttendanceAll = () => {
     };
 
     let response = await fetch(
-      "http://localhost:8000/attendance/" +
-        batchId +
-        "/" +
-        inputYear +
-        "/" +
-        inputMonth,
+      "http://localhost:8000/student/attendance-detail/" + batchId,
       {
         method: "GET",
         headers: headersList,
@@ -419,4 +414,4 @@ const PreviousAttendanceAll = () => {
   );
 };
 
-export default PreviousAttendanceAll;
+export default AttendanceViewStudent;

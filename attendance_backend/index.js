@@ -14,7 +14,18 @@ import { dateNow } from "./src/utils/Date.js";
 let app = new express();
 connectDb();
 // removeExpiredToken()
-app.use(cors());
+const allowedOrigins = ["http://localhost:5173"];
+const options = {
+  methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
+  origin: (origin, callback) => {
+    if (allowedOrigins.includes(origin) || !origin) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+};
+app.use(cors(options));
 app.use(json());
 app.use((req, res, next) => {
   console.log("Request Received:" + req.method + " " + req.url);

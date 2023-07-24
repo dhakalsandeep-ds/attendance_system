@@ -153,6 +153,7 @@ const BatchView = () => {
       handleClose();
     }
     console.log(data);
+    fetchBatch();
   }
 
   async function fetchBatch() {

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { useAuth } from "../../context/auth";
-import { useNavigate, useParams } from "react-router-dom";
+import { useAuth } from "../context/auth";
+import { useParams } from "react-router-dom";
 import {
   AppBar,
   Card,
@@ -21,14 +21,13 @@ import {
   Typography,
 } from "@mui/material";
 
-import CloseIcon from "@mui/icons-material/Close";
-import Button from "@mui/material/Button";
-// import IconButton from "@mui/material/IconButton";
-import DownloadIcon from "@mui/icons-material/Download";
-import { AiOutlineArrowLeft } from "react-icons/Ai";
-import Divider from "@mui/material/Divider";
+const Transition = React.forwardRef(function Transition(props, ref) {
+  return <Slide direction="up" ref={ref} {...props} />;
+});
 
-const AttendanceViewStudent = ({ email, handleClose, isOpen }) => {
+import CloseIcon from "@mui/icons-material/Close";
+
+const IndividualAttendance = ({ email, handleClose, isOpen }) => {
   let [presentDays, setPresentDays] = useState(0);
   let [absentDays, setAbsentDays] = useState(0);
   let [leaveDays, setLeaveDays] = useState(0);
@@ -37,15 +36,9 @@ const AttendanceViewStudent = ({ email, handleClose, isOpen }) => {
   let [data, setData] = useState([]);
   let [totalDays, setTotalDays] = useState("");
 
-  let navigate = useNavigate();
-
   let { batchId } = useParams();
 
   const user = useAuth();
-
-  const goBack = () => {
-    navigate(-1);
-  };
 
   async function fetchStudentsReport() {
     let headersList = {
@@ -53,15 +46,7 @@ const AttendanceViewStudent = ({ email, handleClose, isOpen }) => {
       Authorization: `Bearer ${user.token()}`,
     };
 
-    let emailData = await fetch(`http://localhost:8000/student/info`, {
-      method: "GET",
-      headers: headersList,
-    });
-
-    let emailResponse = await emailData.json();
-
-    let email = emailResponse.result.email;
-
+    console.log(batchId, email);
     let response = await fetch(
       "http://localhost:8000/attendance/" + batchId + "/" + email,
       {
@@ -111,49 +96,6 @@ const AttendanceViewStudent = ({ email, handleClose, isOpen }) => {
     setStudentRep([...nm]);
   }
 
-  async function downloadCSv() {
-    let headersList = {
-      "Content-type": "application/json",
-      Authorization: `Bearer ${user.token()}`,
-    };
-    let emailData = await fetch(`http://localhost:8000/student/info`, {
-      method: "GET",
-      headers: headersList,
-    });
-
-    let emailResponse = await emailData.json();
-
-    let email = emailResponse.result.email;
-
-    let headerCsv = {
-      "Content-type": "text/csv",
-      Authorization: `Bearer ${user.token()}`,
-    };
-    let response;
-    try {
-      response = await fetch(
-        "http://localhost:8000/attendance/export/" + batchId + "/" + email,
-        {
-          method: "GET",
-          headers: headerCsv,
-        }
-      );
-      console.log(response, "response................");
-    } catch (e) {
-      console.log("error", e);
-    }
-
-    let blob = await response.blob();
-
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement("a");
-    link.href = url;
-    link.setAttribute("download", "student.csv");
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-  }
-
   const getAttendanceStatus = (id, date) => {
     const attendanceRecord = data.find((item) => {
       if (item.studentId) {
@@ -173,13 +115,7 @@ const AttendanceViewStudent = ({ email, handleClose, isOpen }) => {
     //   leaveDays += 1;
     // }
 
-    return attendanceRecord.status === 0
-      ? "P"
-      : attendanceRecord.status === 1
-      ? "A"
-      : attendanceRecord.status === 2
-      ? "L"
-      : "N";
+    return attendanceRecord.status;
   };
 
   useEffect(() => {
@@ -187,18 +123,27 @@ const AttendanceViewStudent = ({ email, handleClose, isOpen }) => {
   }, []);
 
   return (
-    <>
-      {" "}
-      <AiOutlineArrowLeft
-        // style={{ position: "relative", top: "34px" }}
-
-        style={{ fontSize: "20px", marginBottom: "3px" }}
-        onClick={goBack}
-      ></AiOutlineArrowLeft>
-      <Divider sx={{ background: "black" }}></Divider>
-      <Grid container spacing={2} marginBottom={1} marginTop={3}>
+    <Dialog
+      fullScreen
+      open={isOpen}
+      onClose={handleClose}
+      TransitionComponent={Transition}
+    >
+      <AppBar sx={{ backgroundColor: "#9c27b0" }}>
+        <Toolbar>
+          <IconButton
+            edge="start"
+            color="inherit"
+            onClick={handleClose}
+            aria-label="close"
+          >
+            <CloseIcon />
+          </IconButton>
+        </Toolbar>
+      </AppBar>
+      <Grid container spacing={5} marginTop={0} marginBottom={5}>
         <Grid item xs={3}>
-          <Stack>
+          <Stack sx={{ marginTop: "50px" }}>
             <Card elevation={6}>
               <Stack direction={"column"}>
                 <CardContent>
@@ -214,7 +159,7 @@ const AttendanceViewStudent = ({ email, handleClose, isOpen }) => {
           </Stack>
         </Grid>
         <Grid item xs={3}>
-          <Stack>
+          <Stack sx={{ marginTop: "50px" }}>
             <Card elevation={6}>
               <Stack direction={"column"}>
                 <CardContent>
@@ -230,7 +175,7 @@ const AttendanceViewStudent = ({ email, handleClose, isOpen }) => {
           </Stack>
         </Grid>
         <Grid item xs={3}>
-          <Stack>
+          <Stack sx={{ marginTop: "50px" }}>
             <Card elevation={6}>
               <Stack direction={"column"}>
                 <CardContent>
@@ -246,7 +191,7 @@ const AttendanceViewStudent = ({ email, handleClose, isOpen }) => {
           </Stack>
         </Grid>
         <Grid item xs={3}>
-          <Stack>
+          <Stack sx={{ marginTop: "50px" }}>
             <Card elevation={6}>
               <Stack direction={"column"}>
                 <CardContent>
@@ -262,63 +207,42 @@ const AttendanceViewStudent = ({ email, handleClose, isOpen }) => {
           </Stack>
         </Grid>
       </Grid>
-      <Grid container spacing={2} marginTop={0} marginBottom={5}>
-        <Grid item xs={12}>
-          <TableContainer
-            component={Paper}
-            sx={{ padding: "20px", marginRight: "10px" }}
-            elevation={6}
-          >
-            <Paper
-              elevation={0}
-              sx={{ padding: "10px", borderBottom: "1px solid black" }}
-            >
-              action{" "}
-              <Button
-                sx={{ marginLeft: "20px" }}
-                variant="outlined"
-                startIcon={<DownloadIcon></DownloadIcon>}
-                onClick={(e) => {
-                  downloadCSv();
-                }}
-              ></Button>
-            </Paper>
-            <Table sx={{ minWidth: 650 }}>
-              <TableHead>
-                <TableRow>
-                  <TableCell>name of student</TableCell>
 
-                  {columns.map((v, i) => {
-                    return <TableCell key={i}>{v.split("T")[0]}</TableCell>;
-                  })}
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {studentRep?.map((name, i) => (
-                  <TableRow
-                    key={i}
-                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                  >
+      <TableContainer component={Paper} sx={{ padding: "10px" }} elevation={6}>
+        <Table sx={{ minWidth: 650 }}>
+          <TableHead>
+            <TableRow>
+              <TableCell>name of student</TableCell>
+
+              {columns.map((v, i) => {
+                return <TableCell key={i}>{v.split("T")[0]}</TableCell>;
+              })}
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {studentRep?.map((name, i) => (
+              <TableRow
+                key={i}
+                sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+              >
+                <TableCell component="th" scope="row">
+                  {name.split("-")[1]}
+                </TableCell>
+
+                {columns.map((v, i) => {
+                  return (
                     <TableCell component="th" scope="row">
-                      {name.split("-")[1]}
+                      {`${getAttendanceStatus(name.split("-")[0], v)}`}
                     </TableCell>
-
-                    {columns.map((v, i) => {
-                      return (
-                        <TableCell component="th" scope="row">
-                          {`${getAttendanceStatus(name.split("-")[0], v)}`}
-                        </TableCell>
-                      );
-                    })}
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
-        </Grid>
-      </Grid>
-    </>
+                  );
+                })}
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+    </Dialog>
   );
 };
 
-export default AttendanceViewStudent;
+export default IndividualAttendance;

@@ -21,6 +21,9 @@ import BatchViewStudent from "./pages/Student/BatchViewStudent";
 import AttendanceViewStudent from "./pages/Student/AttendanceViewStudent";
 import StudentLayout from "./pages/Student/StudentLayout";
 import TeacherLayout from "./pages/Teacher/TeacherLayout";
+import SettingAdmin from "./pages/admin/SettingAdmin";
+import SettingTeacher from "./pages/Teacher/SettingTeacher";
+import SettingStudent from "./pages/Student/SettingStudent";
 
 function App() {
   return (
@@ -60,6 +63,10 @@ function App() {
                 path="attendance"
                 element={<AttendanceView></AttendanceView>}
               ></Route>
+              <Route
+                path="setting"
+                element={<SettingAdmin></SettingAdmin>}
+              ></Route>
             </Route>
           </Route>
         </Route>
@@ -98,6 +105,10 @@ function App() {
                 path="attendance"
                 element={<AttendanceView></AttendanceView>}
               ></Route>
+              <Route
+                path="setting"
+                element={<SettingStudent></SettingStudent>}
+              ></Route>
             </Route>
           </Route>
         </Route>
@@ -135,6 +146,10 @@ function App() {
               <Route
                 path="attendance"
                 element={<AttendanceView></AttendanceView>}
+              ></Route>
+              <Route
+                path="setting"
+                element={<SettingTeacher></SettingTeacher>}
               ></Route>
             </Route>
           </Route>

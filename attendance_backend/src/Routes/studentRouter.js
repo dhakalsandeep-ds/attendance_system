@@ -3,6 +3,7 @@ import {
   attendanceDetail,
   showEnrolledClasses,
   studentDetail,
+  studentInfo,
   updatePasswordStudent,
 } from "../controllers/studentController.js";
 import { isAuthenticated } from "../middleware/isAuthenticated.js";
@@ -23,3 +24,7 @@ studentRouter
 studentRouter
   .route("/update-password")
   .post(isAuthenticated, isAuthorizedStudent, updatePasswordStudent);
+
+studentRouter
+  .route("/info")
+  .get(isAuthenticated, isAuthorizedStudent, studentInfo);

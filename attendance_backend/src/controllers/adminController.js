@@ -2,7 +2,7 @@ import { HttpStatus } from "../config/constant.js";
 import { successResponse } from "../helper/successResponse.js";
 import expressAsyncHandler from "express-async-handler";
 import { Admin, Batch, Student, Teacher } from "../schema/model.js";
-import { hashPassword } from "../utils/Hashing.js";
+import { comparePassword, hashPassword } from "../utils/Hashing.js";
 import { Types } from "mongoose";
 import { deleteElementByIndex, findIndex } from "../utils/arrayMethods.js";
 
@@ -53,10 +53,10 @@ import { deleteElementByIndex, findIndex } from "../utils/arrayMethods.js";
 export let addAdmin = expressAsyncHandler(async (req, res, next) => {
   let email = req.body.email;
   let password = req.body.password;
-  if(!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/.test(password)){
-    let error=new Error("Password Too Weak")
-    error.statusCode=401
-    throw error
+  if (!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/.test(password)) {
+    let error = new Error("Password Too Weak");
+    error.statusCode = 401;
+    throw error;
   }
   let adminData = await Admin.findOne({ email });
 
@@ -270,7 +270,6 @@ export let getTeacher = expressAsyncHandler(async (req, res, next) => {
   successResponse(response);
 });
 
-
 export let getAdmin = expressAsyncHandler(async (req, res, next) => {
   let result = await Admin.find({});
   // console.log(result)
@@ -288,17 +287,14 @@ export let getAdmin = expressAsyncHandler(async (req, res, next) => {
   successResponse(response);
 });
 
-
-
-
 export let addTeacher = expressAsyncHandler(async (req, res, next) => {
   let name = req.body.name;
   let email = req.body.email;
-  let password = req.body.password; 
-  if(!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/.test(password)){
-    let error=new Error("Password Too Weak")
-    error.statusCode=401
-    throw error
+  let password = req.body.password;
+  if (!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/.test(password)) {
+    let error = new Error("Password Too Weak");
+    error.statusCode = 401;
+    throw error;
   }
   let hashed_password = await hashPassword(password);
   var result = await Teacher.create({ name, email, password: hashed_password });
@@ -373,10 +369,10 @@ export let addStudent = expressAsyncHandler(async (req, res, next) => {
   let name = req.body.name;
   let email = req.body.email;
   let password = req.body.password;
-  if(!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/.test(password)){
-    let error=new Error("Password Too Weak")
-    error.statusCode=401
-    throw error
+  if (!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{8,}$/.test(password)) {
+    let error = new Error("Password Too Weak");
+    error.statusCode = 401;
+    throw error;
   }
   password = await hashPassword(password);
   let result = await Student.create({ name, email, password });
@@ -584,6 +580,31 @@ export let unAssignTeacher = expressAsyncHandler(async (req, res, next) => {
 
   successResponse(response);
 });
+export let unAssignStudent = expressAsyncHandler(async (req, res, next) => {
+  let _batchId = req.params.batchId;
+  let _studentId = req.params.studentId;
+  try {
+    var theStudent = await Student.findById(_studentId);
+  } catch (error) {
+    error.statusCode = 404;
+    error.message = "Invalid studentId";
+    throw error;
+  }
+  let indexToDelete = findIndex(_batchId, theStudent.batchId);
+  deleteElementByIndex(theStudent.batchId, indexToDelete);
+
+  let result = await Student.findByIdAndUpdate(_studentId, theStudent, {
+    new: true,
+  });
+  let response = {
+    res,
+    message: "Student Unassigned",
+    result,
+    statusCode: HttpStatus.OK,
+  };
+
+  successResponse(response);
+});
 
 export let assignTeacher = expressAsyncHandler(async (req, res, next) => {
   let _batchId = req.params.batchId;
@@ -643,5 +664,52 @@ export let updateCourse = expressAsyncHandler(async (req, res, next) => {
     result,
     statusCode: HttpStatus.OK,
   };
+  successResponse(response);
+});
+
+export let updatePasswordAdmin = expressAsyncHandler(async (req, res, next) => {
+  let teacherId = req.body.info.id;
+  let theTeacher = await Admin.findOne({ _id: teacherId });
+  let currentPassword = req.body.currentPassword;
+  if (!(await comparePassword(currentPassword, theTeacher.password))) {
+    let error = new Error("Password didn't match");
+    error.statusCode = 401;
+    throw error;
+  }
+  let _hashPassword = await hashPassword(req.body.newPassword);
+  let result = await Admin.findByIdAndUpdate(
+    { _id: teacherId },
+    { password: _hashPassword }
+  );
+
+  let response = {
+    res,
+    result: { id: teacherId },
+    message: "Password Changed Successfully",
+    statusCode: HttpStatus.OK,
+  };
+
+  successResponse(response);
+});
+
+export let adminInfo = expressAsyncHandler(async (req, res, next) => {
+  let teacherId = req.body.info.id;
+  let theTeacher = await Admin.findOne({ _id: teacherId }).select(
+    "-password -__v"
+  );
+  let currentPassword = req.body.currentPassword;
+  if (!theTeacher) {
+    let error = new Error("no admin");
+    error.statusCode = 401;
+    throw error;
+  }
+
+  let response = {
+    res,
+    result: theTeacher,
+    message: "admin info",
+    statusCode: HttpStatus.OK,
+  };
+
   successResponse(response);
 });

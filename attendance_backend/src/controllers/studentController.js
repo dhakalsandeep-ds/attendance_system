@@ -2,7 +2,7 @@ import expressAsyncHandler from "express-async-handler";
 import { Attendance, Student } from "../schema/model.js";
 import { successResponse } from "../helper/successResponse.js";
 import { HttpStatus } from "../config/constant.js";
-import { comparePassword } from "../utils/Hashing.js";
+import { comparePassword, hashPassword } from "../utils/Hashing.js";
 
 // export let loginStudent=expressAsyncHandler(async(req,res,next)=>{
 //   let email=req.body.email
@@ -130,3 +130,25 @@ export let updatePasswordStudent = expressAsyncHandler(
     successResponse(response);
   }
 );
+
+export let studentInfo = expressAsyncHandler(async (req, res, next) => {
+  let teacherId = req.body.info.id;
+  let theTeacher = await Student.findOne({ _id: teacherId }).select(
+    "-password -__v"
+  );
+  let currentPassword = req.body.currentPassword;
+  if (!theTeacher) {
+    let error = new Error("no student");
+    error.statusCode = 401;
+    throw error;
+  }
+
+  let response = {
+    res,
+    result: theTeacher,
+    message: "student info",
+    statusCode: HttpStatus.OK,
+  };
+
+  successResponse(response);
+});

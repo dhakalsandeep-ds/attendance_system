@@ -192,7 +192,13 @@ const PreviousAttendanceAll = () => {
       return "N";
     }
 
-    return attendanceRecord.status;
+    return attendanceRecord.status === 0
+      ? "P"
+      : attendanceRecord.status === 1
+      ? "A"
+      : attendanceRecord.status === 2
+      ? "L"
+      : "N";
   };
 
   useEffect(() => {
@@ -420,3 +426,38 @@ const PreviousAttendanceAll = () => {
 };
 
 export default PreviousAttendanceAll;
+
+{
+  /* cle
+         </Dialog>
+*/
+}
+// let [attendance, setAttendance] = React.useState([]);
+// let { batchId } = useParams();
+// const user = useAuth();
+// async function fetchBatchStudent() {
+//   let headersList = {
+//     "Content-type": "application/json",
+//     Authorization: `Bearer ${user.token()}`,
+//   };
+
+//   console.log(batchId, email);
+//   let response = await fetch(
+//     "http://localhost:8000/attendance/" + batchId + "/" + email,
+//     {
+//       method: "GET",
+//       headers: headersList,
+//     }
+//   );
+
+//   let data = await response.json();
+//   console.log("data..............", data);
+
+//   setAttendance(data.result);
+
+//     }
+// }
+
+// React.useEffect(() => {
+//   fetchBatchStudent();
+// }, []);

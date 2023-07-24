@@ -47,7 +47,6 @@ const TeacherBatch = () => {
       Authorization: `Bearer ${user.token()}`,
     };
 
-    let bodyContent = JSON.stringify({ ok: "ok" });
     let data;
     try {
       let response = await fetch(
@@ -64,20 +63,19 @@ const TeacherBatch = () => {
       setOpenToast(true);
       setToastMessage("something went wrong");
       setSeverity("error");
-      handleClose();
     }
     if (data.success) {
       setOpenToast(true);
       setToastMessage(data.message);
       setSeverity("success");
-      handleClose();
+      fetchBatchTeacher();
     } else {
       setOpenToast(true);
       setToastMessage(data.message);
       setSeverity("error");
-      handleClose();
     }
-    console.log(data);
+    console.log("data is data man", "data");
+    handleClose();
   }
 
   const handleChange = (event) => {
@@ -136,6 +134,42 @@ const TeacherBatch = () => {
   }
   console.log("batch Teacher", batchTeacher);
 
+  function handleUnassign(e, teacherId) {
+    async function unassign() {
+      let headersList = {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${user.token()}`,
+      };
+
+      let response = await fetch(
+        `http://localhost:8000/admin/teacher/${teacherId}/${batchId}`,
+        {
+          method: "PATCH",
+          headers: headersList,
+        }
+      );
+      let json = await response.json();
+      console.log("json betra", json);
+      console.log("heee");
+      console.log("json", json);
+      if (json.success) {
+        console.log("before teahcer is fetched again....");
+        fetchBatchTeacher();
+        setOpenToast(true);
+        setToastMessage(json.message);
+        setSeverity("success");
+        handleClose();
+      } else {
+        setOpenToast(true);
+        setToastMessage(json.message);
+        setSeverity("error");
+        handleClose();
+      }
+    }
+
+    unassign();
+  }
+
   return (
     <div>
       <Paper elevation={10} sx={{ padding: "15px" }}>
@@ -153,6 +187,7 @@ const TeacherBatch = () => {
         <BatchTable
           columns={["name", "email", "action"]}
           rows={batchTeacher}
+          handleUnassign={handleUnassign}
         ></BatchTable>
       </Paper>
 

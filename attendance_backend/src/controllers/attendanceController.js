@@ -109,7 +109,7 @@ export let exportAllAttendance = expressAsyncHandler(async (req, res, next) => {
   });
   let _myData = myData.map((curr) => {
     return {
-      Date: curr.date.toISOString().split("T")[0],
+      Date: curr.date,
       name: curr.studentId.name,
       status:
         curr.status === 0 ? "present" : curr.status === 1 ? "absent" : "leave",
@@ -123,6 +123,42 @@ export let exportAllAttendance = expressAsyncHandler(async (req, res, next) => {
   res.setHeader("Content-Disposition", "attachment:filename=userData.csv");
   res.status(200).end(csv);
 });
+
+export let exportStudentAttendance = async (req, res, next) => {
+  console.log(
+    "abcde .........................................",
+    req.params.batchId,
+    req.params.email
+  );
+  const parser = new Parser();
+  let myData = await Attendance.find({
+    batchId: req.params.batchId,
+  }).populate({
+    path: "studentId",
+    match: {
+      email: req.params.email,
+    },
+  });
+  console.log("my data .........", myData, "....................my data");
+
+  let result = myData.filter((attendance) => attendance.studentId !== null);
+  let _myData = result.map((curr) => {
+    return {
+      Date: curr.date,
+      name: curr.studentId.name,
+      status:
+        curr.status === 0 ? "present" : curr.status === 1 ? "absent" : "leave",
+    };
+  });
+  let _myDataSorted = _myData.sort(
+    (a, b) => new Date(a.Date) - new Date(b.Date)
+  );
+  let csv = parser.parse(_myDataSorted);
+
+  res.setHeader("Content-Type", "text/csv");
+  res.setHeader("Content-Disposition", "attachment:filename=userData.csv");
+  res.status(200).end(csv);
+};
 
 export let exportAttendanceByDate = expressAsyncHandler(
   async (req, res, next) => {
@@ -156,3 +192,38 @@ export let exportAttendanceByDate = expressAsyncHandler(
     res.status(200).end(csv);
   }
 );
+
+export let getAttendance = expressAsyncHandler(async (req, res, next) => {
+  console.log(req.body, "alfjla,,,,,,,,,,,,,,,,,,,,,,,,,");
+  let _batchId = req.params.batchId;
+  // let desiredYear = req.params.year;
+  // let desiredMonth = req.params.month;
+  let email = req.params.email;
+  // console.log(_batchId, desiredYear, desiredMonth, ".....");
+  let result = await Attendance.find({
+    batchId: _batchId,
+
+    // year: desiredYear,
+    // month: desiredMonth,+
+  }).populate({
+    path: "studentId",
+    match: {
+      email: email,
+    },
+  });
+  // .populate({
+  //   path: "batchId",
+  // });
+
+  console.log("result........", result);
+  result = result.filter((attendance) => attendance.studentId !== null);
+
+  let response = {
+    res,
+    message: "Attendance Report",
+    result,
+    statusCode: HttpStatus.OK,
+  };
+
+  successResponse(response);
+});

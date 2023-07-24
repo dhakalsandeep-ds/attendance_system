@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useAuth } from "../../context/auth";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import {
   Button,
   Paper,
@@ -14,12 +14,19 @@ import {
 import Toastify from "../../components/Toastify";
 import SendIcon from "@mui/icons-material/Send";
 import Typography from "@mui/material/Typography";
+import { AiOutlineArrowLeft } from "react-icons/Ai";
 
 const BatchAttendanceTeacher = () => {
   let [batchStudent, setBatchStudent] = useState([]);
   let [toastMessage, setToastMessage] = useState();
   let [severity, setSeverity] = useState();
   let [openToast, setOpenToast] = useState(false);
+
+  const navigate = useNavigate();
+
+  function goBack() {
+    navigate(-1);
+  }
 
   const handleOpenToast = () => {
     setOpenToast(true);
@@ -104,6 +111,10 @@ const BatchAttendanceTeacher = () => {
   }, []);
   return (
     <div>
+      <AiOutlineArrowLeft
+        style={{ position: "relative", top: "48px" }}
+        onClick={goBack}
+      ></AiOutlineArrowLeft>
       <Typography
         variant="h5"
         sx={{

@@ -31,6 +31,7 @@ import { RiAdminLine } from "react-icons/ri";
 import { RiTeamLine } from "react-icons/ri";
 import { Tooltip } from "@mui/material";
 import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
+import { GoGear } from "react-icons/go";
 
 const drawerWidth = 150;
 
@@ -92,7 +93,7 @@ export default function TeacherLayout() {
   };
 
   const logout = () => {
-    user.logout();
+    user.logout({ url: "teacher" });
   };
 
   return (
@@ -172,6 +173,60 @@ export default function TeacherLayout() {
                       <MdOutlineClass size={25} color="white"></MdOutlineClass>
                     </ListItemIcon>
                     <span>Batches</span>
+                  </Stack>
+                )}
+              </ListItemButton>
+            </NavLink>
+          </ListItem>
+
+          <ListItem disablePadding sx={{ display: "block" }}>
+            <NavLink
+              to="setting"
+              style={({ isActive }) => ({
+                color: "white",
+                backgroundColor: isActive ? "#af52bf" : "",
+                display: "block",
+                textDecoration: "none",
+              })}
+            >
+              <ListItemButton
+                sx={{
+                  minHeight: 48,
+                  justifyContent: open ? "initial" : "center",
+                  px: 2.5,
+                  marginTop: open ? "630px" : "550px",
+                }}
+              >
+                {open && (
+                  <Stack direction="row">
+                    <ListItemIcon
+                      sx={{
+                        minWidth: 0,
+                        mr: open ? 3 : "auto",
+                        justifyContent: "center",
+                        fontWeight: "bold",
+                      }}
+                    >
+                      <GoGear size={25} color="white"></GoGear>
+                      {/* <PiStudent size={25} color="white"></PiStudent> */}
+                    </ListItemIcon>
+                    <span>Setting</span>
+                  </Stack>
+                )}
+                {!open && (
+                  <Stack direction="column">
+                    <ListItemIcon
+                      sx={{
+                        minWidth: 0,
+                        mr: open ? 3 : "auto",
+                        justifyContent: "center",
+                        fontWeight: "bold",
+                        padding: "14px",
+                      }}
+                    >
+                      <GoGear size={25} color="white"></GoGear>
+                    </ListItemIcon>
+                    <span>Setting</span>
                   </Stack>
                 )}
               </ListItemButton>

@@ -93,7 +93,7 @@ url: /admin/teacher/:teacherId
 method: delete
 
 //delete student
-url: /admin/set/:teacherId
+url: /admin/student/:studentId
 method: delete
 
 

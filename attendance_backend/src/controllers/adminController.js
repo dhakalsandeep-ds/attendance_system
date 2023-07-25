@@ -230,7 +230,6 @@ export let getBatch = expressAsyncHandler(async (req, res, next) => {
     result: result,
     statusCode: HttpStatus.OK,
   };
-  console.log("all batches getting");
 
   successResponse(response);
 });
@@ -643,5 +642,53 @@ export let updateCourse = expressAsyncHandler(async (req, res, next) => {
     result,
     statusCode: HttpStatus.OK,
   };
+  successResponse(response);
+});
+
+export let deleteAdmin = expressAsyncHandler(async (req, res, next) => {
+  let adminId = req.params.adminId;
+  try {
+    var result = await Admin.findByIdAndDelete(adminId, { new: true });
+  } catch (error) {
+    error.message = "Invalid adminId";
+    error.statusCode = 404;
+    throw error;
+  }
+  if (result === null) {
+    let error = new Error("No such Admin exists");
+    error.statusCode = 404;
+    throw error;
+  }
+  let response = {
+    res,
+    message: "Admin Account Deleted successfully",
+    result,
+    statusCode: HttpStatus.OK,
+  };
+
+  successResponse(response);
+});
+
+export let updateAdmin = expressAsyncHandler(async (req, res, next) => {
+  let adminId = req.params.adminId; 
+  let _data = req.body.data;
+  delete _data.password;
+  try {
+    var result = await Admin.findByIdAndUpdate(adminId, _data, {
+      new: true
+    });
+  } catch (error) {
+    // console.log("error")
+    error.statusCode = 404;
+    error.message = "Invalid adminId";
+    throw error;
+  }
+  let response = {
+    res,
+    message: "Admin Updated successfully",
+    result,
+    statusCode: HttpStatus.OK,
+  };
+
   successResponse(response);
 });

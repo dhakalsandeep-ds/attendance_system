@@ -5,6 +5,7 @@ import {
   addStudent,
   addTeacher,
   assignTeacher,
+  deleteAdmin,
   deleteStudent,
   deleteTeacher,
   getAdmin,
@@ -18,6 +19,7 @@ import {
   getTeacherDetail,
   insertStudent,
   unAssignTeacher,
+  updateAdmin,
   updateCourse,
   updateStudent,
   updateTeacher,
@@ -30,12 +32,14 @@ let adminRouter = Router();
 // adminRouter.route("/logout").get(isAuthenticated, isAuthorizedAdmin, logout)
 adminRouter.route("/add").post(isAuthenticated, isAuthorizedAdmin, addAdmin);
 adminRouter.route("/all").get(isAuthenticated, isAuthorizedAdmin, getAdmin);
-
+adminRouter.route("/:adminId").put(isAuthenticated, isAuthorizedAdmin, updateAdmin);
+adminRouter.route("/:deleteId").delete(isAuthenticated, isAuthorizedAdmin, deleteAdmin);
 //Batch operation
 adminRouter
   .route("/batch")
   .get(isAuthenticated, isAuthorizedAdmin, getBatch)
   .post(isAuthenticated, isAuthorizedAdmin, addBatch);
+  
 adminRouter
   .route("/batch/:batchId")
   .get(isAuthenticated, isAuthorizedAdmin, getBatchDetails)

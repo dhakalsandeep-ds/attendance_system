@@ -108,10 +108,11 @@ const AdminList = () => {
   const handleClose = () => setOpen(false);
 
   async function handleEditOpen(e, id) {
-    await fetch("http://localhost:8000/admin/student/" + id, {
-      headers: {
+    await fetch("http://localhost:8000/admin/" + id, {
+     headers: {
         Authorization: `Bearer ${user.token()}`,
       },
+      
     })
       .then((data) => data.json())
       .then((data) => {
@@ -235,7 +236,7 @@ const AdminList = () => {
         event.target.value
       )
     ) {
-      errors.push(` invalide email format`);
+      errors.push(` invalid email format`);
     }
   }
 
@@ -388,7 +389,7 @@ const AdminList = () => {
             Add Student
           </Button>
           <DisplayTable
-            columns={["name", "email", "action"]}
+            columns={["Name", "Email", "Action"]}
             rows={student}
             elevation={6}
             handleEditOpen={handleEditOpen}

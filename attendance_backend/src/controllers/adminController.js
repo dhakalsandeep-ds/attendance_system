@@ -666,6 +666,53 @@ export let updateCourse = expressAsyncHandler(async (req, res, next) => {
   successResponse(response);
 });
 
+export let updatePasswordAdmin = expressAsyncHandler(async (req, res, next) => {
+  let teacherId = req.body.info.id;
+  let theTeacher = await Admin.findOne({ _id: teacherId });
+  let currentPassword = req.body.currentPassword;
+  if (!(await comparePassword(currentPassword, theTeacher.password))) {
+    let error = new Error("Password didn't match");
+    error.statusCode = 401;
+    throw error;
+  }
+  let _hashPassword = await hashPassword(req.body.newPassword);
+  let result = await Admin.findByIdAndUpdate(
+    { _id: teacherId },
+    { password: _hashPassword }
+  );
+
+  let response = {
+    res,
+    result: { id: teacherId },
+    message: "Password Changed Successfully",
+    statusCode: HttpStatus.OK,
+  };
+
+  successResponse(response);
+});
+
+export let adminInfo = expressAsyncHandler(async (req, res, next) => {
+  let teacherId = req.body.info.id;
+  let theTeacher = await Admin.findOne({ _id: teacherId }).select(
+    "-password -__v"
+  );
+  let currentPassword = req.body.currentPassword;
+  if (!theTeacher) {
+    let error = new Error("no admin");
+    error.statusCode = 401;
+    throw error;
+  }
+
+  let response = {
+    res,
+    result: theTeacher,
+    message: "admin info",
+    statusCode: HttpStatus.OK,
+  };
+
+  successResponse(response);
+});
+
 export let deleteAdmin = expressAsyncHandler(async (req, res, next) => {
   let adminId = req.params.adminId;
   try {

@@ -14,9 +14,9 @@ import { Snackbar } from "@mui/material";
 import MuiAlert from "@mui/material/Alert";
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close";
-import Toastify from "./../../components/Toastify";
+import Toastify from "../../components/Toastify";
 
-const AdminLogin = () => {
+const TeacherLogin = () => {
   let [email, setEmail] = useState("");
   let [password, setPassword] = useState("");
   let [emailErrors, setEmailErrors] = useState([]);
@@ -123,7 +123,7 @@ const AdminLogin = () => {
       console.log("cannot call error is there");
       return;
     }
-    const da = await user.login({ email, password }, "/admin/list");
+    const da = await user.login({ email, password }, "/teacher/batch");
     console.log("da", da);
     if (!da.success) {
       setOpenToast(true);
@@ -208,4 +208,4 @@ const AdminLogin = () => {
   );
 };
 
-export default AdminLogin;
+export default TeacherLogin;

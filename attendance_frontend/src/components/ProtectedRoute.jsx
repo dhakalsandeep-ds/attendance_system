@@ -19,7 +19,7 @@ const validateToken = async (token) => {
   return ans.success;
 };
 
-const ProtectedRoute = ({ children }) => {
+const ProtectedRoute = ({ redirect, children }) => {
   const user = useAuth();
 
   const token = user.token();
@@ -37,7 +37,7 @@ const ProtectedRoute = ({ children }) => {
     return <Outlet></Outlet>;
   }
 
-  return <Navigate to="/admin"></Navigate>;
+  return <Navigate to={redirect}></Navigate>;
 
   // if (user.token()) {
   //   console.log(children);

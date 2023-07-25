@@ -72,6 +72,7 @@ const StudentBatch = () => {
       setOpenToast(true);
       setToastMessage(data.message);
       setSeverity("success");
+      fetchBatchStudent();
       handleClose();
     } else {
       setOpenToast(true);
@@ -135,7 +136,42 @@ const StudentBatch = () => {
     console.log(student);
     add();
   }
-  console.log("batch Teacher", batchStudent);
+
+  function handleUnassign(e, studentId) {
+    async function unassign() {
+      let headersList = {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${user.token()}`,
+      };
+
+      let response = await fetch(
+        `http://localhost:8000/admin/student/${studentId}/${batchId}`,
+        {
+          method: "PATCH",
+          headers: headersList,
+        }
+      );
+      let json = await response.json();
+      console.log("json betra", json);
+      console.log("heee");
+      console.log("json", json);
+      if (json.success) {
+        console.log("before student is fetched again....");
+        fetchBatchStudent();
+        setOpenToast(true);
+        setToastMessage(json.message);
+        setSeverity("success");
+        handleClose();
+      } else {
+        setOpenToast(true);
+        setToastMessage(json.message);
+        setSeverity("error");
+        handleClose();
+      }
+    }
+
+    unassign();
+  }
 
   return (
     <div>
@@ -154,6 +190,8 @@ const StudentBatch = () => {
         <BatchTable
           columns={["name", "email", "action"]}
           rows={batchStudent}
+          handleUnassign={handleUnassign}
+          student={true}
         ></BatchTable>
       </Paper>
 

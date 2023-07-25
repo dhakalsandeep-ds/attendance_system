@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { useAuth } from "../context/auth";
-import { useParams } from "react-router-dom";
+import { useAuth } from "../../context/auth";
+import { useNavigate, useParams } from "react-router-dom";
 import {
   Button,
   Paper,
@@ -11,14 +11,22 @@ import {
   TableHead,
   TableRow,
 } from "@mui/material";
-import Toastify from "./Toastify";
+import Toastify from "../../components/Toastify";
 import SendIcon from "@mui/icons-material/Send";
+import Typography from "@mui/material/Typography";
+import { AiOutlineArrowLeft } from "react-icons/Ai";
 
-const BatchAttendance = () => {
+const BatchAttendanceTeacher = () => {
   let [batchStudent, setBatchStudent] = useState([]);
   let [toastMessage, setToastMessage] = useState();
   let [severity, setSeverity] = useState();
   let [openToast, setOpenToast] = useState(false);
+
+  const navigate = useNavigate();
+
+  function goBack() {
+    navigate(-1);
+  }
 
   const handleOpenToast = () => {
     setOpenToast(true);
@@ -103,6 +111,22 @@ const BatchAttendance = () => {
   }, []);
   return (
     <div>
+      <AiOutlineArrowLeft
+        style={{ position: "relative", top: "48px" }}
+        onClick={goBack}
+      ></AiOutlineArrowLeft>
+      <Typography
+        variant="h5"
+        sx={{
+          marginBottom: "15px",
+          padding: "10px",
+          textAlign: "center",
+        }}
+        color="primary"
+      >
+        {" "}
+        Take Attendance
+      </Typography>
       <TableContainer component={Paper} sx={{ padding: "10px" }} elevation={6}>
         <Table sx={{ minWidth: 650 }}>
           <TableHead>
@@ -174,4 +198,4 @@ const BatchAttendance = () => {
   );
 };
 
-export default BatchAttendance;
+export default BatchAttendanceTeacher;

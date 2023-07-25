@@ -4,6 +4,7 @@ import {
   addBatch,
   addStudent,
   addTeacher,
+  adminInfo,
   assignTeacher,
   deleteAdmin,
   deleteStudent,
@@ -18,9 +19,11 @@ import {
   getTeacher,
   getTeacherDetail,
   insertStudent,
+  unAssignStudent,
   unAssignTeacher,
   updateAdmin,
   updateCourse,
+  updatePasswordAdmin,
   updateStudent,
   updateTeacher,
 } from "../controllers/adminController.js";
@@ -56,6 +59,7 @@ adminRouter
   .get(isAuthenticated, isAuthorizedAdmin, getTeacherDetail)
   .put(isAuthenticated, isAuthorizedAdmin, updateTeacher)
   .delete(isAuthenticated, isAuthorizedAdmin, deleteTeacher);
+
 adminRouter
   .route("/teacher/:teacherId/:batchId")
   .put(isAuthenticated, isAuthorizedAdmin, assignTeacher)
@@ -77,9 +81,15 @@ adminRouter
   .delete(isAuthenticated, isAuthorizedAdmin, deleteStudent);
 adminRouter
   .route("/student/:studentId/:batchId")
-  .put(isAuthenticated, isAuthorizedAdmin, insertStudent);
+  .put(isAuthenticated, isAuthorizedAdmin, insertStudent)
+  .patch(isAuthenticated, isAuthorizedAdmin, unAssignStudent);
+
 adminRouter
   .route("/student/batch/:batchId")
   .get(isAuthenticated, isAuthorizedAdmin, getBatchStudent);
+
+adminRouter
+  .route("/update-password")
+  .post(isAuthenticated, isAuthorizedAdmin, updatePasswordAdmin);
 
 export default adminRouter;

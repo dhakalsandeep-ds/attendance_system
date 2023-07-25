@@ -230,7 +230,6 @@ export let getBatch = expressAsyncHandler(async (req, res, next) => {
     result: result,
     statusCode: HttpStatus.OK,
   };
-  console.log("all batches getting");
 
   successResponse(response);
 });
@@ -667,47 +666,48 @@ export let updateCourse = expressAsyncHandler(async (req, res, next) => {
   successResponse(response);
 });
 
-export let updatePasswordAdmin = expressAsyncHandler(async (req, res, next) => {
-  let teacherId = req.body.info.id;
-  let theTeacher = await Admin.findOne({ _id: teacherId });
-  let currentPassword = req.body.currentPassword;
-  if (!(await comparePassword(currentPassword, theTeacher.password))) {
-    let error = new Error("Password didn't match");
-    error.statusCode = 401;
+export let deleteAdmin = expressAsyncHandler(async (req, res, next) => {
+  let adminId = req.params.adminId;
+  try {
+    var result = await Admin.findByIdAndDelete(adminId, { new: true });
+  } catch (error) {
+    error.message = "Invalid adminId";
+    error.statusCode = 404;
     throw error;
   }
-  let _hashPassword = await hashPassword(req.body.newPassword);
-  let result = await Admin.findByIdAndUpdate(
-    { _id: teacherId },
-    { password: _hashPassword }
-  );
-
+  if (result === null) {
+    let error = new Error("No such Admin exists");
+    error.statusCode = 404;
+    throw error;
+  }
   let response = {
     res,
-    result: { id: teacherId },
-    message: "Password Changed Successfully",
+    message: "Admin Account Deleted successfully",
+    result,
     statusCode: HttpStatus.OK,
   };
 
   successResponse(response);
 });
 
-export let adminInfo = expressAsyncHandler(async (req, res, next) => {
-  let teacherId = req.body.info.id;
-  let theTeacher = await Admin.findOne({ _id: teacherId }).select(
-    "-password -__v"
-  );
-  let currentPassword = req.body.currentPassword;
-  if (!theTeacher) {
-    let error = new Error("no admin");
-    error.statusCode = 401;
+export let updateAdmin = expressAsyncHandler(async (req, res, next) => {
+  let adminId = req.params.adminId; 
+  let _data = req.body.data;
+  delete _data.password;
+  try {
+    var result = await Admin.findByIdAndUpdate(adminId, _data, {
+      new: true
+    });
+  } catch (error) {
+    // console.log("error")
+    error.statusCode = 404;
+    error.message = "Invalid adminId";
     throw error;
   }
-
   let response = {
     res,
-    result: theTeacher,
-    message: "admin info",
+    message: "Admin Updated successfully",
+    result,
     statusCode: HttpStatus.OK,
   };
 

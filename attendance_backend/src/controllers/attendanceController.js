@@ -35,9 +35,9 @@ export let submitAttendance = expressAsyncHandler(async (req, res, next) => {
   _data.year = new Date().getYear() + 1900;
   _data.month = new Date().getMonth() + 1;
   for (let i = 0; i < _data.length; i++) {
-    let status = _data[i].status === "P" ? 0 : _data[i].status === "A" ? 1 : 2;
+    // let status = _data[i].status === "P" ? 0 : _data[i].status === "A" ? 1 : 2;
     await Attendance.create({
-      status,
+      status:_data[i].status,
       studentId: _data[i].studentId,
       batchId: _batchId,
       year: _data.year,
@@ -53,11 +53,10 @@ export let submitAttendance = expressAsyncHandler(async (req, res, next) => {
 });
 
 export let getAttendanceByDate = expressAsyncHandler(async (req, res, next) => {
-  console.log(req.body, "alfjla,,,,,,,,,,,,,,,,,,,,,,,,,");
   let _batchId = req.params.batchId;
   let desiredYear = req.params.year;
   let desiredMonth = req.params.month;
-  console.log(_batchId, desiredYear, desiredMonth, ".....");
+  // console.log(_batchId, desiredYear, desiredMonth, ".....");
   let result = await Attendance.find({
     batchId: _batchId,
     year: desiredYear,
@@ -69,7 +68,7 @@ export let getAttendanceByDate = expressAsyncHandler(async (req, res, next) => {
   //   path: "batchId",
   // });
 
-  console.log("result........", result);
+  // console.log("result........", result);
 
   let response = {
     res,

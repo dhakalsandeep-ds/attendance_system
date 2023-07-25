@@ -27,10 +27,10 @@ const options = {
 };
 app.use(cors(options));
 app.use(json());
-app.use((req, res, next) => {
-  console.log("Request Received:" + req.method + " " + req.url);
-  next();
-});
+// app.use((req,res,next)=>{
+//   console.log("Request Received:"+req.method+" "+req.url)
+//   next()
+// })
 app.use("/", helperRouter);
 app.use("/teacher", teacherRouter);
 app.use("/student", studentRouter);

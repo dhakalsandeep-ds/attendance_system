@@ -8,10 +8,10 @@ export let attendanceSchema = Schema({
     default: dateNow()
   },
   status:{
-    type:Number,
+    type:String,
     required:true,
-    enum:[0,1,2],
-    default: 0
+    enum:["P","A","L"],
+    default: "P"
   },
   studentId: {
     type: Schema.ObjectId,

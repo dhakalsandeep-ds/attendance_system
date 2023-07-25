@@ -57,23 +57,49 @@ export let showAllBatch = expressAsyncHandler(async (req, res, next) => {
   successResponse(response);
 });
 
-export let updatePasswordTeacher = expressAsyncHandler(async (req, res, next) => {
-  let teacherId = req.body.info.id
-  let theTeacher = await Teacher.findOne({ _id:teacherId})
-  let currentPassword=req.body.currentPassword
-  if(!await comparePassword(currentPassword,theTeacher.password))
-  {
-    let error = new Error("Password didn't match")
-    error.statusCode=401
-    throw error    
+export let updatePasswordTeacher = expressAsyncHandler(
+  async (req, res, next) => {
+    let teacherId = req.body.info.id;
+    let theTeacher = await Teacher.findOne({ _id: teacherId });
+    let currentPassword = req.body.currentPassword;
+    if (!(await comparePassword(currentPassword, theTeacher.password))) {
+      let error = new Error("Password didn't match");
+      error.statusCode = 401;
+      throw error;
+    }
+    let _hashPassword = await hashPassword(req.body.newPassword);
+    let result = await Teacher.findByIdAndUpdate(
+      { _id: teacherId },
+      { password: _hashPassword }
+    );
+
+    let response = {
+      res,
+      result: { id: teacherId },
+      message: "Password Changed Successfully",
+      statusCode: HttpStatus.OK,
+    };
+
+    successResponse(response);
   }
-  let _hashPassword= await hashPassword(req.body.newPassword)
-  let result=await Teacher.findByIdAndUpdate({_id:teacherId},{password:_hashPassword})
+);
+
+export let teacherInfo = expressAsyncHandler(async (req, res, next) => {
+  let teacherId = req.body.info.id;
+  let theTeacher = await Teacher.findOne({ _id: teacherId }).select(
+    "-password -__v"
+  );
+  let currentPassword = req.body.currentPassword;
+  if (!theTeacher) {
+    let error = new Error("no teacher");
+    error.statusCode = 401;
+    throw error;
+  }
 
   let response = {
     res,
-    result:{id:teacherId},
-    message: "Password Changed Successfully",
+    result: theTeacher,
+    message: "teacher info",
     statusCode: HttpStatus.OK,
   };
 

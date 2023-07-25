@@ -29,6 +29,7 @@ import { MdOutlineClass } from "react-icons/md";
 import { BsListCheck } from "react-icons/bs";
 import { RiAdminLine } from "react-icons/ri";
 import { RiTeamLine } from "react-icons/ri";
+import { GoGear } from "react-icons/go";
 import { Tooltip } from "@mui/material";
 import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
 
@@ -92,7 +93,7 @@ export default function MiniDrawer() {
   };
 
   const logout = () => {
-    user.logout();
+    user.logout({ url: "admin" });
   };
 
   return (
@@ -118,7 +119,15 @@ export default function MiniDrawer() {
           </Button>
         </Toolbar>
       </AppBar>
-      <Drawer variant="permanent" open={open}>
+      <Drawer
+        variant="permanent"
+        open={open}
+        PaperProps={{
+          sx: {
+            height: "100vh",
+          },
+        }}
+      >
         <List
           sx={{
             marginTop: "60px",
@@ -126,143 +135,155 @@ export default function MiniDrawer() {
             backgroundColor: "#9c27b0",
           }}
         >
-          <ListItem disablePadding sx={{ display: "block" }}>
-            <NavLink
-              to="list"
-              style={({ isActive }) => ({
-                color: "white",
-                backgroundColor: isActive ? "#af52bf" : "",
-                display: "block",
-                textDecoration: "none",
-              })}
-            >
-              <ListItemButton
-                sx={{
-                  minHeight: 48,
-                  justifyContent: open ? "initial" : "center",
-                  px: 2.5,
-                }}
-              >
-                {open && (
-                  <Stack direction="row">
-                    <ListItemIcon
-                      sx={{
-                        minWidth: 0,
-                        mr: open ? 3 : "auto",
-                        justifyContent: "center",
-                        fontWeight: "bold",
-                      }}
-                    >
-                      <AdminPanelSettingsIcon
-                        size={25}
-                        color={"white"}
-                        sx={{ color: "white" }}
-                      ></AdminPanelSettingsIcon>
-                    </ListItemIcon>
-                    <span>Admins</span>
-                  </Stack>
-                )}
-                {!open && (
-                  <Stack direction="column">
-                    <ListItemIcon
-                      sx={{
-                        minWidth: 0,
-                        mr: open ? 3 : "auto",
-                        justifyContent: "center",
-                        fontWeight: "bold",
-                        padding: "14px",
-                      }}
-                    >
-                      <AdminPanelSettingsIcon
-                        size={25}
-                        color="white"
-                        sx={{ color: "white" }}
-                      ></AdminPanelSettingsIcon>
-                    </ListItemIcon>
-                    <span>Admins</span>
-                  </Stack>
+          <Stack
+            direction="column"
+            justifyContent="space-between"
+            alignItems="center"
+          >
+            <div>
+              <ListItem disablePadding sx={{ display: "block" }}>
+                <NavLink
+                  to="list"
+                  style={({ isActive }) => ({
+                    color: "white",
+                    backgroundColor: isActive ? "#af52bf" : "",
+                    display: "block",
+                    textDecoration: "none",
+                  })}
+                >
+                  <ListItemButton
+                    sx={{
+                      minHeight: 48,
+                      justifyContent: open ? "initial" : "center",
+                      px: 2.5,
+                    }}
+                  >
+                    {open && (
+                      <Stack direction="row">
+                        <ListItemIcon
+                          sx={{
+                            minWidth: 0,
+                            mr: open ? 3 : "auto",
+                            justifyContent: "center",
+                            fontWeight: "bold",
+                          }}
+                        >
+                          <AdminPanelSettingsIcon
+                            size={25}
+                            color={"white"}
+                            sx={{ color: "white" }}
+                          ></AdminPanelSettingsIcon>
+                        </ListItemIcon>
+                        <span>Admins</span>
+                      </Stack>
+                    )}
+                    {!open && (
+                      <Stack direction="column">
+                        <ListItemIcon
+                          sx={{
+                            minWidth: 0,
+                            mr: open ? 3 : "auto",
+                            justifyContent: "center",
+                            fontWeight: "bold",
+                            padding: "14px",
+                          }}
+                        >
+                          <AdminPanelSettingsIcon
+                            size={25}
+                            color="white"
+                            sx={{ color: "white" }}
+                          ></AdminPanelSettingsIcon>
+                        </ListItemIcon>
+                        <span>Admins</span>
+                      </Stack>
 
-                  // <Tooltip title="Admins" arrow>
-                  //   <ListItemIcon
-                  //     sx={{
-                  //       minWidth: 0,
-                  //       mr: open ? 3 : "auto",
-                  //       justifyContent: "center",
-                  //       fontWeight: "bold",
-                  //     }}
-                  //   >
-                  //     <MdOutlineClass size={25} color="white"></MdOutlineClass>
-                  //   </ListItemIcon>
-                  // </Tooltip>
-                )}
-              </ListItemButton>
-            </NavLink>
-          </ListItem>
-          <ListItem disablePadding sx={{ display: "block" }}>
-            <NavLink
-              to="batch"
-              style={({ isActive }) => ({
-                color: "white",
-                backgroundColor: isActive ? "#af52bf" : "",
-                display: "block",
-                textDecoration: "none",
-              })}
-            >
-              <ListItemButton
-                sx={{
-                  minHeight: 48,
-                  justifyContent: open ? "initial" : "center",
-                  px: 2.5,
-                }}
-              >
-                {open && (
-                  <Stack direction="row">
-                    <ListItemIcon
-                      sx={{
-                        minWidth: 0,
-                        mr: open ? 3 : "auto",
-                        justifyContent: "center",
-                        fontWeight: "bold",
-                      }}
-                    >
-                      <MdOutlineClass size={25} color="white"></MdOutlineClass>
-                    </ListItemIcon>
-                    <span>Batches</span>
-                  </Stack>
-                )}
-                {!open && (
-                  <Stack direction="column">
-                    <ListItemIcon
-                      sx={{
-                        minWidth: 0,
-                        mr: open ? 3 : "auto",
-                        justifyContent: "center",
-                        fontWeight: "bold",
-                        padding: "14px",
-                      }}
-                    >
-                      <MdOutlineClass size={25} color="white"></MdOutlineClass>
-                    </ListItemIcon>
-                    <span>Batches</span>
-                  </Stack>
+                      // <Tooltip title="Admins" arrow>
+                      //   <ListItemIcon
+                      //     sx={{
+                      //       minWidth: 0,
+                      //       mr: open ? 3 : "auto",
+                      //       justifyContent: "center",
+                      //       fontWeight: "bold",
+                      //     }}
+                      //   >
+                      //     <MdOutlineClass size={25} color="white"></MdOutlineClass>
+                      //   </ListItemIcon>
+                      // </Tooltip>
+                    )}
+                  </ListItemButton>
+                </NavLink>
+              </ListItem>
+              <ListItem disablePadding sx={{ display: "block" }}>
+                <NavLink
+                  to="batch"
+                  style={({ isActive }) => ({
+                    color: "white",
+                    backgroundColor: isActive ? "#af52bf" : "",
+                    display: "block",
+                    textDecoration: "none",
+                  })}
+                >
+                  <ListItemButton
+                    sx={{
+                      minHeight: 48,
+                      justifyContent: open ? "initial" : "center",
+                      px: 2.5,
+                    }}
+                  >
+                    {open && (
+                      <Stack direction="row">
+                        <ListItemIcon
+                          sx={{
+                            minWidth: 0,
+                            mr: open ? 3 : "auto",
+                            justifyContent: "center",
+                            fontWeight: "bold",
+                          }}
+                        >
+                          <MdOutlineClass
+                            size={25}
+                            color="white"
+                          ></MdOutlineClass>
+                        </ListItemIcon>
+                        <span>Batches</span>
+                      </Stack>
+                    )}
+                    {!open && (
+                      <Stack direction="column">
+                        <ListItemIcon
+                          sx={{
+                            minWidth: 0,
+                            mr: open ? 3 : "auto",
+                            justifyContent: "center",
+                            fontWeight: "bold",
+                            padding: "14px",
+                          }}
+                        >
+                          <MdOutlineClass
+                            size={25}
+                            color="white"
+                          ></MdOutlineClass>
+                        </ListItemIcon>
+                        <span>Batches</span>
+                      </Stack>
 
-                  // <Tooltip title="Admins" arrow>
-                  //   <ListItemIcon
-                  //     sx={{
-                  //       minWidth: 0,
-                  //       mr: open ? 3 : "auto",
-                  //       justifyContent: "center",
-                  //       fontWeight: "bold",
-                  //     }}
-                  //   >
-                  //     <MdOutlineClass size={25} color="white"></MdOutlineClass>
-                  //   </ListItemIcon>
-                  // </Tooltip>
-                )}
-              </ListItemButton>
-            </NavLink>
-          </ListItem>
-          {/* <ListItem disablePadding sx={{ display: "block" }}>
+                      // <Tooltip title="Admins" arrow>
+                      //   <ListItemIcon
+                      //     sx={{
+                      //       minWidth: 0,
+                      //       mr: open ? 3 : "auto",
+                      //       justifyContent: "center",
+                      //       fontWeight: "bold",
+                      //     }}
+                      //   >
+                      //     <MdOutlineClass size={25} color="white"></MdOutlineClass>
+                      //   </ListItemIcon>
+                      // </Tooltip>
+                    )}
+                  </ListItemButton>
+                </NavLink>
+              </ListItem>
+              {/* <ListItem disablePadding sx={{ display: "block" }}>
             <NavLink
               to="admin"
               style={({ isActive }) => ({
@@ -311,109 +332,168 @@ export default function MiniDrawer() {
               </ListItemButton>
             </NavLink>
           </ListItem> */}
-          <ListItem disablePadding sx={{ display: "block" }}>
-            <NavLink
-              to="teacher"
-              style={({ isActive }) => ({
-                color: "white",
-                backgroundColor: isActive ? "#af52bf" : "",
-                display: "block",
-                textDecoration: "none",
-              })}
-            >
-              <ListItemButton
-                sx={{
-                  minHeight: 48,
-                  justifyContent: open ? "initial" : "center",
-                  px: 2.5,
-                }}
-              >
-                {open && (
-                  <Stack direction="row">
-                    <ListItemIcon
-                      sx={{
-                        minWidth: 0,
-                        mr: open ? 3 : "auto",
-                        justifyContent: "center",
-                        fontWeight: "bold",
-                      }}
-                    >
-                      <RiTeamLine size={25} color="white"></RiTeamLine>
-                    </ListItemIcon>
-                    <span>Teachers</span>
-                  </Stack>
-                )}
-                {!open && (
-                  <Stack direction="column">
-                    <ListItemIcon
-                      sx={{
-                        minWidth: 0,
-                        mr: open ? 3 : "auto",
-                        justifyContent: "center",
-                        fontWeight: "bold",
-                        padding: "14px",
-                      }}
-                    >
-                      <RiTeamLine size={25} color="white"></RiTeamLine>
-                    </ListItemIcon>
-                    <span>Teachers</span>
-                  </Stack>
-                )}
-              </ListItemButton>
-            </NavLink>
-          </ListItem>
+              <ListItem disablePadding sx={{ display: "block" }}>
+                <NavLink
+                  to="teacher"
+                  style={({ isActive }) => ({
+                    color: "white",
+                    backgroundColor: isActive ? "#af52bf" : "",
+                    display: "block",
+                    textDecoration: "none",
+                  })}
+                >
+                  <ListItemButton
+                    sx={{
+                      minHeight: 48,
+                      justifyContent: open ? "initial" : "center",
+                      px: 2.5,
+                    }}
+                  >
+                    {open && (
+                      <Stack direction="row">
+                        <ListItemIcon
+                          sx={{
+                            minWidth: 0,
+                            mr: open ? 3 : "auto",
+                            justifyContent: "center",
+                            fontWeight: "bold",
+                          }}
+                        >
+                          <RiTeamLine size={25} color="white"></RiTeamLine>
+                        </ListItemIcon>
+                        <span>Teachers</span>
+                      </Stack>
+                    )}
+                    {!open && (
+                      <Stack direction="column">
+                        <ListItemIcon
+                          sx={{
+                            minWidth: 0,
+                            mr: open ? 3 : "auto",
+                            justifyContent: "center",
+                            fontWeight: "bold",
+                            padding: "14px",
+                          }}
+                        >
+                          <RiTeamLine size={25} color="white"></RiTeamLine>
+                        </ListItemIcon>
+                        <span>Teachers</span>
+                      </Stack>
+                    )}
+                  </ListItemButton>
+                </NavLink>
+              </ListItem>
 
-          <ListItem disablePadding sx={{ display: "block" }}>
-            <NavLink
-              to="student"
-              style={({ isActive }) => ({
-                color: "white",
-                backgroundColor: isActive ? "#af52bf" : "",
-                display: "block",
-                textDecoration: "none",
-              })}
-            >
-              <ListItemButton
-                sx={{
-                  minHeight: 48,
-                  justifyContent: open ? "initial" : "center",
-                  px: 2.5,
-                }}
-              >
-                {open && (
-                  <Stack direction="row">
-                    <ListItemIcon
-                      sx={{
-                        minWidth: 0,
-                        mr: open ? 3 : "auto",
-                        justifyContent: "center",
-                        fontWeight: "bold",
-                      }}
-                    >
-                      <PiStudent size={25} color="white"></PiStudent>
-                    </ListItemIcon>
-                    <span>Students</span>
-                  </Stack>
-                )}
-                {!open && (
-                  <Stack direction="column">
-                    <ListItemIcon
-                      sx={{
-                        minWidth: 0,
-                        mr: open ? 3 : "auto",
-                        justifyContent: "center",
-                        fontWeight: "bold",
-                        padding: "14px",
-                      }}
-                    >
-                      <PiStudent size={25} color="white"></PiStudent>
-                    </ListItemIcon>
-                    <span>Students</span>
-                  </Stack>
-                )}
-              </ListItemButton>
-            </NavLink>
-          </ListItem>
+              <ListItem disablePadding sx={{ display: "block" }}>
+                <NavLink
+                  to="student"
+                  style={({ isActive }) => ({
+                    color: "white",
+                    backgroundColor: isActive ? "#af52bf" : "",
+                    display: "block",
+                    textDecoration: "none",
+                  })}
+                >
+                  <ListItemButton
+                    sx={{
+                      minHeight: 48,
+                      justifyContent: open ? "initial" : "center",
+                      px: 2.5,
+                    }}
+                  >
+                    {open && (
+                      <Stack direction="row">
+                        <ListItemIcon
+                          sx={{
+                            minWidth: 0,
+                            mr: open ? 3 : "auto",
+                            justifyContent: "center",
+                            fontWeight: "bold",
+                          }}
+                        >
+                          <PiStudent size={25} color="white"></PiStudent>
+                        </ListItemIcon>
+                        <span>Students</span>
+                      </Stack>
+                    )}
+                    {!open && (
+                      <Stack direction="column">
+                        <ListItemIcon
+                          sx={{
+                            minWidth: 0,
+                            mr: open ? 3 : "auto",
+                            justifyContent: "center",
+                            fontWeight: "bold",
+                            padding: "14px",
+                          }}
+                        >
+                          <PiStudent size={25} color="white"></PiStudent>
+                        </ListItemIcon>
+                        <span>Students</span>
+                      </Stack>
+                    )}
+                  </ListItemButton>
+                </NavLink>
+              </ListItem>
+            </div>
+
+            {/* jslfsj */}
+            <div>
+              <ListItem disablePadding sx={{ display: "block" }}>
+                <NavLink
+                  to="setting"
+                  style={({ isActive }) => ({
+                    color: "white",
+                    backgroundColor: isActive ? "#af52bf" : "",
+                    display: "block",
+                    textDecoration: "none",
+                  })}
+                >
+                  <ListItemButton
+                    sx={{
+                      minHeight: 48,
+                      justifyContent: open ? "initial" : "center",
+                      px: 2.5,
+                      marginTop: open ? "480px" : "280px",
+                    }}
+                  >
+                    {open && (
+                      <Stack direction="row">
+                        <ListItemIcon
+                          sx={{
+                            minWidth: 0,
+                            mr: open ? 3 : "auto",
+                            justifyContent: "center",
+                            fontWeight: "bold",
+                          }}
+                        >
+                          <GoGear size={25} color="white"></GoGear>
+                          {/* <PiStudent size={25} color="white"></PiStudent> */}
+                        </ListItemIcon>
+                        <span>Setting</span>
+                      </Stack>
+                    )}
+                    {!open && (
+                      <Stack direction="column">
+                        <ListItemIcon
+                          sx={{
+                            minWidth: 0,
+                            mr: open ? 3 : "auto",
+                            justifyContent: "center",
+                            fontWeight: "bold",
+                            padding: "14px",
+                          }}
+                        >
+                          <GoGear size={25} color="white"></GoGear>
+                        </ListItemIcon>
+                        <span>Setting</span>
+                      </Stack>
+                    )}
+                  </ListItemButton>
+                </NavLink>
+              </ListItem>
+            </div>
+          </Stack>
         </List>
       </Drawer>
       <Box component="main" sx={{ flexGrow: 1, p: 3, marginTop: "50px" }}>

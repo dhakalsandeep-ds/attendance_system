@@ -9,6 +9,8 @@ import StudentBatch from "./StudentBatch";
 import BatchAttendance from "./BatchAttendance";
 import { useState } from "react";
 import PreviousAttendanceAll from "./PreviousAttendanceAll";
+import { useNavigate } from "react-router-dom";
+import { AiOutlineArrowLeft } from "react-icons/Ai";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -37,10 +39,20 @@ export default function StudentTeacherBatch() {
     setValue(newValue);
   };
 
+  const navigate = useNavigate();
+
+  function goBack() {
+    navigate(-1);
+  }
+
   return (
     <Box sx={{ width: "100%" }}>
       <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
-        <Tabs value={value} onChange={handleChange}>
+        <AiOutlineArrowLeft
+          style={{ position: "relative", top: "34px" }}
+          onClick={goBack}
+        ></AiOutlineArrowLeft>
+        <Tabs value={value} onChange={handleChange} sx={{ marginLeft: "25px" }}>
           <Tab label="Teacher" />
           <Tab label="Student" />
           <Tab label="Today Attendance" />

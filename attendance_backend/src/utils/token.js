@@ -12,14 +12,15 @@ export let generateToken = async (infoObj, expireInfo) => {
   return token;
 };
 
-export let removeExpiredToken=()=>{
-  setInterval(async ()=>{
-    let allToken= await Token.find({})
+export let removeExpiredToken = () => {
+  setInterval(async () => {
+    let allToken = await Token.find({});
     allToken.forEach(async (element) => {
-     let test=await verifyToken(element.token)
-      if(test.exp<new Date().getTime()){
-        await Token.findByIdAndDelete(test.id,{new:true})
-      }
+      console.log(element, "element................");
+      // let test = await verifyToken(element.token);
+      // if (test.exp < new Date().getTime()) {
+      //   await Token.findByIdAndDelete(test.id, { new: true });
+      // }
     });
-  },15*86400)
-}
+  }, 1);
+};

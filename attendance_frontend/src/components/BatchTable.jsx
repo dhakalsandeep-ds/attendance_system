@@ -10,13 +10,29 @@ import Button from "@mui/material/Button";
 
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
+import { useLocation, useParams } from "react-router-dom";
+import { useAuth } from "../context/auth";
+import { AiOutlineEye } from "react-icons/Ai";
+import IndividualAttendance from "./IndividualAttendance";
+import { useState } from "react";
 
 export default function BatchTable({
   columns,
   rows,
-  elevation = 0,
   handleUnassign,
+  elevation = 0,
+  student,
 }) {
+  const [attendance, setAttendance] = useState(false);
+  const handleClose = () => setAttendance(false);
+
+  let [email, setEmail] = useState("");
+
+  function handleViewAttendance(e, email) {
+    setEmail(email);
+    setAttendance(true);
+  }
+
   return (
     <TableContainer
       component={Paper}
@@ -44,6 +60,18 @@ export default function BatchTable({
 
                 <TableCell>{row.email}</TableCell>
                 <TableCell>
+                  {student && (
+                    <Button
+                      onClick={(e) => handleViewAttendance(e, row.email)}
+                      variant="outlined"
+                      color="primary"
+                      startIcon={<AiOutlineEye></AiOutlineEye>}
+                      sx={{ marginRight: "5px" }}
+                    >
+                      attendance
+                    </Button>
+                  )}
+
                   <Button
                     onClick={(e) => handleUnassign(e, row._id)}
                     variant="outlined"
@@ -62,6 +90,14 @@ export default function BatchTable({
           )}
         </TableBody>
       </Table>
+
+      {attendance && (
+        <IndividualAttendance
+          isOpen={attendance}
+          handleClose={handleClose}
+          email={email}
+        ></IndividualAttendance>
+      )}
     </TableContainer>
   );
 }

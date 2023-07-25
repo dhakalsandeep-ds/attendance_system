@@ -159,6 +159,7 @@ const TeacherView = () => {
       setSeverity("error");
       handleEditClose();
     }
+    fetchTeacher();
     console.log("edit submit");
   }
 
@@ -250,9 +251,24 @@ const TeacherView = () => {
     }
   }
 
+  function checkPasswordStrength(event, errors) {
+    if (!/.*[a-z].*/.test(event.target.value)) {
+      errors.push(`must contain at least one lower case letter`);
+    }
+    if (!/.*[A-Z].*/.test(event.target.value)) {
+      errors.push(`must contain at least one upper case letter`);
+    }
+    if (!/.*\d.*/.test(event.target.value)) {
+      errors.push(`mush contain one digit`);
+    }
+    if (!/.{8,}/.test(event.target.value)) {
+      errors.push(`must be at least 8 character long`);
+    }
+  }
+
   const checks = {
     email: [required, checkEmailFormat],
-    password: [required],
+    password: [required, checkPasswordStrength],
     name: [required],
   };
 
@@ -270,7 +286,7 @@ const TeacherView = () => {
     setName(e.target.value);
     let errors = [];
 
-    checks.password.forEach((v) => {
+    checks.name.forEach((v) => {
       v(e, errors);
     });
     if (errors.length === 0) {
@@ -370,6 +386,7 @@ const TeacherView = () => {
       setSeverity("error");
       handleClose();
     }
+    fetchTeacher();
   }
 
   return (

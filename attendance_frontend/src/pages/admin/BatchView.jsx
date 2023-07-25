@@ -153,6 +153,7 @@ const BatchView = () => {
       handleClose();
     }
     console.log(data);
+    fetchBatch();
   }
 
   async function fetchBatch() {
@@ -225,13 +226,13 @@ const BatchView = () => {
                     </Grid>
                     <Grid item xs={4}>
                       <Stack direction={"column"} flexWrap="wrap">
-                        <Button
+                        {/* <Button
                           variant="outlined"
                           color="success"
                           onClick={(e) => console.log(e, row._id)}
                           sx={{ marginRight: "6px", width: "fit-content" }}
                           startIcon={<EditIcon></EditIcon>}
-                        ></Button>
+                        ></Button> */}
                       </Stack>
 
                       {/* <Button

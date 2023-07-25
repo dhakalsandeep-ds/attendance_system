@@ -6,7 +6,7 @@ export const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
   const navigate = useNavigate();
 
-  const login = async ({ email, password }) => {
+  const login = async ({ email, password }, redirect = "") => {
     let headersList = {
       "Content-Type": "application/json",
     };
@@ -33,10 +33,10 @@ export const AuthProvider = ({ children }) => {
 
     console.log("redirecting ....");
 
-    navigate("/admin/batch", { replace: true });
+    navigate(redirect, { replace: true });
   };
 
-  const logout = async () => {
+  const logout = async ({ url }) => {
     let token = localStorage.getItem("token");
     if (token) {
       console.log("insideeee");
@@ -48,7 +48,7 @@ export const AuthProvider = ({ children }) => {
       const data = await response.json();
 
       localStorage.removeItem("token");
-      navigate("/admin", { replace: true });
+      navigate(`/${url}`, { replace: true });
     }
   };
   const token = () => {

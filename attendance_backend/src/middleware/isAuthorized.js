@@ -37,7 +37,7 @@ export let isAuthorizedStudent = expressAsyncHandler((req, res, next) => {
 export let isAuthorized = expressAsyncHandler((req, res, next) => {
   let role = req.body.info.role;
 
-  if (role === "teacher" || role === "admin") {
+  if (role === "teacher" || role === "admin" || role === "student") {
     next();
   } else {
     let error = new Error("Access Not granted");

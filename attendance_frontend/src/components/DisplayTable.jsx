@@ -19,15 +19,10 @@ export default function DisplayTable({
   elevation = 0,
   handleEditOpen,
   handleDeleteOpen,
+  admin = "",
 }) {
-  let [OwnIdDat, setOwnIdData] = React.useState(null);
   let user = useAuth();
 
-  function onRegister(ownIdData) {
-    console.log("ownIdDat", ownIdData);
-    console.log("ownIdData", ownIdData);
-    setOwnIdData(ownIdData.data);
-  }
   return (
     <TableContainer
       component={Paper}
@@ -49,51 +44,32 @@ export default function DisplayTable({
                 key={i}
                 sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
               >
-                <TableCell component="th" scope="row">
-                  {row.name}
-                </TableCell>
+                {admin !== "admin" && (
+                  <TableCell component="th" scope="row">
+                    {row.name}
+                  </TableCell>
+                )}
 
                 <TableCell>{row.email}</TableCell>
-                <TableCell>
-                  <Button
-                    variant="outlined"
-                    color="success"
-                    onClick={(e) => handleEditOpen(e, row._id)}
-                    sx={{ marginRight: "6px" }}
-                    startIcon={<EditIcon></EditIcon>}
-                  ></Button>
 
-                  <Button
-                    onClick={(e) => handleDeleteOpen(e, row._id)}
-                    variant="outlined"
-                    color="error"
-                    startIcon={<DeleteIcon></DeleteIcon>}
-                  ></Button>
-                  <Button
-                    onClick={(e) => handleDeleteOpen(e, row._id)}
-                    variant="outlined"
-                    color="error"
-                  >
-                    {row.ownIdData ? (
-                      "yes"
-                    ) : user.email() === row.email ? (
-                      <OwnID
-                        type="register"
-                        options={{
-                          variant: "button-faceid",
-                          infoTooltip: true,
-                        }}
-                        loginIdField={row.email}
-                        onError={(error) => {
-                          console.log(error, "error");
-                        }}
-                        onRegister={onRegister}
-                      />
-                    ) : (
-                      "no"
-                    )}
-                  </Button>
-                </TableCell>
+                {columns.includes("action") && (
+                  <TableCell>
+                    <Button
+                      variant="outlined"
+                      color="success"
+                      onClick={(e) => handleEditOpen(e, row._id)}
+                      sx={{ marginRight: "6px" }}
+                      startIcon={<EditIcon></EditIcon>}
+                    ></Button>
+
+                    <Button
+                      onClick={(e) => handleDeleteOpen(e, row._id)}
+                      variant="outlined"
+                      color="error"
+                      startIcon={<DeleteIcon></DeleteIcon>}
+                    ></Button>
+                  </TableCell>
+                )}
               </TableRow>
             ))}
           {rows.length === 0 && (

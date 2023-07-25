@@ -240,6 +240,21 @@ const AdminList = () => {
     }
   }
 
+  function checkPasswordStrength(event, errors) {
+    if (!/.*[a-z].*/.test(event.target.value)) {
+      errors.push(`must contain at least one lower case letter`);
+    }
+    if (!/.*[A-Z].*/.test(event.target.value)) {
+      errors.push(`must contain at least one upper case letter`);
+    }
+    if (!/.*\d.*/.test(event.target.value)) {
+      errors.push(`mush contain one digit`);
+    }
+    if (!/.{8,}/.test(event.target.value)) {
+      errors.push(`must be at least 8 character long`);
+    }
+  }
+
   const checks = {
     email: [required, checkEmailFormat],
     password: [required, checkPasswordStrength],
@@ -382,7 +397,8 @@ const AdminList = () => {
             Add Admin
           </Button>
           <DisplayTable
-            columns={["Name", "Email", "Action"]}
+            admin="admin"
+            columns={["email"]}
             rows={student}
             elevation={6}
             handleEditOpen={handleEditOpen}

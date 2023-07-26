@@ -236,7 +236,7 @@ const AdminList = () => {
         event.target.value
       )
     ) {
-      errors.push(` invalid email format`);
+      errors.push(` invalide email format`);
     }
   }
 

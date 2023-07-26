@@ -72,7 +72,7 @@ function App() {
         </Route>
         <Route path="/student">
           <Route
-            index
+            path="login"
             element={
               <HideRoute redirect={"/student/batch"}>
                 <StudentLogin></StudentLogin>
@@ -114,7 +114,7 @@ function App() {
         </Route>
         <Route path="/teacher">
           <Route
-            index
+            path="login"
             element={
               <HideRoute redirect="/teacher/batch">
                 <TeacherLogin></TeacherLogin>

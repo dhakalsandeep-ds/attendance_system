@@ -6,8 +6,6 @@ import { generateToken, verifyToken } from "../utils/token.js"
 import { successResponse } from "../helper/successResponse.js"
 import { HttpStatus } from "../config/constant.js"
 
-
-
 export let login=expressAsyncHandler(async (req,res,next) => {
     let email = req.body.email
     let password = req.body.password
@@ -52,6 +50,7 @@ export let login=expressAsyncHandler(async (req,res,next) => {
       message: "success",
       result: {
         token: jwt_token,
+        role        
       },
       statusCode: HttpStatus.OK,
     };

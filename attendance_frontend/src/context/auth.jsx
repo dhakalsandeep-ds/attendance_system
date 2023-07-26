@@ -7,6 +7,7 @@ export const AuthProvider = ({ children }) => {
   const navigate = useNavigate();
 
   const login = async ({ email, password }, redirect = "") => {
+    let role;
     let headersList = {
       "Content-Type": "application/json",
     };

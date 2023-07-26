@@ -35,7 +35,7 @@ function App() {
         </Route>
         <Route path="/admin">
           <Route
-            index
+            path="login"
             element={
               <HideRoute redirect="/admin/list">
                 <AdminLogin></AdminLogin>

@@ -124,11 +124,6 @@ export let exportAllAttendance = expressAsyncHandler(async (req, res, next) => {
 });
 
 export let exportStudentAttendance = async (req, res, next) => {
-  console.log(
-    "abcde .........................................",
-    req.params.batchId,
-    req.params.email
-  );
   const parser = new Parser();
   let myData = await Attendance.find({
     batchId: req.params.batchId,
@@ -185,7 +180,7 @@ export let exportAttendanceByDate = expressAsyncHandler(
       (a, b) => new Date(a.Date) - new Date(b.Date)
     );
     let csv = parser.parse(_myDataSorted);
-    console.log(csv, "csv.......");
+    // console.log(csv, "csv.......");
     res.setHeader("Content-Type", "text/csv");
     res.setHeader("Content-Disposition", "attachment:filename=userData.csv");
     res.status(200).end(csv);
@@ -193,7 +188,7 @@ export let exportAttendanceByDate = expressAsyncHandler(
 );
 
 export let getAttendance = expressAsyncHandler(async (req, res, next) => {
-  console.log(req.body, "alfjla,,,,,,,,,,,,,,,,,,,,,,,,,");
+  // console.log(req.body, "alfjla,,,,,,,,,,,,,,,,,,,,,,,,,");
   let _batchId = req.params.batchId;
   // let desiredYear = req.params.year;
   // let desiredMonth = req.params.month;

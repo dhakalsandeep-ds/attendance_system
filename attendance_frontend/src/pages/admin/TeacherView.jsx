@@ -247,7 +247,7 @@ const TeacherView = () => {
         event.target.value
       )
     ) {
-      errors.push(` invalide email format`);
+      errors.push(`Invalid Email`);
     }
   }
 

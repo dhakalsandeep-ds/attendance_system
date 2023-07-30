@@ -1,23 +1,18 @@
-import React, { useEffect, useState } from "react";
-import Grid from "@mui/material/Grid";
-import Card from "@mui/material/Card";
-import CardActions from "@mui/material/CardActions";
-import CardContent from "@mui/material/CardContent";
-import CardMedia from "@mui/material/CardMedia";
 import Button from "@mui/material/Button";
-import Typography from "@mui/material/Typography";
+import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
+import Grid from "@mui/material/Grid";
 import Stack from "@mui/material/Stack";
+import Typography from "@mui/material/Typography";
+import React, { useEffect, useState } from "react";
 
-import "../../css/linear-gradient.css";
-import { useAuth } from "../../context/auth";
-import Divider from "@mui/material/Divider";
-import { useNavigate } from "react-router-dom";
-import DeleteIcon from "@mui/icons-material/Delete";
-import EditIcon from "@mui/icons-material/Edit";
 import AddIcon from "@mui/icons-material/Add";
-import Toastify from "../../components/Toastify";
-import ModalForm from "../../components/ModalForm";
 import { TextField } from "@mui/material";
+import { useNavigate } from "react-router-dom";
+import ModalForm from "../../components/ModalForm";
+import Toastify from "../../components/Toastify";
+import { useAuth } from "../../context/auth";
+import "../../css/linear-gradient.css";
 
 const BatchView = () => {
   let [batch, setBatch] = useState([]);
@@ -220,7 +215,7 @@ const BatchView = () => {
                           Course:{v.course} <br></br>
                         </Typography>
                         <Typography variant="body2" color="text.secondary">
-                          name of batch {v.name}
+                          Name of batch: {v.name}
                         </Typography>
                       </Stack>
                     </Grid>

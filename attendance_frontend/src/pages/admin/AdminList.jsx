@@ -8,7 +8,7 @@ import DisplayTable from "./../../components/DisplayTable";
 import TextField from "@mui/material/TextField";
 import AddIcon from "@mui/icons-material/Add";
 import Toastify from "../../components/Toastify";
-import { Card, CardContent, Grid, Stack } from "@mui/material";
+import { Card, CardContent, Grid, Skeleton, Stack } from "@mui/material";
 import EditForm from "../../components/EditForm";
 import DeleteModel from "../../components/DeleteModel";
 
@@ -109,10 +109,9 @@ const AdminList = () => {
 
   async function handleEditOpen(e, id) {
     await fetch("http://localhost:8000/admin/" + id, {
-     headers: {
+      headers: {
         Authorization: `Bearer ${user.token()}`,
       },
-      
     })
       .then((data) => data.json())
       .then((data) => {

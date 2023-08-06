@@ -73,13 +73,13 @@ const IndividualAttendance = ({ email, handleClose, isOpen }) => {
         nm.add(v.studentId._id + "-" + v.studentId.name);
       }
 
-      if (v.status === 1) {
+      if (v.status === "A") {
         absentDays += 1;
         console.log(absentDays, "1", "look", v.status);
-      } else if (v.status === 0) {
+      } else if (v.status === "P") {
         console.log(presentDays, "0,", "look", v.status);
         presentDays += 1;
-      } else if (v.status === 2) {
+      } else if (v.status === "L") {
         leaveDays += 1;
         console.log(leaveDays, "2", "look", v.status);
       }

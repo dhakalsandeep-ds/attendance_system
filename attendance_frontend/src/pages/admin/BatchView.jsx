@@ -18,8 +18,10 @@ import AddIcon from "@mui/icons-material/Add";
 import Toastify from "../../components/Toastify";
 import ModalForm from "../../components/ModalForm";
 import { TextField } from "@mui/material";
+import { Skeleton } from "@mui/material";
 
 const BatchView = () => {
+  let [loader, setLoader] = useState(true);
   let [batch, setBatch] = useState([]);
   let [noBatches, setNoBatches] = useState(0);
   let [toastMessage, setToastMessage] = useState();
@@ -174,6 +176,7 @@ const BatchView = () => {
     console.log(data);
 
     setBatch(data.result);
+    setLoader(false);
   }
 
   useEffect(() => {
@@ -196,6 +199,34 @@ const BatchView = () => {
           >
             Add Batch{" "}
           </Button>
+          {loader && (
+            <Stack>
+              <Skeleton
+                variant="rectangular"
+                sx={{ marginTop: "15px" }}
+                width={"100%"}
+                height={120}
+              />
+              <Skeleton
+                variant="rectangular"
+                sx={{ marginTop: "15px" }}
+                width={"100%"}
+                height={120}
+              />
+              <Skeleton
+                variant="rectangular"
+                sx={{ marginTop: "15px" }}
+                width={"100%"}
+                height={120}
+              />
+              <Skeleton
+                variant="rectangular"
+                sx={{ marginTop: "15px" }}
+                width={"100%"}
+                height={120}
+              />
+            </Stack>
+          )}
           {batch?.map((v, i) => {
             return (
               <Card
@@ -251,20 +282,30 @@ const BatchView = () => {
           })}
         </Grid>
         <Grid item xs={4}>
-          <Stack sx={{ marginTop: "50px" }}>
-            <Card elevation={6}>
-              <Stack direction={"column"}>
-                <CardContent>
-                  <Typography gutterBottom variant="h5" component="div">
-                    Total Batch
-                  </Typography>
-                  <Typography variant="body2" color="text.secondary">
-                    {noBatches}
-                  </Typography>
-                </CardContent>
-              </Stack>
-            </Card>
-          </Stack>
+          {loader && (
+            <Skeleton
+              variant="rectangular"
+              sx={{ marginTop: "50px" }}
+              width={"100%"}
+              height={120}
+            />
+          )}
+          {!loader && (
+            <Stack sx={{ marginTop: "50px" }}>
+              <Card elevation={6}>
+                <Stack direction={"column"}>
+                  <CardContent>
+                    <Typography gutterBottom variant="h5" component="div">
+                      Total Batch
+                    </Typography>
+                    <Typography variant="body2" color="text.secondary">
+                      {noBatches}
+                    </Typography>
+                  </CardContent>
+                </Stack>
+              </Card>
+            </Stack>
+          )}
         </Grid>
       </Grid>
 

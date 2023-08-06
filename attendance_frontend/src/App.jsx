@@ -24,15 +24,17 @@ import TeacherLayout from "./pages/Teacher/TeacherLayout";
 import SettingAdmin from "./pages/admin/SettingAdmin";
 import SettingTeacher from "./pages/Teacher/SettingTeacher";
 import SettingStudent from "./pages/Student/SettingStudent";
+import Home from "./pages/Home";
+import "./css/reset.css";
 
 function App() {
   return (
     <AuthProvider>
-      <div className="App"></div>
       <Routes>
         <Route path="/*" element={<h1>page not found</h1>}>
           {" "}
         </Route>
+        <Route path="/" element={<HideRoute redirect="/admin/login"><Home></Home></HideRoute>}></Route>
         <Route path="/admin">
           <Route
             path="login"

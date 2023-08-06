@@ -23,6 +23,7 @@ const ProtectedRoute = ({ redirect, children }) => {
   const user = useAuth();
 
   const token = user.token();
+  let role = user.role ? user.role : "admin"
   let isTokenValid;
   if (token) {
     isTokenValid = validateToken(user.token());

@@ -22,6 +22,16 @@ const validateToken = async (token = "") => {
 const HideRoute = ({ redirect, children }) => {
   const user = useAuth();
   const token = user.token();
+  const role =user.role ? user.role : "student"
+  let path 
+  if(role === "admin"){
+    path = "/admin/list"
+  }else if(role === "teacher"){
+    path="/teacher/batch"
+  }
+  else if(role === "student"){
+    path="/student/batch"
+  }
   console.log(token, "token");
   let isTokenValid;
   if (token) {
@@ -32,7 +42,7 @@ const HideRoute = ({ redirect, children }) => {
     console.log("inside else");
   }
   if (isTokenValid) {
-    return <Navigate to={redirect} replace={true}></Navigate>;
+    return <Navigate to={path} replace={true}></Navigate>;
   }
 
   return children;

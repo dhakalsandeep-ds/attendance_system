@@ -18,7 +18,7 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import InboxIcon from "@mui/icons-material/MoveToInbox";
 import MailIcon from "@mui/icons-material/Mail";
-import { NavLink, Outlet } from "react-router-dom";
+import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import { FaChalkboardTeacher } from "react-icons/fa";
 import Stack from "@mui/material/Stack";
 import Button from "@mui/material/Button";
@@ -32,6 +32,7 @@ import { RiTeamLine } from "react-icons/ri";
 import { GoGear } from "react-icons/go";
 import { Tooltip } from "@mui/material";
 import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
+import { Navigate } from "react-router-dom";
 
 const drawerWidth = 150;
 
@@ -80,9 +81,21 @@ const Drawer = styled(MuiDrawer, {
 }));
 
 export default function MiniDrawer() {
+  const navigate = useNavigate()
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
   const user = useAuth();
+  const role = user.role ? user.role : "student"
+  console.log("role",role)
+  if(role !== "admin"){
+     let path 
+     if( role === "student"){
+      path = "/student/batch"
+     }else if( role === "teacher"){
+      path = "/teacher/batch"
+     }
+     return  <Navigate to={path} replace={true} />
+  }
 
   const handleDrawerOpen = () => {
     setOpen(true);

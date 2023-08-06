@@ -18,7 +18,7 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import InboxIcon from "@mui/icons-material/MoveToInbox";
 import MailIcon from "@mui/icons-material/Mail";
-import { NavLink, Outlet } from "react-router-dom";
+import { NavLink, Navigate, Outlet } from "react-router-dom";
 import { FaChalkboardTeacher } from "react-icons/fa";
 import Stack from "@mui/material/Stack";
 import Button from "@mui/material/Button";
@@ -83,6 +83,18 @@ export default function StudentLayout() {
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
   const user = useAuth();
+
+  const role = user.role ? user.role : "student"
+  console.log("role",role)
+  if(role !== "student"){
+     let path 
+     if( role === "admin"){
+      path = "/admin/list"
+     }else if( role === "teacher"){
+      path = "/teacher/batch"
+     }
+     return  <Navigate to={path} replace={true} />
+  }
 
   const handleDrawerOpen = () => {
     setOpen(true);

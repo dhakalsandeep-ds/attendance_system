@@ -5,6 +5,7 @@ export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const navigate = useNavigate();
+  let role
 
   const login = async ({ email, password }, redirect = "") => {
     let role;
@@ -30,7 +31,8 @@ export const AuthProvider = ({ children }) => {
       return data;
     }
     localStorage.setItem("token", data.result.token);
-    localStorage.setItem("email", email);
+  
+    role = data.result.role
 
     console.log("redirecting ....");
 
@@ -61,9 +63,11 @@ export const AuthProvider = ({ children }) => {
     let email = localStorage.getItem("email");
     return email ? email : null;
   };
+  
+  
 
   return (
-    <AuthContext.Provider value={{ token, login, logout, email }}>
+    <AuthContext.Provider value={{ token, login, logout, email,role }}>
       {children}
     </AuthContext.Provider>
   );

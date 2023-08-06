@@ -24,6 +24,7 @@ import SettingAdmin from "./pages/admin/SettingAdmin";
 import StudentView from "./pages/admin/StudentView";
 import TeacherView from "./pages/admin/TeacherView";
 import BatchViewTeacher from "./pages/teacher/BatchViewTeacher";
+import Home from "./pages/Home";
 
 function App() {
   return (

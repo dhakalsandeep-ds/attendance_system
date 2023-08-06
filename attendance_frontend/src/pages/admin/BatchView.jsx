@@ -7,16 +7,12 @@ import Typography from "@mui/material/Typography";
 import React, { useEffect, useState } from "react";
 
 import AddIcon from "@mui/icons-material/Add";
-import { TextField } from "@mui/material";
-<<<<<<< HEAD
-import { Skeleton } from "@mui/material";
-=======
+import { Skeleton, TextField } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import ModalForm from "../../components/ModalForm";
 import Toastify from "../../components/Toastify";
 import { useAuth } from "../../context/auth";
 import "../../css/linear-gradient.css";
->>>>>>> b4aa1940f37e647652a1af1f294b35a0e0874a55
 
 const BatchView = () => {
   let [loader, setLoader] = useState(true);

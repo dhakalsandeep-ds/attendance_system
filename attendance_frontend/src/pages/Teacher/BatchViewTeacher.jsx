@@ -1,4 +1,3 @@
-import Button from "@mui/material/Button";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import Grid from "@mui/material/Grid";
@@ -6,11 +5,7 @@ import Stack from "@mui/material/Stack";
 import Typography from "@mui/material/Typography";
 import React, { useEffect, useState } from "react";
 
-import AddIcon from "@mui/icons-material/Add";
-import { TextField } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import ModalForm from "../../components/ModalForm";
-import Toastify from "../../components/Toastify";
 import { useAuth } from "../../context/auth";
 
 const BatchViewTeacher = () => {
@@ -76,7 +71,7 @@ const BatchViewTeacher = () => {
                           Course:{v.course} <br></br>
                         </Typography>
                         <Typography variant="body2" color="text.secondary">
-                          name of batch {v.name}
+                          Name of batch: {v.name}
                         </Typography>
                       </Stack>
                     </Grid>

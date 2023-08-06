@@ -20,7 +20,7 @@ export let isAuthenticated = expressAsyncHandler(async (req, res, next) => {
     throw error;
   } else {
     let info = await verifyToken(token);
-    console.log("info.............", info);
+    // console.log("info.............", info);
     req.body.info = info;
     req.body.token = {
       token,

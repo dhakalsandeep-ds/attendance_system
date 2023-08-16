@@ -19,11 +19,12 @@ const validateToken = async (token) => {
   return ans.success;
 };
 
-const ProtectedRoute = ({ redirect, children }) => {
+const ProtectedRoute = ({ redirect,children}) => {
+  console.log("inside protected route")
   const user = useAuth();
 
   const token = user.token();
-  let role = user.role ? user.role : "admin"
+  let role = user.role() ? user.role() : "admin"
   let isTokenValid;
   if (token) {
     isTokenValid = validateToken(user.token());

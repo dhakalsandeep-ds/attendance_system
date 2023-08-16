@@ -81,11 +81,12 @@ const Drawer = styled(MuiDrawer, {
 }));
 
 export default function MiniDrawer() {
+  console.log("inside admin layout")
   const navigate = useNavigate()
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
   const user = useAuth();
-  const role = user.role ? user.role : "student"
+  const role = user.role() ? user.role() : "student"
   console.log("role",role)
   if(role !== "admin"){
      let path 
@@ -108,6 +109,8 @@ export default function MiniDrawer() {
   const logout = () => {
     user.logout({ url: "admin" });
   };
+
+  console.log("end adminlayout")
 
   return (
     <Box sx={{ display: "flex" }}>

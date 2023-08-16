@@ -5,10 +5,9 @@ export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const navigate = useNavigate();
-  let role
-
+ 
   const login = async ({ email, password }, redirect = "") => {
-    let role;
+   
     let headersList = {
       "Content-Type": "application/json",
     };
@@ -31,8 +30,9 @@ export const AuthProvider = ({ children }) => {
       return data;
     }
     localStorage.setItem("token", data.result.token);
+    localStorage.setItem("role", data.result.role);
   
-    role = data.result.role
+    
 
     console.log("redirecting ....");
 
@@ -51,12 +51,17 @@ export const AuthProvider = ({ children }) => {
       const data = await response.json();
 
       localStorage.removeItem("token");
-      navigate(`/${url}`, { replace: true });
+      localStorage.removeItem("role");
+      navigate(`/`, { replace: true });
     }
   };
   const token = () => {
     let token = localStorage.getItem("token");
     return token ? token : null;
+  };
+  const role = () => {
+    let role = localStorage.getItem("role");
+    return role ? role : null;
   };
 
   const email = () => {

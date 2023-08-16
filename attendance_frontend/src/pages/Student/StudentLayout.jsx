@@ -84,7 +84,7 @@ export default function StudentLayout() {
   const [open, setOpen] = React.useState(false);
   const user = useAuth();
 
-  const role = user.role ? user.role : "student"
+  const role = user.role() ? user.role() : "student"
   console.log("role",role)
   if(role !== "student"){
      let path 

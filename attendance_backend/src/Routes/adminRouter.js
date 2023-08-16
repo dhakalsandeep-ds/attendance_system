@@ -92,4 +92,8 @@ adminRouter
   .route("/update-password")
   .post(isAuthenticated, isAuthorizedAdmin, updatePasswordAdmin);
 
+  adminRouter
+  .route("/info")
+  .get(isAuthenticated, isAuthorizedAdmin, adminInfo);
+
 export default adminRouter;

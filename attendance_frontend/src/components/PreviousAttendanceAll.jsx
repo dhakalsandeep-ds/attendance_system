@@ -111,11 +111,11 @@ const PreviousAttendanceAll = () => {
         names.add(v.studentId.name);
         if (studentsd[v.studentId.name]) {
           studentsd[v.studentId.name].push(
-            v.status === 0 ? "p" : v.status === 1 ? "A" : "L"
+            v.status 
           );
         } else {
           studentsd[v.studentId.name] = [
-            v.status === 0 ? "p" : v.status === 1 ? "A" : "L",
+            v.status 
           ];
         }
       }
@@ -192,13 +192,14 @@ const PreviousAttendanceAll = () => {
       return "N";
     }
 
-    return attendanceRecord.status === 0
-      ? "P"
-      : attendanceRecord.status === 1
-      ? "A"
-      : attendanceRecord.status === 2
-      ? "L"
-      : "N";
+    return attendanceRecord.status 
+    // === 0
+    //   ? "P"
+    //   : attendanceRecord.status === 1
+    //   ? "A"
+    //   : attendanceRecord.status === 2
+    //   ? "L"
+    //   : "N";
   };
 
   useEffect(() => {

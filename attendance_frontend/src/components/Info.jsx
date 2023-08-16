@@ -4,6 +4,7 @@ import { useAuth } from "../context/auth";
 const Info = ({ url = "admin" }) => {
   let [data, setData] = useState([]);
   const user = useAuth();
+  console.log("info ..................................................")
 
   async function fetchStudentsReport() {
     let headersList = {
@@ -17,7 +18,7 @@ const Info = ({ url = "admin" }) => {
     });
 
     let data = await response.json();
-    console.log(data, "insdie get previous student");
+    console.log(data, "...............insdie get previous student.........");
 
     setData(data.result);
   }

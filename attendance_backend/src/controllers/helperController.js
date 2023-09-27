@@ -9,7 +9,9 @@ import { HttpStatus } from "../config/constant.js"
 export let login=expressAsyncHandler(async (req,res,next) => {
     let email = req.body.email
     let password = req.body.password
+    console.log("email is " + email + " password is "+ password)
     let resultAdmin = await Admin.findOne({ email })
+    console.log("admin result " + resultAdmin)
     let resultTeacher = await Teacher.findOne({ email })
     let resultStudent = await Student.findOne({ email })
     if(resultAdmin===null && resultTeacher===null && resultStudent===null ) 

@@ -88,13 +88,13 @@ const AttendanceViewStudent = ({ email, handleClose, isOpen }) => {
         nm.add(v.studentId._id + "-" + v.studentId.name);
       }
 
-      if (v.status === 1) {
+      if (v.status === "A" || v.status === "a") {
         absentDays += 1;
         console.log(absentDays, "1", "look", v.status);
-      } else if (v.status === 0) {
+      } else if (v.status === "P" || v.status === "p") {
         console.log(presentDays, "0,", "look", v.status);
         presentDays += 1;
-      } else if (v.status === 2) {
+      } else if (v.status === "L" || v.status === "l") {
         leaveDays += 1;
         console.log(leaveDays, "2", "look", v.status);
       }
@@ -173,13 +173,14 @@ const AttendanceViewStudent = ({ email, handleClose, isOpen }) => {
     //   leaveDays += 1;
     // }
 
-    return attendanceRecord.status === 0
-      ? "P"
-      : attendanceRecord.status === 1
-      ? "A"
-      : attendanceRecord.status === 2
-      ? "L"
-      : "N";
+    return attendanceRecord.status 
+    // === 0
+    //   ? "P"
+    //   : attendanceRecord.status === 1
+    //   ? "A"
+    //   : attendanceRecord.status === 2
+    //   ? "L"
+    //   : "N";
   };
 
   useEffect(() => {

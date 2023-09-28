@@ -252,7 +252,7 @@ const PreviousAttendanceAll = () => {
     link.href = url;
     link.setAttribute("download", "data.csv");
     document.body.appendChild(link);
-    link.click();
+    link.click(); 
     document.body.removeChild(link);
   }
   return (

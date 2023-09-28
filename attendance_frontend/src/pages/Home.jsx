@@ -34,8 +34,8 @@ export default function Home() {
       <Stack direction={"row"} justifyContent={"space-around"} sx={{position:"absolute",top:"70px",width:"100%"}} spacing={4}>
     <Button variant="contained" color="success" sx={{color:"white",border:"red",fontSize:"20px"}} onClick={()=>{handleClick("admin")}}> Login as 
     Admin</Button>
-    <Button variant="contained" color="success"  onClick={()=>{handleClick("admin")}} sx={{color:"white",fontSize:"20px"}}> Login as Teacher</Button>
-    <Button variant="contained" color="success"  onClick={()=>{handleClick("admin")}}sx={{color:"white",fontSize:"20px"}}> Login as Student</Button>
+    <Button variant="contained" color="success"  onClick={()=>{handleClick("teacher")}} sx={{color:"white",fontSize:"20px"}}> Login as Teacher</Button>
+    <Button variant="contained" color="success"  onClick={()=>{handleClick("student")}}sx={{color:"white",fontSize:"20px"}}> Login as Student</Button>
   
     </Stack>
  
